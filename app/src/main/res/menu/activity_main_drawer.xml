@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group >
+
+        <item
+            android:id="@+id/nav_my_mall"
+            android:icon="@drawable/ic_store_mall_directory_black_24dp"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_my_orders"
+            android:icon="@drawable/ic_local_mall_black_24dp"
+            android:title="My Order" />
+
+        <item
+            android:id="@+id/nav_my_account"
+            android:icon="@drawable/ic_action_user"
+            android:title="My Account" />
+        <item
+            android:id="@+id/nav_my_instruction"
+            android:icon="@drawable/ic_comment_black_24dp"
+            android:title="Instruction" />
+        <item
+            android:id="@+id/nav_my_about"
+            android:icon="@drawable/about"
+            android:title="About" />
+
+        <item
+            android:id="@+id/nav_singout"
+            android:icon="@drawable/ic_signout"
+            android:title="Sign Out" />
+    </group>
+
+</menu>

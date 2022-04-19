@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Pack Size"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        android:background="@color/black"
+        android:gravity="center"
+        android:textSize="21dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:fontFamily="cursive"
+        android:id="@+id/dialogText"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weight_recyclerView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="#ECEAEA"
+        android:elevation="3dp"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"
+        />
+
+</LinearLayout>

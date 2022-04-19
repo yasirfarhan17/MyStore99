@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval" >
+    <solid android:color="#09F309"/>
+</shape>
+</item>
+    <item android:drawable="@drawable/ic_check_black_24dp_white"/>
+</layer-list>
