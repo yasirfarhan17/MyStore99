@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        // sessionManager = new SessionManager(getApplicationContext());
         auth=FirebaseAuth.getInstance();
         str=getIntent().getStringExtra("phone");
-        key= Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+       // key= Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         //badge=findViewById(R.id.badge);
 
 

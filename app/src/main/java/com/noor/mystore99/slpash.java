@@ -35,30 +35,21 @@ public class slpash extends AppCompatActivity {
 
     }
 
-    FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-            if (firebaseUser != null) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent=new Intent(slpash.this,MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                },SPLASH_SCREEN);
-            }
-            else {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent=new Intent(slpash.this,page1.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                },SPLASH_SCREEN);
-            }
+    FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            new Handler().postDelayed(() -> {
+                Intent intent=new Intent(slpash.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            },SPLASH_SCREEN);
+        }
+        else {
+            new Handler().postDelayed(() -> {
+                Intent intent=new Intent(slpash.this,page1.class);
+                startActivity(intent);
+                finish();
+            },SPLASH_SCREEN);
         }
     };
     @Override

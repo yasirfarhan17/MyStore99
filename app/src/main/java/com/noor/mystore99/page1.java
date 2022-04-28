@@ -17,22 +17,16 @@ public class page1 extends AppCompatActivity {
         signUp=findViewById(R.id.signUp);
         Login=findViewById(R.id.submit);
 
-        Login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(page1.this,loginPage.class);
-                startActivity(intent);
-                Login.setBackgroundResource(R.drawable.background5);
-            }
+        Login.setOnClickListener(view -> {
+            Intent intent=new Intent(page1.this,MainActivity.class);
+            startActivity(intent);
+            Login.setBackgroundResource(R.drawable.background5);
         });
 
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(page1.this,signUpPage.class);
-                startActivity(intent);
-                signUp.setBackgroundResource(R.drawable.background5);
-            }
+        signUp.setOnClickListener(view -> {
+            Intent intent=new Intent(page1.this,signUpPage.class);
+            startActivity(intent);
+            signUp.setBackgroundResource(R.drawable.background5);
         });
     }
 }
