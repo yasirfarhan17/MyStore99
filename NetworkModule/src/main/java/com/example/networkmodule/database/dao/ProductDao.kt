@@ -16,7 +16,7 @@ interface ProductDao {
     @Query("select * from productTable")
     suspend fun getAllProduct(): List<ProductEntity>
 
-    @Query("UPDATE productTable Set price = price  WHERE products_name = :id")
+    @Query("UPDATE productTable Set price = :price  WHERE products_name = :id")
     fun updatePrice(price: String, id: String)
 
     @Query("SELECT COUNT(*) FROM productTable")
