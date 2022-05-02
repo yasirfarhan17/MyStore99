@@ -31,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hbb20.CountryCodePicker;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.Objects;
@@ -50,7 +49,7 @@ public class first extends AppCompatActivity {
     DatabaseReference users;
     RelativeLayout rootLayout;
     String code,email,pass;
-    private CountryCodePicker cpp;
+   // private CountryCodePicker cpp;
     User user;
     SharedPreferences preferences;
     SharedPreferences.Editor editor ;

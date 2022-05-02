@@ -5,6 +5,24 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw280dp/fragment_home2.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw300dp/fragment_home2.xml" value="0.2525" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw330dp/fragment_home2.xml" value="0.13425925925925927" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw600dp/fragment_home2.xml" value="0.197265625" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout/activity_main2.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout/activity_main3.xml" value="0.12452830188679245" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout/fragment_dashboard.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout/fragment_home.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout/fragment_home2.xml" value="0.4358108108108108" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout/layout_dialog.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout/user_fragment.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/menu/bottom_nav_menu.xml" value="0.16354166666666667" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="org.jetbrains.annotations.Nullable" />
     <option name="myDefaultNotNull" value="androidx.annotation.NonNull" />

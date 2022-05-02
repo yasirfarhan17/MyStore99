@@ -33,5 +33,9 @@
 
     <string name="instruction"><u>Instructions</u></string>
     <string name="about"><u>About</u></string>
+    <string name="cancel">Cancel</string>
+    <string name="title_home">Home</string>
+    <string name="title_user">User</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>

@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
@@ -156,14 +154,14 @@ public class LastPage extends AppCompatActivity {
         arr1.clear();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Gson gson = new Gson();
-        String json = sharedPrefs.getString("rate", "");
-        Type type = new TypeToken<ArrayList<Integer>>() {}.getType();
-         arr1 = gson.fromJson(json, type);
+        //Gson gson = new Gson();
+        //String json = sharedPrefs.getString("rate", "");
+       // Type type = new TypeToken<ArrayList<Integer>>() {}.getType();
+        // arr1 = gson.fromJson(json, type);
 
         String json1 = sharedPrefs.getString("name", "");
-        Type type1 = new TypeToken<ArrayList<String>>() {}.getType();
-         Name1 = gson.fromJson(json1, type1);
+       // Type type1 = new TypeToken<ArrayList<String>>() {}.getType();
+         //Name1 = gson.fromJson(json1, type1);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         val = FirebaseAuth.getInstance().getCurrentUser().getUid();
 

@@ -2,41 +2,31 @@ package com.noor.mystore99;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ConfirmAddress extends DialogFragment implements
-        android.view.View.OnClickListener, OnMapReadyCallback {
+        android.view.View.OnClickListener {
 
     public Activity c;
     public Dialog d;
     public Button yes, no;
 
-    private GoogleMap mMap;
-    MapView mapView;
+    /*  private GoogleMap mMap;
+      MapView mapView;*/
     Double Lat;
     Double Long;
     String Address;
     TextView myAddress;
     Button SelectBtn;
     Button ChangeBtn;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,32 +35,33 @@ public class ConfirmAddress extends DialogFragment implements
         Address = getArguments().getString("address");
 
     }
-    MapFragment mapFragment;
+
+    //  MapFragment mapFragment;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.custom_confirm_address, container, false);
-        myAddress=(TextView)v.findViewById(R.id.myAddress);
-        SelectBtn=(Button) v.findViewById(R.id.Select);
-        ChangeBtn=(Button) v.findViewById(R.id.Change);
+        myAddress = (TextView) v.findViewById(R.id.myAddress);
+        SelectBtn = (Button) v.findViewById(R.id.Select);
+        ChangeBtn = (Button) v.findViewById(R.id.Change);
 
 
-
-        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapp);
-        mapFragment.getMapAsync(this);
-        // Toast.makeText(getActivity(),mNum,Toast.LENGTH_LONG).show();
+//
+//        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapp);
+//        mapFragment.getMapAsync(this);
+//        // Toast.makeText(getActivity(),mNum,Toast.LENGTH_LONG).show();
 
         SelectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),myAddress.getText().toString(),Toast.LENGTH_LONG).show();
-                getFragmentManager().beginTransaction().remove(mapFragment).commit();
+                // Toast.makeText(getActivity(),myAddress.getText().toString(),Toast.LENGTH_LONG).show();
+                //getFragmentManager().beginTransaction().remove(mapFragment).commit();
                 dismiss();
             }
         });
         ChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().remove(mapFragment).commit();
+                // getFragmentManager().beginTransaction().remove(mapFragment).commit();
                 dismiss();
             }
         });
@@ -82,7 +73,7 @@ public class ConfirmAddress extends DialogFragment implements
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        getFragmentManager().beginTransaction().remove(mapFragment).commit();
+        //  getFragmentManager().beginTransaction().remove(mapFragment).commit();
 
     }
 
@@ -97,6 +88,7 @@ public class ConfirmAddress extends DialogFragment implements
 
     }
 
+/*
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -113,4 +105,5 @@ public class ConfirmAddress extends DialogFragment implements
         mMap.addMarker(markerOptions);
         Log.d("status","success");
     }
+*/
 }
