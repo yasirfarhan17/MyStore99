@@ -1,2 +1,3 @@
 rootProject.name='MyStore99'
 include ':app'
+include ':NetworkModule'

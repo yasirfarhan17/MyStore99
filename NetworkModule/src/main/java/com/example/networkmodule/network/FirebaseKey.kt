@@ -1,4 +1,4 @@
-package com.noor.mystore99.amigrate.network.firebase
+package com.example.networkmodule.network
 
 object FirebaseKey {
     const val GET_ALL_PRODUCT_KEY = "CategoryProducts"

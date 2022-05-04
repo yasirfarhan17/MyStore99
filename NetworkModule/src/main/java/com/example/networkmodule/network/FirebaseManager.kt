@@ -1,4 +1,4 @@
-package com.noor.mystore99.amigrate.network.firebase
+package com.example.networkmodule.network
 
 
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +29,11 @@ object FirebaseManager {
 
     fun getFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
+    }
+
+    fun getCategoryRef(firebaseDatabase: FirebaseDatabase): DatabaseReference {
+
+        return firebaseDatabase.reference.child(FirebaseKey.GET_CATEGORY_KEY)
     }
 
 }

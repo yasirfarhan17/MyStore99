@@ -8,6 +8,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_main2.xml" value="0.16983695652173914" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_main3.xml" value="0.1" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/user_fragment.xml" value="0.16983695652173914" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18854166666666666" />
         <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw280dp/fragment_home2.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw300dp/fragment_home2.xml" value="0.2525" />
         <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw330dp/fragment_home2.xml" value="0.13425925925925927" />

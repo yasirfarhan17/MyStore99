@@ -5,9 +5,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.example.networkmodule.network.FirebaseKey
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
-import com.noor.mystore99.amigrate.network.firebase.FirebaseKey
 import com.noor.mystore99.amigrate.util.toLiveData
 import com.noor.mystore99.sliderModel
 import dagger.hilt.android.lifecycle.HiltViewModel

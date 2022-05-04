@@ -2,10 +2,12 @@ package com.noor.mystore99.amigrate.ui.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.networkmodule.database.ProductEntity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
@@ -26,11 +28,10 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
     }
 
     private fun setNavView() {
-        val navView: BottomNavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_home, R.id.navigation_user)
-        )
+
+        val navView :BottomNavigationView=binding.navView
+        val navController=findNavController(R.id.nav_host_fragment_activity_main)
+        val appBarConfiguration= AppBarConfiguration(setOf(R.id.navigation_home,R.id.navigation_user))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -38,6 +39,10 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
     override fun addObservers() {
         viewModel.productList.observe(this) {
+            it.onEach { item->
+                val productEntity=ProductEntity(item.products_name,item.price,item.img,item.quant,item.hindiName,item.stock,type ="vegetable" )
+                viewModel.insertToDB(productEntity)
+            }
         }
     }
 

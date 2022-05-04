@@ -10,7 +10,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.noor.mystore99.amigrate.util.UiUtil
 
 abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel> : Fragment() {

@@ -2,16 +2,18 @@ package com.noor.mystore99.amigrate.ui.main
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import androidx.lifecycle.viewModelScope
+import com.example.networkmodule.database.ProductDao
+import com.example.networkmodule.database.ProductEntity
+
+import com.example.networkmodule.network.FirebaseKey
+import com.google.firebase.database.*
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
-import com.noor.mystore99.amigrate.network.firebase.FirebaseKey
 import com.noor.mystore99.amigrate.util.toLiveData
 import com.noor.mystore99.product
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -19,19 +21,20 @@ import javax.inject.Named
 class MainViewModel @Inject constructor(
     @Named(FirebaseKey.BANNER_DATABASE_REF) private val bannerDbRef: DatabaseReference,
     @Named(FirebaseKey.PRODUCT_DATABASE_REF) private val productDbRef: DatabaseReference,
+    private val productDao:ProductDao
 ) : BaseViewModel() {
     private var _productList = MutableLiveData<ArrayList<product>>()
     val productList = _productList.toLiveData()
 
     init {
-        getSurah()
+        getAllProductList()
     }
 
-    private fun getSurah() {
+    private fun getAllProductList() {
         launch {
             _viewState.postValue(ViewState.Loading)
-            productDbRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            productDbRef.addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val p = ArrayList<product>()
                     for (dataSnapshot1 in snapshot.children) {
                         val p1 = dataSnapshot1.getValue<product>(product::class.java)
@@ -45,11 +48,30 @@ class MainViewModel @Inject constructor(
                     _viewState.postValue(ViewState.Success())
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    _viewState.postValue(ViewState.Error(error.toException()))
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
                 }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
 
             })
         }
     }
+    fun insertToDB(productItem:ProductEntity){
+        viewModelScope.launch {
+            productDao.insertPhone(productItem)
+        }
+    }
+
 }
