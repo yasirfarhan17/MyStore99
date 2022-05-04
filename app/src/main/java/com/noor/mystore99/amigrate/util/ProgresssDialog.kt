@@ -10,7 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
 import coil.ImageLoader
-import coil.api.load
+
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import com.noor.mystore99.R
@@ -30,17 +30,17 @@ class ProgressDialog(context: Context) : Dialog(context) {
             null, false
         )
         setContentView(binding.root)
-        loadGif()
+        //loadGif()
     }
 
-    private fun loadGif() {
-        val imageLoader = ImageLoader.Builder(context)
-            .componentRegistry {
-                if (VERSION.SDK_INT >= 28) add(ImageDecoderDecoder()) else add(GifDecoder())
-            }
-            .build()
-        binding.imgProgress.load(imageLoader = imageLoader, uri = PROGRESS_LOADER_URL)
-    }
+//    private fun loadGif() {
+//        val imageLoader = ImageLoader.Builder(context)
+//            .componentRegistry {
+//                if (VERSION.SDK_INT >= 28) add(ImageDecoderDecoder()) else add(GifDecoder())
+//            }
+//            .build()
+//        binding.imgProgress.load(imageLoader = imageLoader, uri = PROGRESS_LOADER_URL)
+//    }
 
     companion object {
         const val PROGRESS_LOADER_URL = "file:///android_asset/loading.gif"

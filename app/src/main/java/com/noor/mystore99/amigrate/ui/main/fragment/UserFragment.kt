@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
 import com.noor.mystore99.amigrate.ui.main.MainViewModel
@@ -14,6 +16,8 @@ import kotlinx.coroutines.FlowPreview
 
 @AndroidEntryPoint
 class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
+    val mainViewModel: MainViewModel by activityViewModels()
+    override val viewModel: UserViewModel by activityViewModels()
 
     @FlowPreview
     private val homeViewModel: MainViewModel by lazy {
@@ -24,27 +28,38 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
         )
     }
 
-    val mainViewModel: MainViewModel by activityViewModels()
-    override val viewModel: UserViewModel by activityViewModels()
+
+
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.root
+
+
+        addObservers()
+        init()
     }
 
     override fun getViewModelClass(): Class<UserViewModel> = UserViewModel::class.java
 
     override fun getLayout(): Int = R.layout.user_fragment
 
-    override fun addObservers() {
-        viewModel.bannerList.observe(this) {
-            binding.tvUserViewmodel.text = it.toString()
+    private fun init(){
+        with(binding) {
+
+            productRecyclerView1.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+            //shimmer.visibility = View.VISIBLE
+            mainViewModel.getProductFromDB()
+            productRecyclerView1.adapter = UserAdapter(this@UserFragment)
         }
-        mainViewModel.productFromDB.observe(this) {
-            it.onEach {item->
-                binding.tvMainViewmodel.text = item.products_name.toString()
-                Log.d("yasir check",""+it)
-            }
+    }
+
+    override fun addObservers() {
+        mainViewModel.productFromDB.observe(viewLifecycleOwner) {
+            (binding.productRecyclerView1.adapter as UserAdapter).submitList(it)
+            Log.d("yasir check",""+it)
         }
     }
 

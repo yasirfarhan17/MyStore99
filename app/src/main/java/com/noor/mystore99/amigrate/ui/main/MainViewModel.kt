@@ -38,6 +38,7 @@ class MainViewModel @Inject constructor(
 
     init {
         getAllProductList()
+        getProductFromDB()
     }
 
     private fun getAllProductList() {

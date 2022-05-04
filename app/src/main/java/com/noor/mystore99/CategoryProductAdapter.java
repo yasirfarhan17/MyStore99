@@ -1,5 +1,6 @@
 package com.noor.mystore99;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -80,7 +81,7 @@ public class CategoryProductAdapter extends RecyclerView.Adapter <CategoryProduc
 
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         holder.name.setText(product1.get(position).getProducts_name()+"\n("+product1.get(position).getHindiName()+")");
 

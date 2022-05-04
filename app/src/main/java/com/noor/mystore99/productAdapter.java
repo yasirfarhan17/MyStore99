@@ -1,5 +1,6 @@
 package com.noor.mystore99;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -93,7 +94,7 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.MyViewH
 
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         holder.name.setText(product1.get(position).getProducts_name()+"\n("+product1.get(position).getHindiName()+")");
         holder.price.setText("₹ "+product1.get(position).getPrice());
         ref= FirebaseDatabase.getInstance().getReference("Add Mrp").child(product1.get(position).getProducts_name());

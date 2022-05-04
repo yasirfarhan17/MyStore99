@@ -12,6 +12,7 @@ import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.databinding.ActivityMain3Binding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -26,7 +27,7 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        setNavView()
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             viewModel.getProductFromDB()
         }
 
