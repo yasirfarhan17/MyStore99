@@ -16,7 +16,7 @@ interface ProductDao {
     suspend fun clear()
 
     @Query("select * from productTable")
-    suspend fun getPhone():List<ProductEntity>
+    suspend fun getProduct():List<ProductEntity>
 
     @Query("UPDATE productTable SET price = :price WHERE products_name = :id")
     fun update(price:String, id: String)

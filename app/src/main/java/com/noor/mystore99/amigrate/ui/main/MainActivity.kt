@@ -2,7 +2,6 @@ package com.noor.mystore99.amigrate.ui.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -13,6 +12,8 @@ import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.databinding.ActivityMain3Binding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
@@ -25,6 +26,10 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        setNavView()
+        GlobalScope.launch {
+            viewModel.getProductFromDB()
+        }
+
     }
 
     private fun setNavView() {
@@ -38,9 +43,9 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
 
     override fun addObservers() {
-        viewModel.productList.observe(this) {
+        viewModel.productEntity.observe(this) {
             it.onEach { item->
-                val productEntity=ProductEntity(item.products_name,item.price,item.img,item.quant,item.hindiName,item.stock,type ="vegetable" )
+                val productEntity=ProductEntity(item.products_name,item.price,item.img,item.quant,item.HindiName,item.stock,type = item.type )
                 viewModel.insertToDB(productEntity)
             }
         }

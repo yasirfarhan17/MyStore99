@@ -86,6 +86,7 @@ object FirebaseModule {
             ProductDataBase::class.java,
             ProductDataBase.Name
         )
+            .fallbackToDestructiveMigration()
             .build()
 
     }

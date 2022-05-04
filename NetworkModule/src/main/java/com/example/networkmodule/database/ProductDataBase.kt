@@ -12,7 +12,7 @@ abstract class ProductDataBase :RoomDatabase() {
 
     companion object{
         const val Name="phone_dataBase"
-        const val Version=2
+        const val Version=3
 
         @Volatile
         private var instance :ProductDataBase?=null
@@ -28,6 +28,7 @@ abstract class ProductDataBase :RoomDatabase() {
                     ProductDataBase::class.java,
                     Name
                 )
+                    .fallbackToDestructiveMigration()
                     .build()
                 this.instance =instance
                 return instance

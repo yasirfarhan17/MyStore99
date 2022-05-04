@@ -1,6 +1,7 @@
 package com.noor.mystore99.amigrate.ui.main.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noor.mystore99.R
@@ -39,8 +40,11 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
         viewModel.bannerList.observe(this) {
             binding.tvUserViewmodel.text = it.toString()
         }
-        mainViewModel.productList.observe(this) {
-            binding.tvMainViewmodel.text = it.toString()
+        mainViewModel.productFromDB.observe(this) {
+            it.onEach {item->
+                binding.tvMainViewmodel.text = item.products_name.toString()
+                Log.d("yasir check",""+it)
+            }
         }
     }
 
