@@ -15,6 +15,7 @@ import com.bumptech.glide.signature.ObjectKey
 import com.example.networkmodule.database.ProductEntity
 import com.noor.mystore99.R
 import com.noor.mystore99.databinding.CardviewBinding
+import com.noor.mystore99.productModel
 
 class UserAdapter(val context: UserFragment):RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
@@ -25,7 +26,7 @@ class UserAdapter(val context: UserFragment):RecyclerView.Adapter<UserAdapter.Us
 
 
     @SuppressLint("NotifyDataSetChange")
-    fun submitList(list :ArrayList<ProductEntity>){
+    fun submitList(list: ArrayList<ProductEntity>){
         item.clear()
         itemFilter.clear()
         itemFilter.addAll(list)

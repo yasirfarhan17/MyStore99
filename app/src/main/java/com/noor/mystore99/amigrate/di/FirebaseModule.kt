@@ -6,6 +6,9 @@ import com.example.networkmodule.database.ProductDao
 import com.example.networkmodule.database.ProductDataBase
 import com.example.networkmodule.network.FirebaseKey
 import com.example.networkmodule.network.FirebaseManager
+import com.example.networkmodule.repository.ProductRepository
+import com.example.networkmodule.repository.ProductRepositoryImpl
+import com.example.networkmodule.usecase.ProductUsecase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -76,6 +79,22 @@ object FirebaseModule {
     @Provides
     @Singleton
     fun getFirebaseAuth(): FirebaseAuth = FirebaseManager.getFirebaseAuth()
+
+
+    @Provides
+    @Singleton
+    fun provideCoilRepository(productDao: ProductDao):ProductRepository{
+        return ProductRepositoryImpl(productDao)
+    }
+
+
+
+    @Provides
+    @Singleton
+    fun provideUseCase(repository: ProductRepository):
+            ProductUsecase{
+        return ProductUsecase(repository)
+    }
 
 
     @Provides

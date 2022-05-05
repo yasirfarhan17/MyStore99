@@ -1,6 +1,7 @@
 package com.noor.mystore99.amigrate.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -27,9 +28,7 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        setNavView()
-        GlobalScope.launch(Dispatchers.IO) {
-            viewModel.getProductFromDB()
-        }
+
 
     }
 
@@ -44,11 +43,19 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
 
     override fun addObservers() {
-        viewModel.productEntity.observe(this) {
+        viewModel.productList.observe(this) {
+            val arr=ArrayList<ProductEntity>()
             it.onEach { item->
-                val productEntity=ProductEntity(item.products_name,item.price,item.img,item.quant,item.HindiName,item.stock,type = item.type )
-                viewModel.insertToDB(productEntity)
+
+                val productEntity=ProductEntity(item.products_name!!,item.price,item.img,item.quant,item.hindiName,item.stock)
+                Log.d("yasir ",""+item)
+                arr.add(productEntity)
+
+
             }
+            Log.d("yasir ",""+arr)
+            viewModel.insertToDB(arr)
+
         }
     }
 

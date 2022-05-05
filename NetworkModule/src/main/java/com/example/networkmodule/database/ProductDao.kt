@@ -4,13 +4,17 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.noor.mystore99.productModel
 
 
 @Dao
 interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPhone(phone: ProductEntity)
+    suspend fun insertProduct(phone: ProductEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllProduct(phone: List<ProductEntity>)
 
     @Query("delete from productTable")
     suspend fun clear()
