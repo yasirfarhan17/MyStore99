@@ -10,7 +10,7 @@ import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
 
-class ProductUsecase @Inject constructor(
+class ProductUseCase @Inject constructor(
     private val repository: ProductRepository
 ) {
     operator fun invoke(): Flow<Resource<List<ProductEntity>>> = flow{
@@ -24,7 +24,7 @@ class ProductUsecase @Inject constructor(
         }
         catch (E:IOException)
         {
-            emit(Resource.Error("couldn't connect to db"))
+            emit(Resource.Error("Couldn't connect to db"))
         }
 
     }

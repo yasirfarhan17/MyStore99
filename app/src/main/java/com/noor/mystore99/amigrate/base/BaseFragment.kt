@@ -57,15 +57,15 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel> : Fragment(
                     }
                     is ViewState.Error -> {
                         hideProgress()
-                        handleException(it.throwable)
+                        handleException(it.throwable?:"")
                     }
                     else -> Log.d("onserveState", it.toString())
                 }
             }
     }
 
-    private fun handleException(throwable: Throwable?) {
-        showMessage(throwable?.message)
+    private fun handleException(throwable: String) {
+        showMessage(throwable)
     }
 
 

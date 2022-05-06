@@ -43,7 +43,7 @@ class UserViewModel @Inject constructor(
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    _viewState.postValue(ViewState.Error(error.toException()))
+                    _viewState.postValue(ViewState.Error(error.message))
                 }
 
             })

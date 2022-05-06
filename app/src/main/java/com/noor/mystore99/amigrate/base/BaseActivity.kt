@@ -23,13 +23,11 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindContentView(layoutId())
-        setNavController()
         uiUtil = UiUtil(this)
         observeViewState()
         addObservers()
     }
 
-    abstract fun setNavController()
 
     private fun observeViewState() {
         viewModel.viewState
@@ -52,8 +50,8 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompat
             }
     }
 
-    private fun handleException(throwable: Throwable?) {
-        showMessage(throwable?.message)
+    private fun handleException(throwable: String?) {
+        showMessage(throwable)
 
     }
 

@@ -58,7 +58,8 @@
 
         <activity
             android:name=".amigrate.ui.main.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,6 +67,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LastPage" />
+        <activity android:name=".amigrate.ui.cart.CartActivity" />
         <activity android:name=".CategoryProduct" />
         <activity android:name=".CartProductList" />
         <activity android:name=".AddressPage" />

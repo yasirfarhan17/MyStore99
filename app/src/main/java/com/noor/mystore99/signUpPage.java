@@ -170,12 +170,14 @@ public class signUpPage extends AppCompatActivity {
         //String phone="+"+cpp.selectCoun
 
 
+/*
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
                 30,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 TaskExecutors.MAIN_THREAD,               // Activity (for callback binding)
                 mCallbacks);        // OnVerificationStateChangedCallbacks
+*/
         // Toast.makeText(first.this,"hiiii",Toast.LENGTH_SHORT).show();
 
     }

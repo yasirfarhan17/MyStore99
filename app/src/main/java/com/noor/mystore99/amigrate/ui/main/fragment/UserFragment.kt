@@ -1,90 +1,46 @@
 package com.noor.mystore99.amigrate.ui.main.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.networkmodule.database.ProductEntity
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
 import com.noor.mystore99.amigrate.ui.main.MainViewModel
-import com.noor.mystore99.amigrate.util.extension.obtainViewModel
 import com.noor.mystore99.databinding.UserFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.FlowPreview
 
 @AndroidEntryPoint
 class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
-    val mainViewModel: MainViewModel by activityViewModels()
-    override val viewModel: UserViewModel by activityViewModels()
-
-    @FlowPreview
-    private val homeViewModel: MainViewModel by lazy {
-        obtainViewModel(
-            requireActivity(),
-            MainViewModel::class.java,
-            defaultViewModelProviderFactory
-        )
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
 
-
-
-
+    override val viewModel: UserViewModel by viewModels()
+    override fun getViewModelClass(): Class<UserViewModel> = UserViewModel::class.java
+    override fun getLayout(): Int = R.layout.user_fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.root
-
-
-        addObservers()
         init()
     }
 
-    override fun getViewModelClass(): Class<UserViewModel> = UserViewModel::class.java
-
-    override fun getLayout(): Int = R.layout.user_fragment
-
-    private fun init(){
+    private fun init() {
         with(binding) {
-
-            productRecyclerView1.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-            //shimmer.visibility = View.VISIBLE
+            rvProduct.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
             mainViewModel.getProductFromDB()
-            productRecyclerView1.adapter = UserAdapter(this@UserFragment)
+            rvProduct.adapter = UserAdapter(this@UserFragment)
         }
     }
 
     override fun addObservers() {
-        mainViewModel.productFromDB.observe(viewLifecycleOwner) {
-            (binding.productRecyclerView1.adapter as UserAdapter).submitList(it)
-            Log.d("yasir check",""+it)
+        mainViewModel.productList.observe(viewLifecycleOwner) {
+           val list= it.map { it.toProductEntity() }
+            (binding.rvProduct.adapter as UserAdapter).submitList(list as ArrayList<ProductEntity>)
         }
     }
 
 }
-
-
-/*class UserFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = UserFragment()
-    }
-
-    private lateinit var viewModel: UserViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.user_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
-}*/

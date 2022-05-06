@@ -1,0 +1,210 @@
+{
+  "control": [
+    {
+      "fontsize": {
+        "body": 16,
+        "sub": 12,
+        "title": 18,
+        "price": 14,
+        "footer": 12,
+        "header": 16
+      },
+      "dimension": {
+        "control": 60,
+        "image": 60,
+        "addremoveicon": 36,
+        "screenmargin": 0,
+        "vegicon": 18,
+        "keyboard": 60,
+        "scroll": 60
+      }
+    }
+  ],
+  "location_settings": {
+    "usertype_settings": {
+      "employee": {
+        "recharge_enabled": true,
+        "menu_price_logic": 2,
+        "hide_smartcash_page": false,
+        "validateEcashBillAmount": true,
+        "hide_menu_price": false
+      },
+      "all": {
+        "payment_methods": [
+          "paytmgpay",
+          "paytmphonepe",
+          "paytmpaytmpay",
+          "paytmupi",
+          "razorpaydc",
+          "razorpaywallets",
+          "razorpayvpaupi",
+          "paytmupi",
+          "pay_at_counter",
+          "pay_at_counter~cost1",
+          "pay_at_counter~cost2",
+          "pay_at_counter~cost3",
+          "pay_at_counter~cost4"
+        ]
+      },
+      "meal_card_user": {
+        "recharge_enabled": true,
+        "hide_smartcash_page": false,
+        "validateEcashBillAmount": true,
+        "hide_menu_price": false
+      }
+    },
+    "payment_objects": {
+      "pay_at_counter": {
+        "name": "Cash"
+      },
+      "pay_at_counter~cost2": {
+        "name": "Cost Center 2"
+      },
+      "pay_at_counter~cost3": {
+        "name": "Cost Center 3"
+      },
+      "pay_at_counter~cost4": {
+        "name": "Cost Center 4"
+      },
+      "pay_at_counter~cost1": {
+        "name": "Cost Center 1"
+      }
+    }
+  },
+  "restaurant": [
+    {
+      "IsOFSConfig": false,
+      "name": "Breakfast.NEW",
+      "isofsonly": false,
+      "orderchannel": 2,
+      "IsPrintUniqueImage": 2,
+      "IsORTConfig": false,
+      "foodcourtname": "TATA.Consultancy.Service",
+      "TIN": "",
+      "showprice": "0:0-23:59",
+      "key": "tafJo8Th2dXXy83U1p_D0-rdztQ=",
+      "address": "",
+      "id": "TCS:breakfast"
+    },
+    {
+      "IsOFSConfig": false,
+      "name": "Adigas",
+      "isofsonly": false,
+      "orderchannel": 2,
+      "IsPrintUniqueImage": 2,
+      "IsORTConfig": false,
+      "foodcourtname": "TATA.Consultancy.Service",
+      "TIN": "",
+      "showprice": "0:0-23:59",
+      "key": "tafJo8PT3dvN2JjD0efV0Ns=",
+      "address": "",
+      "id": "TCS:adigas"
+    },
+    {
+      "IsOFSConfig": false,
+      "name": "Dinner",
+      "isofsonly": false,
+      "orderchannel": 2,
+      "IsPrintUniqueImage": 2,
+      "IsORTConfig": false,
+      "foodcourtname": "TATA.Consultancy.Service",
+      "TIN": "",
+      "showprice": "0:0-23:59",
+      "key": "tafJo8bY4uLR15jD0efV0Ns=",
+      "address": "",
+      "id": "TCS:dinner"
+    },
+    {
+      "IsOFSConfig": false,
+      "name": "Lunch",
+      "isofsonly": false,
+      "orderchannel": 2,
+      "IsPrintUniqueImage": 2,
+      "IsORTConfig": false,
+      "foodcourtname": "TATA.Consultancy.Service",
+      "TIN": "",
+      "showprice": "0:0-23:59",
+      "key": "tafJo87k4tfUkc7Q1ufNyQ==",
+      "address": "",
+      "id": "TCS:lunch"
+    }
+  ],
+  "system": {
+    "cloudimageurl": "https:\/\/storage.googleapis.com\/smartq-prd\/images\/",
+    "cloudapi": "https:\/\/smartqdemo.thesmartq.com\/",
+    "systemtime": "2017-13-21 12:00:00",
+    "logging": false,
+    "users": "[]",
+    "smartq": false,
+    "connectionmode": 4,
+    "orderperiod": 0,
+    "counterid": "TCS.IMD",
+    "connectionstring": {
+      "password": "",
+      "uid": "",
+      "server": "https:\/\/smartqdemo.thesmartq.com\/v1\/",
+      "database": ""
+    },
+    "applocation": "desktop",
+    "isprivacyon": 0,
+    "locationid": "TCS",
+    "location": "tata",
+    "releaseproduction": false,
+    "userprivacy": false,
+    "issiginreq": false
+  },
+  "timer": {
+    "offerscroldelay": 10,
+    "clearcart": 0,
+    "menuscroldelay": 10,
+    "item": 0,
+    "menu": 450,
+    "ort": 0,
+    "offers": 40,
+    "autocloseopenwnd": 0,
+    "ofs": 20,
+    "cloudsync": 0,
+    "paytm": 0,
+    "closewndonerror": 0,
+    "closewnd": 0
+  },
+  "feature": {
+    "apptitle": "Today's Menu",
+    "showcalories": true,
+    "donnation": false,
+    "multipaymentmode": false,
+    "isdayendreq": false,
+    "centralized": false,
+    "availablequantity": false,
+    "categorysession": {
+      "Lunch": "12:00-15:00",
+      "Breakfast": "7:00-11:30",
+      "Snack": "15:05-18:30",
+      "Dinner": "18:31-23:30"
+    },
+    "columncount": 1,
+    "kioskmode": false,
+    "issalesvisible": false,
+    "istapfirst": false,
+    "screenorientation": "portrait",
+    "theme": 0,
+    "enabletrending": false,
+    "offline": false,
+    "isonlineofssync": false,
+    "multiscreen": false,
+    "showitemimage": false,
+    "fooddescriptioninanewline": false,
+    "paymentmode": false,
+    "restaurantselection": false,
+    "removeitemdialog": false,
+    "enablebgimage": false,
+    "showprice": true,
+    "showuseroptions": false,
+    "transactioncount": 0,
+    "rowcount": 8,
+    "isautosessioncut": false,
+    "groupbasedonfoodtype": false,
+    "issingleitemallowed": false,
+    "showReports": false
+  }
+}

@@ -27,10 +27,10 @@ abstract class BaseViewModel() : ViewModel() {
     }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        handleFailure(throwable = exception)
+        handleFailure(throwable = exception.localizedMessage)
     }
 
-    private fun handleFailure(throwable: Throwable?) {
+    private fun handleFailure(throwable: String?) {
         _viewState.postValue(ViewState.Error(throwable))
     }
 }

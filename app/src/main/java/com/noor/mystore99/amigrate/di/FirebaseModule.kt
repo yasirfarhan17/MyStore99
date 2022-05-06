@@ -8,7 +8,7 @@ import com.example.networkmodule.network.FirebaseKey
 import com.example.networkmodule.network.FirebaseManager
 import com.example.networkmodule.repository.ProductRepository
 import com.example.networkmodule.repository.ProductRepositoryImpl
-import com.example.networkmodule.usecase.ProductUsecase
+import com.example.networkmodule.usecase.ProductUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -92,14 +92,14 @@ object FirebaseModule {
     @Provides
     @Singleton
     fun provideUseCase(repository: ProductRepository):
-            ProductUsecase{
-        return ProductUsecase(repository)
+            ProductUseCase{
+        return ProductUseCase(repository)
     }
 
 
     @Provides
     @Singleton
-    fun provideProductDatabase(@ApplicationContext context:Context):ProductDataBase{
+    fun provideProductDatabase(@ApplicationContext context: Context): ProductDataBase {
         return Room.databaseBuilder(
             context,
             ProductDataBase::class.java,
@@ -112,7 +112,7 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideProductDao(productDatabase:ProductDataBase):ProductDao{
+    fun provideProductDao(productDatabase: ProductDataBase): ProductDao {
         return productDatabase.product
     }
 
