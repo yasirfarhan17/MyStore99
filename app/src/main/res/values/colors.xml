@@ -15,6 +15,8 @@
     <color name="rippleEffectColor">#FFEB3B</color>
     <color name="btnSignIn">#1fbad6</color>
     <color name="btnRegister">#83838c</color>
+    <color name="primary">#192648</color>
+    <color name="btnprimary">#fe9501</color>
 
 
     <color name="baseReleaseColor">#212121</color>

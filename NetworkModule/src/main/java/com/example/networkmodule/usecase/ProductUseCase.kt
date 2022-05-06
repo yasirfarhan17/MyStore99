@@ -1,5 +1,6 @@
 package com.example.networkmodule.usecase
 
+import android.util.Log
 import com.example.networkmodule.database.ProductEntity
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.repository.ProductRepository
@@ -17,6 +18,7 @@ class ProductUseCase @Inject constructor(
         try {
             emit(Resource.Loading())
             val result=repository.getAllProduct()
+            Log.d("usecase",""+result)
             emit(Resource.Success(result))
         }
         catch (e:Exception){

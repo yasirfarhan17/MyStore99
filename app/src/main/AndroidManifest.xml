@@ -22,6 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SbziTaza">
+        <activity
+            android:name=".amigrate.ui.cart.NewCartActivity"
+            android:exported="false" />
         <activity android:name=".AboutPage" />
         <activity android:name=".InstructionPage" />
         <activity android:name=".page1" />
