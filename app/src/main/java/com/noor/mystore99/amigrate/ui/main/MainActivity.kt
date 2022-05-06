@@ -14,6 +14,7 @@ import com.noor.mystore99.amigrate.ui.cart.CartActivity
 import com.noor.mystore99.databinding.ActivityMain3Binding
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
@@ -63,3 +64,46 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
         }
     }
 }
+/*
+    fun showAlert() {
+        alertShowing=true
+        AlertDialog.Builder(this)
+            .setTitle("Spinner check")
+            .setPositiveButton(android.R.string.yes) { dialog, which ->
+                binding.spinner.setSelection(currentSelection)
+                prevSelection=currentSelection
+                dialog.dismiss()
+                Handler().postDelayed({
+                    alertShowing=false
+                },1000)
+
+            }
+            .setNegativeButton(android.R.string.no) { dialog, _ ->
+                binding.spinner.setSelection(prevSelection)
+                dialog.dismiss()
+                Handler().postDelayed({
+                    alertShowing=false
+                },1000)
+            }
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
+
+    }
+                spinner.onItemSelectedListener = object : SpinnerInteractionListener() {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View,
+                    pos: Int,
+                    id: Long
+                ) {
+                    if (alertShowing) return
+                    super.onItemSelected(parent, view, pos, id)
+                    currentSelection = pos
+                    Log.d("SAHIL", spinner.selectedItem.toString()+"--"+ prevSelection +"---"+currentSelection)
+                    showAlert()
+                    spinner.setSelection(prevSelection)
+                }
+            }
+
+
+* */

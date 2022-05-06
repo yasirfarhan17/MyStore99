@@ -1,4 +1,4 @@
-package com.noor.mystore99.amigrate.ui.main.fragment
+package com.noor.mystore99.amigrate.ui.main.fragment.home
 
 import android.os.Bundle
 import android.view.View
@@ -10,8 +10,10 @@ import com.example.networkmodule.database.ProductEntity
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
 import com.noor.mystore99.amigrate.ui.main.MainViewModel
+import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
 import com.noor.mystore99.databinding.UserFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {

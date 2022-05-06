@@ -1,4 +1,4 @@
-package com.noor.mystore99.amigrate.ui.main.fragment
+package com.noor.mystore99.amigrate.ui.main.fragment.home.adapter
 
 
 import android.annotation.SuppressLint
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.networkmodule.database.ProductEntity
+import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
 import com.noor.mystore99.amigrate.util.extension.CoilExtension.loadBitmap
 import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
 import com.noor.mystore99.databinding.CardviewBinding

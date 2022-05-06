@@ -1,4 +1,4 @@
-package com.noor.mystore99.amigrate.ui.main.fragment.ui.dashboard
+package com.noor.mystore99.amigrate.ui.main.fragment.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package com.noor.mystore99.amigrate.ui.main.fragment
+package com.noor.mystore99.amigrate.ui.main.fragment.home
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot

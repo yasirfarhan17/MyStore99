@@ -1,10 +1,9 @@
-package com.noor.mystore99.amigrate.ui.main.fragment.ui.dashboard
+package com.noor.mystore99.amigrate.ui.main.fragment.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.noor.mystore99.databinding.UserFragmentBinding
