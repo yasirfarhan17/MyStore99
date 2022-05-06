@@ -5,43 +5,41 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.networkmodule.database.ProductEntity
-import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
-import com.noor.mystore99.amigrate.util.extension.CoilExtension.loadBitmap
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
-import com.noor.mystore99.databinding.CardviewBinding
+import com.noor.mystore99.categoryModel
+import com.noor.mystore99.databinding.IndiviewCategoryBinding
 
-class CategoryAdapter(val context: UserFragment) :
+class CategoryAdapter :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
 
-    private val item = ArrayList<ProductEntity>()
-    private val itemFilter = ArrayList<ProductEntity>()
-
+    private val item = ArrayList<categoryModel>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: ArrayList<ProductEntity>) {
+    fun submitList(list: ArrayList<categoryModel>) {
         item.clear()
-        itemFilter.clear()
-        itemFilter.addAll(list)
         item.addAll(list)
         notifyDataSetChanged()
     }
 
-    inner class CategoryViewHolder(private val binding: CardviewBinding) :
+    inner class CategoryViewHolder(private val binding: IndiviewCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ProductEntity) {
+        fun bind(item: categoryModel) {
             with(binding) {
-                name.text = item.products_name
-                price.text = item.price
-                hindiName.text = item.HindiName
-                productImg.loadBitmap(item.img!!.decodeToBitmap())
+                imgCategoryIcon.load(item.categoryIconLink.decodeToBitmap()){
+                    transformations(CircleCropTransformation())
+                }
+                tvCategoryName.text = item.categoryName.uppercase()
+                imgCategoryIcon.invalidate()
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val binding = CardviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            IndiviewCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CategoryViewHolder(binding)
     }
 

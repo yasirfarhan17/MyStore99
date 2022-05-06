@@ -5,13 +5,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.ProductEntity
-import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
-import com.noor.mystore99.amigrate.util.extension.CoilExtension.loadBitmap
 import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
-import com.noor.mystore99.databinding.CardviewBinding
+import com.noor.mystore99.databinding.IndiviewProductsBinding
 
-class UserAdapter(val context: UserFragment) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
 
     private val item = ArrayList<ProductEntity>()
@@ -27,20 +27,25 @@ class UserAdapter(val context: UserFragment) : RecyclerView.Adapter<UserAdapter.
         notifyDataSetChanged()
     }
 
-    inner class UserViewHolder(private val binding: CardviewBinding) :
+    inner class UserViewHolder(private val binding: IndiviewProductsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ProductEntity) {
             with(binding) {
-                name.text = item.products_name
-                price.text = item.price
-                hindiName.text = item.HindiName
-                productImg.loadBitmap(item.img!!.decodeToBitmap())
+                tvName.text = item.products_name
+                tvMrp.text = item.price
+                tvHindiName.text = item.HindiName
+                item.img!!.decodeToBitmap(500)?.let {
+                    imgProductImage.load(it) {
+                        transformations(CircleCropTransformation())
+                    }
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val binding = CardviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            IndiviewProductsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserViewHolder(binding)
     }
 

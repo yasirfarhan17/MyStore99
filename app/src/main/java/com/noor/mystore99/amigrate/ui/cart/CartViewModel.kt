@@ -1,4 +1,6 @@
 package com.noor.mystore99.amigrate.ui.cart
 
-class CartViewModel {
+import com.noor.mystore99.amigrate.base.BaseViewModel
+
+class CartViewModel:BaseViewModel() {
 }

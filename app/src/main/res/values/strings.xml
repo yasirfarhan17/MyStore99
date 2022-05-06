@@ -48,5 +48,11 @@
     <string name="icon_for_notification">Icon for Notification</string>
     <string name="category">Category</string>
     <string name="txt_offers_amp_promo"><![CDATA[Offers & Promo]]></string>
+    <string name="icon_for_category">Icon for category</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="imageview_for_product_icon">ImageView for product icon</string>
+    <string name="all_products">All Products</string>
+    <string name="app_name_first">Sabzi</string>
+    <string name="app_name_last">Taza</string>
 
 </resources>

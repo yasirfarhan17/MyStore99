@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Paint;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -72,7 +71,7 @@ public class CategoryProductAdapter extends RecyclerView.Adapter <CategoryProduc
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview,parent,false);
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.indiview_products,parent,false);
         MyViewHolder evh=new MyViewHolder(v,mListner);
 
         return  evh;
@@ -180,7 +179,7 @@ public class CategoryProductAdapter extends RecyclerView.Adapter <CategoryProduc
 
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
-            name=(TextView)itemView.findViewById(R.id.name);
+          /*  name=(TextView)itemView.findViewById(R.id.name);
             price=(TextView)itemView.findViewById(R.id.price);
             img=(ImageView) itemView.findViewById(R.id.product_img);
             ins_box=(TextView)itemView.findViewById(R.id.inc_box);
@@ -189,7 +188,7 @@ public class CategoryProductAdapter extends RecyclerView.Adapter <CategoryProduc
             //btnDsc=(Button)itemView.findViewById(R.id.buttonDes);
             addBtn=(Button)itemView.findViewById(R.id.addBtn);
             price1=(TextView)itemView.findViewById(R.id.mrp);
-            textMrp=(TextView)itemView.findViewById(R.id.textMrp);
+            textMrp=(TextView)itemView.findViewById(R.id.textMrp);*/
 
 
 

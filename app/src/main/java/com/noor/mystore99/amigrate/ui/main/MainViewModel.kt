@@ -16,6 +16,7 @@ import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
 import com.noor.mystore99.productModel
+import com.noor.mystore99.sliderModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -39,6 +40,7 @@ class MainViewModel @Inject constructor(
         getAllProductList()
         getProductFromDB()
     }
+
 
     private fun getAllProductList() {
         launch {

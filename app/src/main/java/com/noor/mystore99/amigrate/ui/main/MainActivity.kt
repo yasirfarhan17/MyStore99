@@ -13,9 +13,6 @@ import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.databinding.ActivityMain3Binding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
@@ -27,33 +24,40 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       setNavView()
+        setNavView()
 
 
     }
 
     private fun setNavView() {
-
-        val navView :BottomNavigationView=binding.navView
-        val navController=findNavController(R.id.nav_host_fragment_activity_main)
-        val appBarConfiguration= AppBarConfiguration(setOf(R.id.navigation_home,R.id.navigation_user))
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        val navView: BottomNavigationView = binding.bottomNavigationView
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+       /* val appBarConfiguration =
+            AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_user))
+        setupActionBarWithNavController(navController, appBarConfiguration)*/
         navView.setupWithNavController(navController)
     }
 
 
     override fun addObservers() {
         viewModel.productList.observe(this) {
-            val arr=ArrayList<ProductEntity>()
-            it.onEach { item->
+            val arr = ArrayList<ProductEntity>()
+            it.onEach { item ->
 
-                val productEntity=ProductEntity(item.products_name!!,item.price,item.img,item.quant,item.hindiName,item.stock)
-                Log.d("yasir ",""+item)
+                val productEntity = ProductEntity(
+                    item.products_name!!,
+                    item.price,
+                    item.img,
+                    item.quant,
+                    item.hindiName,
+                    item.stock
+                )
+                Log.d("yasir ", "" + item)
                 arr.add(productEntity)
 
 
             }
-            Log.d("yasir ",""+arr)
+            Log.d("yasir ", "" + arr)
             viewModel.insertToDB(arr)
 
         }

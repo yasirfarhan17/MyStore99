@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.noor.mystore99.databinding.UserFragmentBinding
+import com.noor.mystore99.databinding.ActivityMain2Binding
 
 class DashboardFragment : Fragment() {
 
-    private var _binding: UserFragmentBinding? = null
+    private var _binding: ActivityMain2Binding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,11 +23,8 @@ class DashboardFragment : Fragment() {
     ): View {
         val dashboardViewModel =
             ViewModelProvider(this)[DashboardViewModel::class.java]
-
-        _binding = UserFragmentBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        return root
+        _binding = ActivityMain2Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {
