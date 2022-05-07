@@ -1,15 +1,15 @@
-package com.noor.mystore99;
+package com.example.networkmodule.model;
 
-public class categoryModel {
+public class CategoryModel {
 
     private String categoryIconLink;
     private String categoryName;
 
-    public categoryModel(){
+    public CategoryModel(){
 
     }
 
-    public categoryModel(String categoryIconLink, String categoryName) {
+    public CategoryModel(String categoryIconLink, String categoryName) {
         this.categoryIconLink = categoryIconLink;
         this.categoryName = categoryName;
     }

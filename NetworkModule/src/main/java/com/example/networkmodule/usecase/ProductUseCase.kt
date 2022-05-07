@@ -1,7 +1,7 @@
 package com.example.networkmodule.usecase
 
 import android.util.Log
-import com.example.networkmodule.database.product.ProductEntity
+import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow

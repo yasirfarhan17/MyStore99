@@ -6,12 +6,12 @@ import android.util.Base64
 import android.util.Log
 
 object Util {
-    fun String.decodeToBitmap(resize:Int=80): Bitmap? {
+    fun String.decodeToBitmap(resize: Int = 80): Bitmap? {
         val decodedString: ByteArray =
             Base64.decode(this, Base64.DEFAULT)
         val bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
             .getResizedBitmap(resize)
-        Log.d("SAHIL_BITMAP", "input ${bitmap?.width} ${bitmap?.height}")
+        Log.d("SAHIL_BITMAP", "output ${bitmap?.width} ${bitmap?.height}")
         return bitmap
     }
 
@@ -19,7 +19,6 @@ object Util {
         var width = this.width
         var height = this.height
         Log.d("SAHIL_BITMAP", "input $width $height")
-
         val bitmapRatio = width.toFloat() / height.toFloat()
         if (bitmapRatio > 1) {
             width = maxSize

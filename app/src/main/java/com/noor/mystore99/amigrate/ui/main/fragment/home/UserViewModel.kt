@@ -1,100 +1,87 @@
 package com.noor.mystore99.amigrate.ui.main.fragment.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.networkmodule.database.cart.CartDao
-import com.example.networkmodule.database.cart.CartEntity
-import com.example.networkmodule.database.cart.CartModel
-import com.example.networkmodule.network.FirebaseKey
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.example.networkmodule.database.dao.CartDao
+import com.example.networkmodule.database.entity.CartEntity
+import com.example.networkmodule.model.CategoryModel
+import com.example.networkmodule.model.SliderModel
+import com.example.networkmodule.network.Resource
+import com.example.networkmodule.usecase.FirebaseGetBannerUseCase
+import com.example.networkmodule.usecase.FirebaseGetCategoryUseCase
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
-import com.noor.mystore99.categoryModel
-import com.noor.mystore99.sliderModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    @Named(FirebaseKey.BANNER_DATABASE_REF) private val bannerDbRef: DatabaseReference,
-    @Named(FirebaseKey.PRODUCT_DATABASE_REF) private val productDbRef: DatabaseReference,
-    @Named(FirebaseKey.CATEGORY_DATABASE_REF) private val categoryDbRef: DatabaseReference,
+    private val categoryUseCase: FirebaseGetCategoryUseCase,
+    private val bannerUseCase: FirebaseGetBannerUseCase,
     private val cartDao: CartDao
 ) : BaseViewModel() {
-    private var _bannerList = MutableLiveData<ArrayList<sliderModel>>()
+    private var _bannerList = MutableLiveData<ArrayList<SliderModel>>()
     val bannerList = _bannerList.toLiveData()
-    private var _categoryList = MutableLiveData<ArrayList<categoryModel>>()
+
+    private var _categoryList = MutableLiveData<ArrayList<CategoryModel>>()
     val categoryList = _categoryList.toLiveData()
 
     init {
-        getData()
         getCategory()
+        getBanner()
+    }
+
+    private fun getBanner() {
+        launch {
+            bannerUseCase.invoke().collect {
+                when (it) {
+                    is Resource.Success -> {
+                        _bannerList.postValue(it.data as ArrayList<SliderModel>)
+                        _viewState.postValue(ViewState.Success())
+                    }
+                    is Resource.Error -> {
+                        _viewState.postValue(ViewState.Error(it.message))
+                    }
+                    is Resource.Loading -> {
+                        _viewState.postValue(ViewState.Loading)
+                    }
+                }
+
+            }
+        }
     }
 
     private fun getCategory() {
         launch {
-            _viewState.postValue(ViewState.Loading)
-            categoryDbRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val categoryList = ArrayList<categoryModel>()
-                    snapshot.children.forEach {
-                        Log.d("SAHIL", "category $it")
-                        val categoryModel = it.getValue(categoryModel::class.java)
-                        Log.d("SAHIL", "category $snapshot")
-                        categoryModel?.let { it1 -> categoryList.add(it1) }
+            categoryUseCase.invoke().collect {
+                when (it) {
+                    is Resource.Success -> {
+                        _categoryList.postValue(it.data as ArrayList<CategoryModel>)
+                        _viewState.postValue(ViewState.Success())
                     }
-                    Log.d("SAHIL", "category $categoryList")
-                    _categoryList.postValue(categoryList)
-                    _viewState.postValue(ViewState.Success())
+                    is Resource.Error -> {
+                        _viewState.postValue(ViewState.Error(it.message))
+                    }
+                    is Resource.Loading -> {
+                        _viewState.postValue(ViewState.Loading)
+                    }
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    _viewState.postValue(ViewState.Error(error.message))
-                }
-
-            })
+            }
         }
 
     }
 
-    private fun getData() {
-        launch {
-            _viewState.postValue(ViewState.Loading)
-            bannerDbRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val p = ArrayList<sliderModel>()
-                    for (dataSnapshot1 in snapshot.children) {
-                        val val1 = dataSnapshot1.child("img").value.toString()
-                        val color = dataSnapshot1.child("color").value.toString()
-                        val ob = sliderModel(val1, color)
-                        p.add(ob)
-                    }
-                    _bannerList.postValue(p)
-                    _viewState.postValue(ViewState.Success())
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    _viewState.postValue(ViewState.Error(error.message))
-                }
-
-            })
+    fun insertToCartDb(item: CartEntity) {
+        viewModelScope.launch {
+            val arr = ArrayList<CartEntity>()
+            arr.addAll(cartDao.getAllCartProduct())
+            arr.add(item)
+            cartDao.insertAllCartProduct(arr)
         }
     }
-
-     fun insertToCartDb(item:CartEntity) {
-         viewModelScope.launch {
-             val arr=ArrayList<CartEntity>()
-             arr.addAll(cartDao.getProduct())
-             arr.add(item)
-             cartDao.insertAllProduct(arr)
-         }
-     }
 
 }

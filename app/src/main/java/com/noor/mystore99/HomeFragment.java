@@ -16,6 +16,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.example.networkmodule.model.CategoryModel;
+import com.example.networkmodule.model.SliderModel;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,15 +43,6 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 import dmax.dialog.SpotsDialog;
 
 
@@ -49,47 +52,40 @@ import dmax.dialog.SpotsDialog;
 public class HomeFragment extends Fragment {
 
 
-
-
     public HomeFragment() {
         // Required empty public constructor
     }
 
     private RecyclerView categoryRecyclerView;
     private categoryAdaptor categoryAdaptor1;
-    ArrayList<categoryModel> list1=new ArrayList<>();
+    ArrayList<CategoryModel> list1 = new ArrayList<>();
 
     /////////Banner Slider
     private ViewPager bannersliderviewPager;
-    ArrayList<sliderModel> sliderModelList=new ArrayList<>();
-    private int currentPage=2;
+    ArrayList<SliderModel> sliderModelList = new ArrayList<>();
+    private int currentPage = 2;
     private Timer timer;
-    final private long delayTime=3000;
-    final private long periodTime=3000;
+    final private long delayTime = 3000;
+    final private long periodTime = 3000;
     String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
 
     DatabaseReference ref;
     RecyclerView recyclerView;
     ArrayList<product> list;
-    ArrayList<String> l=new ArrayList<>();
+    ArrayList<String> l = new ArrayList<>();
     ArrayList<product> list3;
     productAdapter adapter;
-    int count=1;
-    Button btn_ins,btn_dsc;
-    TextView CountText,allcat,allPro,updateTime;
-    boolean checkRun=false;
+    int count = 1;
+    Button btn_ins, btn_dsc;
+    TextView CountText, allcat, allPro, updateTime;
+    boolean checkRun = false;
 
     SearchView searchView;
-    Handler handler=new Handler();
+    Handler handler = new Handler();
     android.app.AlertDialog waitingtDialog;
     public static NestedScrollView nestedScrollView;
     public static Toolbar toolbar;
-
-
-
-
-
 
 
     ////////Banner slider
@@ -101,14 +97,14 @@ public class HomeFragment extends Fragment {
 
     ////Strip Ad
 
-    private Runnable update=new Runnable() {
+    private Runnable update = new Runnable() {
         @Override
         public void run() {
             String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-            String timeSub=currentTime.substring(0,5);
-            String timeReplace=timeSub.replaceAll("[^a-zA-Z0-9]","");
-            int timeCon=Integer.parseInt(timeReplace);
-            if(timeCon>=800 && timeCon<=859){
+            String timeSub = currentTime.substring(0, 5);
+            String timeReplace = timeSub.replaceAll("[^a-zA-Z0-9]", "");
+            int timeCon = Integer.parseInt(timeReplace);
+            if (timeCon >= 800 && timeCon <= 859) {
                 updateTime.setVisibility(View.VISIBLE);
                 categoryRecyclerView.setVisibility(View.INVISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
@@ -116,13 +112,13 @@ public class HomeFragment extends Fragment {
                 bannersliderviewPager.setVisibility(View.INVISIBLE);
                 allcat.setVisibility(View.INVISIBLE);
                 allPro.setVisibility(View.INVISIBLE);
-                checkRun=true;
+                checkRun = true;
 
-                ref=FirebaseDatabase.getInstance().getReference("Cart");
+                ref = FirebaseDatabase.getInstance().getReference("Cart");
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot snapshot1:snapshot.getChildren()){
+                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                             snapshot1.getRef().removeValue();
                         }
                     }
@@ -132,8 +128,7 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-            }
-            else {
+            } else {
                 updateTime.setVisibility(View.GONE);
                 categoryRecyclerView.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -141,22 +136,22 @@ public class HomeFragment extends Fragment {
                 bannersliderviewPager.setVisibility(View.VISIBLE);
                 allcat.setVisibility(View.VISIBLE);
                 allPro.setVisibility(View.VISIBLE);
-                checkRun=false;
+                checkRun = false;
             }
 
-            handler.postDelayed(this,1000);
+            handler.postDelayed(this, 1000);
 
         }
     };
-    private Runnable page=new Runnable() {
+    private Runnable page = new Runnable() {
         @Override
         public void run() {
             String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-            String timeSub=currentTime.substring(0,5);
-            String timeReplace=timeSub.replaceAll("[^a-zA-Z0-9]","");
-            int timeCon=Integer.parseInt(timeReplace);
+            String timeSub = currentTime.substring(0, 5);
+            String timeReplace = timeSub.replaceAll("[^a-zA-Z0-9]", "");
+            int timeCon = Integer.parseInt(timeReplace);
 
-            if(timeCon>=800 && timeCon<=859){
+            if (timeCon >= 800 && timeCon <= 859) {
                 updateTime.setVisibility(View.VISIBLE);
                 categoryRecyclerView.setVisibility(View.INVISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
@@ -164,12 +159,12 @@ public class HomeFragment extends Fragment {
                 bannersliderviewPager.setVisibility(View.INVISIBLE);
                 allcat.setVisibility(View.INVISIBLE);
                 allPro.setVisibility(View.INVISIBLE);
-                checkRun=true;
-                ref=FirebaseDatabase.getInstance().getReference("Cart");
+                checkRun = true;
+                ref = FirebaseDatabase.getInstance().getReference("Cart");
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot snapshot1:snapshot.getChildren()){
+                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                             snapshot1.getRef().removeValue();
                         }
                     }
@@ -179,29 +174,28 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-            }
-           else if(recyclerView.getVisibility()== View.INVISIBLE){
+            } else if (recyclerView.getVisibility() == View.INVISIBLE) {
                 updateTime.setVisibility(View.GONE);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setVisibility(View.VISIBLE);
-                checkRun=false;
+                checkRun = false;
 
             }
-           //adapter.notifyDataSetChanged();
-            handler.postDelayed(this,1000);
+            //adapter.notifyDataSetChanged();
+            handler.postDelayed(this, 1000);
 
         }
     };
 
-    private Runnable check=new Runnable() {
+    private Runnable check = new Runnable() {
         @Override
         public void run() {
             String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-            String timeSub=currentTime.substring(0,5);
-            String timeReplace=timeSub.replaceAll("[^a-zA-Z0-9]","");
-            int timeCon=Integer.parseInt(timeReplace);
+            String timeSub = currentTime.substring(0, 5);
+            String timeReplace = timeSub.replaceAll("[^a-zA-Z0-9]", "");
+            int timeCon = Integer.parseInt(timeReplace);
 
-            if(timeCon>=800 && timeCon<=859){
+            if (timeCon >= 800 && timeCon <= 859) {
                 updateTime.setVisibility(View.VISIBLE);
                 categoryRecyclerView.setVisibility(View.INVISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
@@ -209,12 +203,12 @@ public class HomeFragment extends Fragment {
                 bannersliderviewPager.setVisibility(View.INVISIBLE);
                 allcat.setVisibility(View.INVISIBLE);
                 allPro.setVisibility(View.INVISIBLE);
-                checkRun=true;
-                ref=FirebaseDatabase.getInstance().getReference("Cart");
+                checkRun = true;
+                ref = FirebaseDatabase.getInstance().getReference("Cart");
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot snapshot1:snapshot.getChildren()){
+                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                             snapshot1.getRef().removeValue();
                         }
                     }
@@ -224,18 +218,17 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-            }
-          else  if(searchView.getQuery().toString().isEmpty()|| searchView.getQuery().toString().equals("")){
+            } else if (searchView.getQuery().toString().isEmpty() || searchView.getQuery().toString().equals("")) {
                 updateTime.setVisibility(View.GONE);
                 categoryRecyclerView.setVisibility(View.VISIBLE);
                 bannersliderviewPager.setVisibility(View.VISIBLE);
                 allcat.setVisibility(View.VISIBLE);
                 allPro.setVisibility(View.VISIBLE);
-                checkRun=false;
+                checkRun = false;
 
             }
 
-            handler.postDelayed(this,5000);
+            handler.postDelayed(this, 5000);
 
 
             //handler.postDelayed(check, 1000);
@@ -245,61 +238,58 @@ public class HomeFragment extends Fragment {
     };
 
 
-
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         final View view=inflater.inflate(R.layout.fragment_home2, container, false);
+        final View view = inflater.inflate(R.layout.fragment_home2, container, false);
         //View view1=inflater.inflate(R.layout.cardview, container, false);
         //CountText=(TextView)view1.findViewById(R.id.inc_box);
 
-        categoryRecyclerView=view.findViewById(R.id.category_recyclerView);
-        allcat=view.findViewById(R.id.allCategory);
+        categoryRecyclerView = view.findViewById(R.id.category_recyclerView);
+        allcat = view.findViewById(R.id.allCategory);
 
-        allPro=view.findViewById(R.id.allproduct);
-        nestedScrollView=view.findViewById(R.id.scroll);
-        toolbar=view.findViewById(R.id.toolbar);
+        allPro = view.findViewById(R.id.allproduct);
+        nestedScrollView = view.findViewById(R.id.scroll);
+        toolbar = view.findViewById(R.id.toolbar);
 
 
-        final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        final GridLayoutManager gridLayoutManager=new GridLayoutManager(view.getContext(),2);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 2);
         gridLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         categoryRecyclerView.setLayoutManager(gridLayoutManager);
-        searchView=view.findViewById(R.id.search);
+        searchView = view.findViewById(R.id.search);
         searchView.setQueryHint("Search...");
         searchView.setIconifiedByDefault(false);
         getActivity().onSearchRequested();
-        updateTime=view.findViewById(R.id.updateTime);
-        recyclerView=(RecyclerView)view.findViewById(R.id.product_recyclerView1);
-        bannersliderviewPager=view.findViewById(R.id.banner_slider_view_pager);
+        updateTime = view.findViewById(R.id.updateTime);
+        recyclerView = (RecyclerView) view.findViewById(R.id.product_recyclerView1);
+        bannersliderviewPager = view.findViewById(R.id.banner_slider_view_pager);
 
-       // Toast.makeText(view.getContext(),""+timeCon,Toast.LENGTH_LONG).show();
+        // Toast.makeText(view.getContext(),""+timeCon,Toast.LENGTH_LONG).show();
 
-        if(checkRun){
+        if (checkRun) {
             update.run();
-        }
-        else {
-            waitingtDialog= new SpotsDialog.Builder().setContext(getActivity()).build();
+        } else {
+            waitingtDialog = new SpotsDialog.Builder().setContext(getActivity()).build();
             waitingtDialog.show();
-            ref= FirebaseDatabase.getInstance().getReference("Category");
+            ref = FirebaseDatabase.getInstance().getReference("Category");
             //Toast.makeText(getActivity(),"hii",Toast.LENGTH_SHORT).show();
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     list1.clear();
 
-                    for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-                        categoryModel p=dataSnapshot1.getValue(categoryModel.class);
+                        CategoryModel p = dataSnapshot1.getValue(CategoryModel.class);
                         list1.add(p);
                     }
 
-                    categoryAdaptor1=new categoryAdaptor(list1,view.getContext());
+                    categoryAdaptor1 = new categoryAdaptor(list1, view.getContext());
                     categoryRecyclerView.setAdapter(categoryAdaptor1);
 
 
@@ -307,12 +297,10 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(getActivity(),"Oppps....someThing is wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Oppps....someThing is wrong", Toast.LENGTH_SHORT).show();
 
                 }
             });
-
-
 
 
             /////banner slider
@@ -321,17 +309,17 @@ public class HomeFragment extends Fragment {
             categoryRecyclerView.setVisibility(View.VISIBLE);
             bannersliderviewPager.setVisibility(View.VISIBLE);
 
-            ref=FirebaseDatabase.getInstance().getReference("Banner");
+            ref = FirebaseDatabase.getInstance().getReference("Banner");
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         int count = (int) dataSnapshot.getChildrenCount();
                         for (int i = 0; i < count + 1; i++) {
-                            for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()) {
+                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                                 String val1 = dataSnapshot1.child("img").getValue().toString();
                                 String color = dataSnapshot1.child("color").getValue().toString();
-                                sliderModel ob = new sliderModel(val1, color);
+                                SliderModel ob = new SliderModel(val1, color);
                                 sliderModelList.add(ob);
                             }
 
@@ -354,12 +342,7 @@ public class HomeFragment extends Fragment {
             });
 
 
-
-
-
-
-
-            ViewPager.OnPageChangeListener onPageChangeListener=new ViewPager.OnPageChangeListener() {
+            ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -367,13 +350,13 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onPageSelected(int position) {
-                    currentPage=position;
+                    currentPage = position;
 
                 }
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
-                    if(state== ViewPager.SCROLL_STATE_IDLE){
+                    if (state == ViewPager.SCROLL_STATE_IDLE) {
                         pageLooper();
                     }
 
@@ -387,7 +370,7 @@ public class HomeFragment extends Fragment {
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     pageLooper();
                     stopbannerslidshow();
-                    if(motionEvent.getAction()== MotionEvent.ACTION_UP){
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                         startbannerslideshow();
                     }
                     return false;
@@ -405,16 +388,10 @@ public class HomeFragment extends Fragment {
         stripAdContainer.setBackgroundColor(Color.parseColor("#000000"));*/
 
 
-
             /////strip Ad
 
 
-
-
-
-
-
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             //ViewCompat.setNestedScrollingEnabled(recyclerView, false);
             recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setHasFixedSize(true);
@@ -422,31 +399,28 @@ public class HomeFragment extends Fragment {
             recyclerView.setDrawingCacheEnabled(true);
             recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
             //update.run();
-            list=new ArrayList<product>();
+            list = new ArrayList<product>();
 
-            ref= FirebaseDatabase.getInstance().getReference("CategoryProducts");
+            ref = FirebaseDatabase.getInstance().getReference("CategoryProducts");
             ref.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     //list.clear();
-                    for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                        product p=dataSnapshot1.getValue(product.class);
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                        product p = dataSnapshot1.getValue(product.class);
                         list.add(p);
 
                     }
-                    Collections.sort(list,(product p,product p1) ->{
+                    Collections.sort(list, (product p, product p1) -> {
                         return p.getProducts_name().compareToIgnoreCase(p1.getProducts_name());
                     });
-                    adapter=new productAdapter(list,view.getContext());
+                    adapter = new productAdapter(list, view.getContext());
                     //Toast.makeText(getActivity(),"Hii"+list,Toast.LENGTH_SHORT).show();
                     //adapter.notifyDataSetChanged();
                     recyclerView.setItemViewCacheSize(10);
                     adapter.notifyDataSetChanged();
                     recyclerView.setAdapter(adapter);
                     waitingtDialog.dismiss();
-
-
-
 
 
                 }
@@ -477,8 +451,7 @@ public class HomeFragment extends Fragment {
             page.run();
 
 
-
-            if(searchView!=null){
+            if (searchView != null) {
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
                     @Override
@@ -490,13 +463,11 @@ public class HomeFragment extends Fragment {
                     @Override
                     public boolean onQueryTextChange(String newText) {
 
-                        search(newText,view.getContext());
+                        search(newText, view.getContext());
                         //recreate1();
 
                         return true;
                     }
-
-
 
 
                 });
@@ -527,9 +498,7 @@ public class HomeFragment extends Fragment {
         }
 
 
-
-
-       // searchView.clearFocus();
+        // searchView.clearFocus();
 
 
 
@@ -563,9 +532,6 @@ public class HomeFragment extends Fragment {
         });*/
 
 
-
-
-
         return view;
     }
 
@@ -575,18 +541,18 @@ public class HomeFragment extends Fragment {
         super.onDestroy();
     }
 
-    public  void search(String str, Context context) {
-        ArrayList<product> prr=new ArrayList<>();
+    public void search(String str, Context context) {
+        ArrayList<product> prr = new ArrayList<>();
 
-            for (product obj : list) {
-                if (obj.getProducts_name().toLowerCase().contains(str.toLowerCase())) {
-                    prr.add(obj);
+        for (product obj : list) {
+            if (obj.getProducts_name().toLowerCase().contains(str.toLowerCase())) {
+                prr.add(obj);
 
-                }
-                adapter = new productAdapter(prr,context);
-                recyclerView.setAdapter(adapter);
+            }
+            adapter = new productAdapter(prr, context);
+            recyclerView.setAdapter(adapter);
 
-                //handler.removeCallbacks(check);
+            //handler.removeCallbacks(check);
 
 
         }
@@ -599,53 +565,51 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public Boolean recreate1(){
+    public Boolean recreate1() {
 
         return true;
     }
 
 
-
     /////banner slider
 
-    private void pageLooper(){
+    private void pageLooper() {
 
-        if(currentPage==sliderModelList.size()-2){
-            currentPage=2;
-            bannersliderviewPager.setCurrentItem(currentPage,false);
+        if (currentPage == sliderModelList.size() - 2) {
+            currentPage = 2;
+            bannersliderviewPager.setCurrentItem(currentPage, false);
         }
 
-        if(currentPage==1){
-            currentPage=sliderModelList.size()-3;
-            bannersliderviewPager.setCurrentItem(currentPage,false);
+        if (currentPage == 1) {
+            currentPage = sliderModelList.size() - 3;
+            bannersliderviewPager.setCurrentItem(currentPage, false);
         }
 
     }
 
-    private  void startbannerslideshow(){
-        final Handler handler=new Handler();
-        final Runnable update=new Runnable() {
+    private void startbannerslideshow() {
+        final Handler handler = new Handler();
+        final Runnable update = new Runnable() {
             @Override
             public void run() {
-                if(currentPage>=sliderModelList.size()){
-                    currentPage=1;
+                if (currentPage >= sliderModelList.size()) {
+                    currentPage = 1;
                 }
-                bannersliderviewPager.setCurrentItem(currentPage++,true);
+                bannersliderviewPager.setCurrentItem(currentPage++, true);
             }
         };
-        timer=new Timer();
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 handler.post(update);
             }
-        },delayTime,periodTime);
+        }, delayTime, periodTime);
     }
 
-    private void stopbannerslidshow(){
+    private void stopbannerslidshow() {
         timer.cancel();
     }
-
 
 
     /////banner slider
@@ -681,8 +645,8 @@ public class HomeFragment extends Fragment {
         }
     }*/
 
-    public static void jump(){
-        nestedScrollView.scrollTo(0,0);
+    public static void jump() {
+        nestedScrollView.scrollTo(0, 0);
     }
 
 }

@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
-import com.noor.mystore99.categoryModel
+import com.example.networkmodule.model.CategoryModel
 import com.noor.mystore99.databinding.IndiviewCategoryBinding
 
 class CategoryAdapter :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
 
-    private val item = ArrayList<categoryModel>()
+    private val item = ArrayList<CategoryModel>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: ArrayList<categoryModel>) {
+    fun submitList(list: ArrayList<CategoryModel>) {
         item.clear()
         item.addAll(list)
         notifyDataSetChanged()
@@ -26,7 +26,7 @@ class CategoryAdapter :
 
     inner class CategoryViewHolder(private val binding: IndiviewCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: categoryModel) {
+        fun bind(item: CategoryModel) {
             with(binding) {
                 imgCategoryIcon.load(item.categoryIconLink.decodeToBitmap()){
                     transformations(CircleCropTransformation())

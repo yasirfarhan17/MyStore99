@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SbziTaza">
         <activity
-            android:name=".amigrate.ui.lastPage.NewLastPage"
+            android:name=".amigrate.ui.lastPage.CheckoutActivity"
             android:exported="false" />
         <activity
             android:name=".amigrate.ui.payment.PaymentActivity"

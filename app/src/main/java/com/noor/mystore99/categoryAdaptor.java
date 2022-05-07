@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
+import com.example.networkmodule.model.CategoryModel;
 
 import java.util.List;
 
@@ -22,10 +23,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class categoryAdaptor  extends RecyclerView.Adapter<categoryAdaptor.ViewHolder> {
-    private List<categoryModel> categoryModelList;
+    private List<CategoryModel> categoryModelList;
     Context context;
 
-    public categoryAdaptor(List<categoryModel> categoryModelList,Context c) {
+    public categoryAdaptor(List<CategoryModel> categoryModelList, Context c) {
         this.categoryModelList = categoryModelList;
         context=c;
     }

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#192648"
-        tools:context=".amigrate.ui.lastPage.NewLastPage">
+        tools:context=".amigrate.ui.lastPage.CheckoutActivity">
 
 
         <ImageView

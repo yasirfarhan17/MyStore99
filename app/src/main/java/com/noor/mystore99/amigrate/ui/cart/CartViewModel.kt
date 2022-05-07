@@ -2,8 +2,7 @@ package com.noor.mystore99.amigrate.ui.cart
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.networkmodule.database.cart.CartEntity
-import com.example.networkmodule.database.product.ProductEntity
+import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.usecase.CartUseCase
 import com.noor.mystore99.amigrate.base.BaseViewModel
@@ -12,7 +11,6 @@ import com.noor.mystore99.amigrate.util.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 

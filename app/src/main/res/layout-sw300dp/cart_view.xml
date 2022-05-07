@@ -160,7 +160,7 @@
                         android:layout_height="20dp"
                         android:layout_marginTop="60dp"
                         android:layout_marginRight="-25dp"
-                        android:background="@drawable/minusbtn"
+                        android:background="@drawable/minus_btn"
 
                         />
 
@@ -171,7 +171,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginTop="30dp"
-                        android:background="@drawable/plusbtn" />
+                        android:background="@drawable/plus_btn" />
 
                     <TextView
                         android:id="@+id/CtTv4"

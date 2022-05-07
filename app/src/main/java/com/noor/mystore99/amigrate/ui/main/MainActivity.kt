@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.networkmodule.database.product.ProductEntity
+import com.example.networkmodule.database.entity.ProductEntity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity

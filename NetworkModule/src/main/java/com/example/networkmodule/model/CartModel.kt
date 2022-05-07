@@ -1,6 +1,7 @@
-package com.example.networkmodule.database.cart
+package com.example.networkmodule.model
 
 import android.os.Parcelable
+import com.example.networkmodule.database.entity.CartEntity
 import kotlinx.parcelize.Parcelize
 
 
