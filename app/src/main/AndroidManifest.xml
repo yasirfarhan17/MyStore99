@@ -23,6 +23,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SbziTaza">
         <activity
+            android:name=".amigrate.ui.auth.register.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".amigrate.ui.auth.login.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".amigrate.ui.lastPage.CheckoutActivity"
             android:exported="false" />
         <activity

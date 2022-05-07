@@ -57,7 +57,7 @@
             android:id="@+id/fab_bt_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="26dp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_local_mall_black_24dp"
             app:layout_anchor="@id/constraintLayout7"
