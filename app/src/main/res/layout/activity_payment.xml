@@ -295,7 +295,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/checkOut"
+            android:id="@+id/bt_check_out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"

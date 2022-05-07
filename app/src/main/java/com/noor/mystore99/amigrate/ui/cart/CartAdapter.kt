@@ -12,13 +12,19 @@ import com.noor.mystore99.databinding.IndiviewCartBinding
 
 class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
-    private val item = ArrayList<CartEntity>()
+    private val items = ArrayList<CartEntity>()
 
 
     @SuppressLint("NotifyDataSetChanged")
     fun submitList(list: ArrayList<CartEntity>) {
-        item.clear()
-        item.addAll(list)
+        items.clear()
+        items.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun clearAdapter() {
+        items.clear()
         notifyDataSetChanged()
     }
 
@@ -50,9 +56,9 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
 
-        holder.bind(item[position])
+        holder.bind(items[position])
 
     }
 
-    override fun getItemCount(): Int = item.size
+    override fun getItemCount(): Int = items.size
 }

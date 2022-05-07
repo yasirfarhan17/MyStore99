@@ -10,7 +10,7 @@ import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
 
-class CartUseCase @Inject constructor(
+class GetCartItemsUseCase @Inject constructor(
     private val cartRepository: CartRepository
 )
 {

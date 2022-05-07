@@ -88,7 +88,7 @@
                 tools:ignore="MissingConstraints">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/Cart_RecyclerView3"
+                    android:id="@+id/rv_cart"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="10dp"
@@ -96,7 +96,7 @@
 
                     android:elevation="3dp"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@id/checkOut"
+                    app:layout_constraintBottom_toTopOf="@id/bt_check_out"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -110,7 +110,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/checkOut"
+            android:id="@+id/bt_check_out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -135,7 +135,7 @@
             app:cardBackgroundColor="#28365b"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/checkOut"
+            app:layout_constraintBottom_toTopOf="@+id/bt_check_out"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints">

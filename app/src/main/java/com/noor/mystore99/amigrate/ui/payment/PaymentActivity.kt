@@ -23,7 +23,7 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
 
     private fun initUi() {
         with(binding) {
-            checkOut.setOnClickListener {
+            btCheckOut.setOnClickListener {
                 startActivity(Intent(this@PaymentActivity, CheckoutActivity::class.java))
             }
         }
