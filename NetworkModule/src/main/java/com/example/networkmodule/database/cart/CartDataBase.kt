@@ -1,4 +1,4 @@
-package com.example.networkmodule.database
+package com.example.networkmodule.database.cart
 
 import android.content.Context
 import androidx.room.Database
@@ -6,18 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [ProductEntity::class],version = ProductDataBase.Version)
-abstract class ProductDataBase :RoomDatabase() {
-    abstract val product:ProductDao
+@Database(entities = [CartEntity::class],version = CartDataBase.Version)
+abstract class CartDataBase :RoomDatabase() {
+    abstract val cart: CartDao
 
     companion object{
         const val Name="phone_dataBase"
         const val Version=3
 
         @Volatile
-        private var instance :ProductDataBase?=null
+        private var instance : CartDataBase?=null
 
-        fun getInstance(context: Context):ProductDataBase{
+        fun getInstance(context: Context): CartDataBase {
             val tempInstance= instance
             if(tempInstance!=null)
                 return tempInstance
@@ -25,12 +25,12 @@ abstract class ProductDataBase :RoomDatabase() {
             synchronized(this){
                 val instance= Room.databaseBuilder(
                     context,
-                    ProductDataBase::class.java,
+                    CartDataBase::class.java,
                     Name
                 )
                     .fallbackToDestructiveMigration()
                     .build()
-                this.instance =instance
+                Companion.instance =instance
                 return instance
             }
         }

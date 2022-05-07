@@ -1,7 +1,6 @@
 package com.example.networkmodule.repository
 
-import com.example.networkmodule.database.ProductEntity
-import com.noor.mystore99.productModel
+import com.example.networkmodule.database.product.ProductEntity
 
 interface ProductRepository {
     suspend fun getAllProduct():List<ProductEntity>

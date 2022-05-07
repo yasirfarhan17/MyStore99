@@ -1,32 +1,32 @@
 package com.example.networkmodule.usecase
 
 import android.util.Log
-import com.example.networkmodule.database.product.ProductEntity
+import com.example.networkmodule.database.cart.CartEntity
 import com.example.networkmodule.network.Resource
-import com.example.networkmodule.repository.ProductRepository
+import com.example.networkmodule.repository.CartRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
 
-class ProductUseCase @Inject constructor(
-    private val repository: ProductRepository
-) {
-    operator fun invoke(): Flow<Resource<List<ProductEntity>>> = flow{
-        try {
+class CartUseCase @Inject constructor(
+    private val cartRepository: CartRepository
+)
+{
+    operator fun invoke():Flow<Resource<List<CartEntity>>> = flow {
+        try{
             emit(Resource.Loading())
-            val result=repository.getAllProduct()
-            Log.d("usecase",""+result)
+            val result=cartRepository.getCartItem()
+            Log.d("cartcheck",""+result)
             emit(Resource.Success(result))
         }
-        catch (e:Exception){
+        catch (e: Exception){
             emit(Resource.Error(e.localizedMessage?:"Something went wrong"))
         }
-        catch (E:IOException)
+        catch (E: IOException)
         {
             emit(Resource.Error("Couldn't connect to db"))
         }
-
     }
 }

@@ -15,10 +15,12 @@
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_cart.xml" value="0.33" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_main2.xml" value="0.16983695652173914" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_main3.xml" value="0.22" />
-        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_new_cart.xml" value="0.12590579710144928" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_new_cart.xml" value="0.2" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/cardview.xml" value="0.33" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/cart_indi_view.xml" value="0.25" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/fragment_home2.xml" value="0.5419161676646707" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/indiview_category.xml" value="0.18854166666666666" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/indiview_products.xml" value="0.18854166666666666" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/user_fragment.xml" value="0.16983695652173914" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18854166666666666" />
         <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw280dp/fragment_home2.xml" value="0.16354166666666667" />

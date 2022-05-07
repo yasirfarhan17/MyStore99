@@ -2,12 +2,17 @@ package com.noor.mystore99.amigrate.ui.main.fragment.home.adapter
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.example.networkmodule.database.ProductEntity
+import com.example.networkmodule.database.cart.CartEntity
+import com.example.networkmodule.database.product.ProductEntity
+import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
 import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
 import com.noor.mystore99.databinding.IndiviewProductsBinding
 
@@ -17,13 +22,16 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     private val item = ArrayList<ProductEntity>()
     private val itemFilter = ArrayList<ProductEntity>()
 
+    private lateinit var viewModel:UserViewModel
+
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: ArrayList<ProductEntity>) {
+    fun submitList(list: ArrayList<ProductEntity>,viewModel: UserViewModel) {
         item.clear()
         itemFilter.clear()
         itemFilter.addAll(list)
         item.addAll(list)
+        this.viewModel=viewModel
         notifyDataSetChanged()
     }
 
@@ -38,6 +46,12 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
                     imgProductImage.load(it) {
                         transformations(CircleCropTransformation())
                     }
+                }
+
+                val cartEntity=CartEntity(item.products_name,item.price,item.img,item.quant,item.price)
+                btAddToCart.setOnClickListener {
+                    viewModel.insertToCartDb(cartEntity)
+                    Toast.makeText(it.context,"Item Added successfully",Toast.LENGTH_SHORT).show()
                 }
             }
         }

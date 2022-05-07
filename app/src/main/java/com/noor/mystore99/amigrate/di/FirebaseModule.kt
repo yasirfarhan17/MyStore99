@@ -2,12 +2,17 @@ package com.noor.mystore99.amigrate.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.networkmodule.database.ProductDao
-import com.example.networkmodule.database.ProductDataBase
+import com.example.networkmodule.database.cart.CartDao
+import com.example.networkmodule.database.cart.CartDataBase
+import com.example.networkmodule.database.product.ProductDao
+import com.example.networkmodule.database.product.ProductDataBase
 import com.example.networkmodule.network.FirebaseKey
 import com.example.networkmodule.network.FirebaseManager
+import com.example.networkmodule.repository.CartRepository
+import com.example.networkmodule.repository.CartRepositoryImpl
 import com.example.networkmodule.repository.ProductRepository
 import com.example.networkmodule.repository.ProductRepositoryImpl
+import com.example.networkmodule.usecase.CartUseCase
 import com.example.networkmodule.usecase.ProductUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -96,6 +101,18 @@ object FirebaseModule {
         return ProductUseCase(repository)
     }
 
+    @Provides
+    @Singleton
+    fun provideCartRepository(cartDao: CartDao):CartRepository
+    {
+        return CartRepositoryImpl(cartDao)
+    }
+    @Singleton
+    @Provides
+    fun provideCartUseCase(repository: CartRepository):CartUseCase{
+        return CartUseCase(repository)
+    }
+
 
     @Provides
     @Singleton
@@ -114,6 +131,24 @@ object FirebaseModule {
     @Singleton
     fun provideProductDao(productDatabase: ProductDataBase): ProductDao {
         return productDatabase.product
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartDatabase(@ApplicationContext context: Context):CartDataBase{
+        return Room.databaseBuilder(
+            context,
+            CartDataBase::class.java,
+            CartDataBase.Name
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartDao(cartDataBase: CartDataBase):CartDao{
+        return cartDataBase.cart
     }
 
 }

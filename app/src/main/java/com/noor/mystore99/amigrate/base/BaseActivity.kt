@@ -36,10 +36,10 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompat
                     ViewState.Idle -> {
                     }
                     ViewState.Loading -> {
-                        showProgress()
+                        //showProgress()
                     }
                     is ViewState.Success -> {
-                        hideProgress()
+                       // hideProgress()
                         showMessage(it.message)
                     }
                     is ViewState.Error -> {

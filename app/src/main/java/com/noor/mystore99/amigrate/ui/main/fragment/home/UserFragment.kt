@@ -6,7 +6,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.networkmodule.database.ProductEntity
+import com.example.networkmodule.database.product.ProductEntity
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
 import com.noor.mystore99.amigrate.ui.main.MainViewModel
@@ -46,7 +46,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
     override fun addObservers() {
         mainViewModel.productList.observe(viewLifecycleOwner) {
             val list = it.map { it.toProductEntity() }
-            (binding.rvProduct.adapter as UserAdapter).submitList(list as ArrayList<ProductEntity>)
+            (binding.rvProduct.adapter as UserAdapter).submitList(list as ArrayList<ProductEntity>,viewModel)
         }
         viewModel.categoryList.observe(viewLifecycleOwner) {
             (binding.rvCategory.adapter as CategoryAdapter).submitList(it as ArrayList<categoryModel>)

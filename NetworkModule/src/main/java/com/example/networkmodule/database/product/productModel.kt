@@ -1,7 +1,7 @@
-package com.noor.mystore99
+package com.example.networkmodule.database.product
 
 import android.os.Parcelable
-import com.example.networkmodule.database.ProductEntity
+import com.example.networkmodule.database.product.ProductEntity
 import kotlinx.parcelize.Parcelize
 
 
@@ -14,7 +14,7 @@ data class productModel (
     var hindiName: String? = null,
     var stock: String? = null
 ):Parcelable{
-    fun toProductEntity():ProductEntity{
+    fun toProductEntity(): ProductEntity {
         return ProductEntity(this.products_name!!,this.price,this.img,this.quant,this.hindiName,this.stock)
     }
 }

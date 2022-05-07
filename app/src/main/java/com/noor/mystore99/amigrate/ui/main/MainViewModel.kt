@@ -3,8 +3,8 @@ package com.noor.mystore99.amigrate.ui.main
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.networkmodule.database.ProductDao
-import com.example.networkmodule.database.ProductEntity
+import com.example.networkmodule.database.product.ProductDao
+import com.example.networkmodule.database.product.ProductEntity
 import com.example.networkmodule.network.FirebaseKey
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.usecase.ProductUseCase
@@ -15,8 +15,7 @@ import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
-import com.noor.mystore99.productModel
-import com.noor.mystore99.sliderModel
+import com.example.networkmodule.database.product.productModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

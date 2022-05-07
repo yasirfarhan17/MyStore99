@@ -1,10 +1,9 @@
-package com.example.networkmodule.database
+package com.example.networkmodule.database.product
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.noor.mystore99.productModel
 
 
 @Dao
