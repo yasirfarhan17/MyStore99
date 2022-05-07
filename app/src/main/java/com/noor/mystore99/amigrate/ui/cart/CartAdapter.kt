@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.cart.CartEntity
 import com.example.networkmodule.database.product.ProductEntity
+import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
 import com.noor.mystore99.databinding.ActivityNewCartBinding
 import com.noor.mystore99.databinding.CartIndiViewBinding
 
@@ -36,6 +38,12 @@ class CartAdapter :RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
                     cartQuant.text=item.quant
                     cartType.text=item.price
                     total.text=item.price
+
+                    item.img!!.decodeToBitmap(500)?.let {
+                        cartImage.load(it) {
+                            transformations(CircleCropTransformation())
+                        }
+                    }
                 }
             }
 

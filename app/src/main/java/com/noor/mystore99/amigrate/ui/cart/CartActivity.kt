@@ -1,5 +1,6 @@
 package com.noor.mystore99.amigrate.ui.cart
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -7,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
+import com.noor.mystore99.amigrate.ui.payment.PaymentActivity
 import com.noor.mystore99.databinding.ActivityNewCartBinding
 import com.noor.mystore99.databinding.CartViewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +33,10 @@ class CartActivity : BaseActivity<ActivityNewCartBinding,CartViewModel>() {
         with(binding){
             CartRecyclerView3.layoutManager=LinearLayoutManager(this@CartActivity)
             CartRecyclerView3.adapter=CartAdapter()
+
+            checkOut.setOnClickListener {
+                startActivity(Intent(this@CartActivity,PaymentActivity::class.java))
+            }
 
         }
 

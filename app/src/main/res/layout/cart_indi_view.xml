@@ -34,7 +34,7 @@
 
             <ImageView
                 android:id="@+id/cartImage"
-                android:layout_width="120dp"
+                android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="4dp"
                 android:src="@drawable/ic_local_mall_black_24dp"
@@ -46,7 +46,7 @@
                 android:id="@+id/cart_productName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="14dp"
                 android:layout_marginTop="4dp"
                 android:text="ProductName"
                 android:textColor="@color/white"
@@ -59,11 +59,11 @@
                 android:id="@+id/cart_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Type"
-                android:textColor="#0c862f"
-                android:textSize="15dp"
+                android:textColor="#fd7b01"
+                android:textSize="17dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/cartImage"
                 app:layout_constraintTop_toBottomOf="@+id/cart_productName" />
@@ -72,8 +72,8 @@
                 android:id="@+id/cart_quant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:text="quant"
                 android:textColor="@color/white"
                 android:textSize="17dp"
@@ -84,18 +84,18 @@
                 android:id="@+id/total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="208dp"
+                android:layout_marginStart="22dp"
                 android:text="$ 120"
                 android:textColor="#fd7b01"
                 android:textSize="17dp"
-                app:layout_constraintStart_toEndOf="@+id/cartImage"
-                app:layout_constraintTop_toBottomOf="@+id/cart_type" />
+                app:layout_constraintStart_toEndOf="@+id/buttonIns"
+                app:layout_constraintTop_toTopOf="@+id/buttonIns" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonDes"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="10dp"
 
                 android:background="@drawable/minusbtn"
                 app:layout_constraintStart_toEndOf="@+id/cart_quant"
@@ -136,7 +136,7 @@
                 android:textSize="10dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cart_quant"
+                app:layout_constraintStart_toStartOf="@+id/cart_quant"
                 app:layout_constraintTop_toBottomOf="@+id/cart_quant"
                 app:layout_constraintVertical_bias="1.0" />
 
@@ -160,7 +160,7 @@
                 android:id="@+id/vBt3"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginStart="13dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/cartbg"
                 android:backgroundTint="#fd7b01"
                 android:padding="5dp"
