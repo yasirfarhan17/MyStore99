@@ -2,21 +2,19 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login_navigation">
+    android:id="@+id/login_navigation"
+    app:startDestination="@+id/nav_login">
 
 
     <fragment
-        android:id="@+id/loginFragment"
+        android:id="@+id/nav_login"
         android:name="com.noor.mystore99.amigrate.ui.auth.login.fragment.login.LoginFragment"
         android:label="login"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_login"/>
+
     <fragment
-        android:id="@+id/registerFragment"
-        android:name="com.noor.mystore99.amigrate.ui.auth.login.fragment.register.RegistetFragment"
+        android:id="@+id/nav_register"
+        android:name="com.noor.mystore99.amigrate.ui.auth.login.fragment.register.RegisterFragment"
         android:label="register"
         tools:layout="@layout/fragment_registet"/>
 

@@ -1,60 +1,113 @@
 package com.noor.mystore99.amigrate.ui.auth.login.fragment.login
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleCoroutineScope
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.noor.mystore99.MainActivity
 import com.noor.mystore99.R
+import com.noor.mystore99.amigrate.base.BaseFragment
+import com.noor.mystore99.amigrate.base.BaseViewModel
+import com.noor.mystore99.databinding.FragmentLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.*
+import javax.inject.Inject
+import kotlin.concurrent.schedule
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class LoginFragment  : BaseFragment<FragmentLoginBinding,loginViewModel>() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [LoginFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class LoginFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+
+    override val viewModel: loginViewModel by viewModels()
+    var flag:Boolean=false
+
+    override fun getViewModelClass(): Class<loginViewModel> = loginViewModel::class.java
+    val ref = FirebaseDatabase.getInstance().getReference("User")
+
+    override fun getLayout(): Int=R.layout.fragment_login
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.root
+
+
+        init()
+    }
+
+    fun init(){
+        with(binding){
+            checkOut.setOnClickListener {
+                startActivity(Intent(it.context,com.noor.mystore99.amigrate.ui.main.MainActivity::class.java))
+            }
+
+
+            verify.setOnClickListener {
+
+                Toast.makeText(it.context,"Please wait",Toast.LENGTH_SHORT).show()
+                if (ETPhone.text.toString().isNotEmpty()) {
+                    searchPhone(ETPhone.text.toString())
+                }
+            }
+
+
+
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+    fun searchPhone(phone:String){
+       GlobalScope.launch {
+           Log.d("check","inside "+phone)
+           ref.orderByChild("phone").equalTo(phone).addValueEventListener(object : ValueEventListener {
+               override fun onDataChange(snapshot: DataSnapshot) {
+                   if(snapshot.exists()){
+                      flag=true
+                       binding.textLayout1.visibility=View.INVISIBLE
+                       binding.linearLayoutCompat.visibility=View.VISIBLE
+                       binding.otp.visibility=View.VISIBLE
+                       binding.checkOut.visibility=View.VISIBLE
+                       Log.d("check","working")
+                   }
+                   else{
+                       Log.d("check","working1")
+                       flag=false
+                       binding.textLayout1.visibility=View.VISIBLE
+                       binding.otp.visibility=View.INVISIBLE
+                       binding.linearLayoutCompat.visibility=View.INVISIBLE
+                       binding.checkOut.visibility=View.VISIBLE
+                   }
+               }
+
+               override fun onCancelled(error: DatabaseError) {
+
+               }
+
+           })
+       }
+
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LoginFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoginFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun addObservers() {
+
     }
+
+
+
+
+
+
+
 }
