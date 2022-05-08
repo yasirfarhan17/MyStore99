@@ -48,6 +48,7 @@
                             android:layout_marginStart="15dp"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
+                            android:fontFamily="@font/convergence"
                             android:text="@string/app_name_first"
                             android:textAllCaps="true"
                             android:textColor="@color/colorPrimaryDark"
@@ -64,6 +65,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="15dp"
                             android:layout_marginBottom="15dp"
+                            android:fontFamily="@font/convergence"
                             android:text="@string/app_name_last"
                             android:textAllCaps="true"
                             android:textColor="@color/btnprimary"
@@ -78,7 +80,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:background="@drawable/ic_notifications_black_24dp"
-                            android:backgroundTint="@color/colorPrimaryDark"
+                            android:backgroundTint="@color/colorSecondaryLight"
                             android:contentDescription="@string/icon_for_notification"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -90,6 +92,7 @@
                             android:layout_margin="15dp"
                             android:background="@drawable/background3"
                             android:backgroundTint="#E8E8E8"
+                            android:fontFamily="@font/convergence"
                             android:iconifiedByDefault="false"
                             android:queryBackground="@android:color/transparent"
                             android:queryHint="Search here"
@@ -107,28 +110,51 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:fontFamily="@font/convergence"
                         android:padding="5dp"
                         android:text="@string/category"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_category"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:itemCount="5"
-                        tools:listitem="@layout/indiview_category" />
+                        android:layout_height="60dp">
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/category_progress_bar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:progressBackgroundTint="@color/colorSecondary"
+                            android:visibility="visible"
+                            app:indicatorColor="@color/colorSecondary"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="5"
+                            tools:listitem="@layout/indiview_category" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                     <TextView
                         android:id="@+id/label_promo_offer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:fontFamily="@font/convergence"
                         android:padding="5dp"
                         android:text="@string/txt_offers_amp_promo"
                         android:textColor="@color/colorPrimary"
@@ -145,6 +171,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
+                        android:fontFamily="@font/convergence"
                         android:text="@string/all_products"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="20sp"
@@ -174,16 +201,6 @@
             tools:listitem="@layout/indiview_products" />
 
 
-        <ProgressBar
-            android:id="@+id/progressCircular"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

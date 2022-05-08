@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.networkmodule.database.entity.ProductEntity
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -20,7 +21,7 @@ interface ProductDao {
     suspend fun clear()
 
     @Query("select * from productTable")
-    suspend fun getProduct():List<ProductEntity>
+    fun getProduct(): Flow<List<ProductEntity>>
 
     @Query("UPDATE productTable SET price = :price WHERE products_name = :id")
     fun update(price:String, id: String)

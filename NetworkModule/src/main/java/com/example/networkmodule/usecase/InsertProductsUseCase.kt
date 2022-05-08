@@ -10,13 +10,13 @@ import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
 
-class ProductUseCase @Inject constructor(
+class InsertProductsUseCase @Inject constructor(
     private val repository: ProductRepository
 ) {
-    operator fun invoke(): Flow<Resource<List<ProductEntity>>> = flow{
+    operator fun invoke(list: ArrayList<ProductEntity>) = flow{
         try {
             emit(Resource.Loading())
-            val result=repository.getAllProduct()
+            val result=repository.insertItems(list)
             Log.d("usecase",""+result)
             emit(Resource.Success(result))
         }

@@ -90,8 +90,8 @@ object FirebaseModule {
     @Provides
     @Singleton
     fun provideUseCase(repository: ProductRepository):
-            ProductUseCase {
-        return ProductUseCase(repository)
+            GetAllProductsUseCase {
+        return GetAllProductsUseCase(repository)
     }
 
     @Provides
@@ -104,6 +104,12 @@ object FirebaseModule {
     @Provides
     fun provideCartUseCase(repository: CartRepository): GetCartItemsUseCase {
         return GetCartItemsUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideInsertCartItemUseCase(repository: CartRepository): InsertCartItemUseCase {
+        return InsertCartItemUseCase(repository)
     }
 
 

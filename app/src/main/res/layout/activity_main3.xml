@@ -41,14 +41,35 @@
 
         </com.google.android.material.bottomappbar.BottomAppBar>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_batch"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/round_shape"
+            android:backgroundTint="#D50000"
+            app:layout_anchor="@id/fab_bt_cart"
+            app:layout_anchorGravity="top|right">
+            <TextView
+                android:id="@+id/tv_batch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:fontFamily="@font/convergence"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                tools:text="110" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_bt_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_local_mall_black_24dp"
-            app:layout_anchor="@id/bottomAppBar" />
-
+            app:layout_anchor="@id/bottomAppBar"
+            app:tint="@color/white" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

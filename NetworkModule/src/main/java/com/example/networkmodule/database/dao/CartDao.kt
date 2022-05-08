@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.networkmodule.database.entity.CartEntity
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -26,5 +27,5 @@ interface CartDao {
     fun update(price: String, id: String)
 
     @Query("SELECT COUNT(*) FROM cartTable")
-    fun getCount(): Int?
+    fun getCount(): Flow<Int?>
 }

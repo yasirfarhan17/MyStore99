@@ -41,7 +41,7 @@
 
                     <TextView
                         android:id="@+id/tv_name"
-
+                        android:fontFamily="@font/convergence"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -60,11 +60,11 @@
 
                     <TextView
                         android:id="@+id/tv_hindi_name"
-
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/convergence"
                         android:ellipsize="end"
                         android:gravity="center"
                         android:textAlignment="center"
@@ -83,6 +83,7 @@
                         android:layout_marginEnd="5dp"
                         android:ellipsize="end"
                         android:gravity="center"
+                        android:fontFamily="@font/convergence"
                         android:textAlignment="center"
                         android:textColor="@color/colorPrimary"
                         android:textSize="17sp"
@@ -100,6 +101,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         android:padding="8dp"
+                        android:fontFamily="@font/convergence"
                         android:text="@string/add_to_cart"
                         android:textAllCaps="true"
                         android:textSize="12sp"
