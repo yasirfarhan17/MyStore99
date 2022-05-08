@@ -114,8 +114,8 @@
                         android:padding="5dp"
                         android:text="@string/category"
                         android:textColor="@color/colorPrimaryDark"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp"
+                        />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -158,13 +158,15 @@
                         android:padding="5dp"
                         android:text="@string/txt_offers_amp_promo"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp"
+                        />
 
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/view_pager_banners"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp" />
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_height="182dp" />
 
                     <TextView
                         android:id="@+id/label_all_product"
@@ -174,8 +176,7 @@
                         android:fontFamily="@font/convergence"
                         android:text="@string/all_products"
                         android:textColor="@color/colorPrimaryDark"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:textSize="18sp"
                         android:visibility="visible"
                         app:layout_anchor="@id/app_bar"
                         app:layout_anchorGravity="bottom"

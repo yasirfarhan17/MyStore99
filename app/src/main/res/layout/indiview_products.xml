@@ -13,7 +13,6 @@
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:background="@android:color/transparent"
             android:maxWidth="180dp"
             android:minWidth="120dp"
             app:layout_constrainedWidth="true"
@@ -25,7 +24,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@null"
+                android:background="@color/primary"
                 android:clipToPadding="true"
                 android:elevation="0dp"
                 app:cardCornerRadius="8dp"
@@ -37,7 +36,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/basePressColor">
+                    android:background="@color/primary">
 
                     <TextView
                         android:id="@+id/tv_name"
@@ -51,7 +50,7 @@
                         android:gravity="center"
                         android:textAlignment="center"
                         android:textAllCaps="true"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/white"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +67,7 @@
                         android:ellipsize="end"
                         android:gravity="center"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/white"
                         android:textSize="17sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +84,7 @@
                         android:gravity="center"
                         android:fontFamily="@font/convergence"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/white"
                         android:textSize="17sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +100,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         android:padding="8dp"
+                        android:backgroundTint="@color/btnprimary"
                         android:fontFamily="@font/convergence"
                         android:text="@string/add_to_cart"
                         android:textAllCaps="true"

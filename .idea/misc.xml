@@ -16,6 +16,7 @@
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw330dp/cart_view.xml" value="0.18854166666666666" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw360dp/activity_address1.xml" value="0.1875" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw360dp/activity_last_page.xml" value="0.13632246376811594" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw360dp/sliding_ad_layout.xml" value="0.18070652173913043" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_cart.xml" value="0.33" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_check_out.xml" value="0.22" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_last_page2.xml" value="0.18854166666666666" />
@@ -26,9 +27,12 @@
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_payment.xml" value="0.18" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/cardview.xml" value="0.33" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/cart_indi_view.xml" value="0.25" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/content_new_category.xml" value="0.18070652173913043" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/fragment_first.xml" value="0.18070652173913043" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/fragment_home2.xml" value="0.5419161676646707" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/fragment_login.xml" value="0.22" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/fragment_registet.xml" value="0.17753623188405798" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/fragment_second.xml" value="0.18070652173913043" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/indiview_category.xml" value="0.18854166666666666" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/indiview_products.xml" value="0.18854166666666666" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/user_fragment.xml" value="0.16983695652173914" />
