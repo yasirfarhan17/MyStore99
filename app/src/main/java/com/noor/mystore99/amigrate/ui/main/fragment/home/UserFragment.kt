@@ -19,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
-    //private val mainViewModel: MainViewModel by activityViewModels()
     override val viewModel: UserViewModel by viewModels()
     override fun getViewModelClass(): Class<UserViewModel> = UserViewModel::class.java
     override fun getLayout(): Int = R.layout.user_fragment
@@ -55,7 +54,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
             )
         }
         viewModel.categoryList.observe(viewLifecycleOwner) {
-            if(it.isNullOrEmpty()){
+            if (it.isNullOrEmpty()) {
                 binding.labelCategory.setVisible(false)
                 binding.rvCategory.setVisible(false)
                 return@observe

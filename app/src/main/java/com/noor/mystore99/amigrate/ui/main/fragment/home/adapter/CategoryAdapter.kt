@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
 import com.example.networkmodule.model.CategoryModel
+import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.databinding.IndiviewCategoryBinding
 
 class CategoryAdapter :
@@ -28,7 +28,7 @@ class CategoryAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CategoryModel) {
             with(binding) {
-                imgCategoryIcon.load(item.categoryIconLink.decodeToBitmap()){
+                imgCategoryIcon.load(item.categoryIconLink.decodeToBitmap(60)){
                     transformations(CircleCropTransformation())
                 }
                 tvCategoryName.text = item.categoryName.uppercase()

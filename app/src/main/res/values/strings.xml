@@ -79,5 +79,6 @@
     <string name="choose_delivery_date">Choose Delivery Date</string>
     <string name="change_pincode">Change PinCode</string>
     <string name="check_out">Check Out</string>
+    <string name="dd_mm_yyyy">DD/MM/YYYY</string>
 
 </resources>

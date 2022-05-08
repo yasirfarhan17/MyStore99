@@ -13,7 +13,7 @@ import com.noor.mystore99.R
 import com.noor.mystore99.databinding.LayoutDialogBinding
 
 
-class ProgressDialog(context: Context) : Dialog(context) {
+class ProgresssDialog(context: Context) : Dialog(context) {
 
     private lateinit var binding: LayoutDialogBinding
     override fun onStart() {

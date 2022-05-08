@@ -10,13 +10,13 @@ import com.example.networkmodule.repository.CartRepository
 import com.example.networkmodule.usecase.FirebaseGetCategoryUseCase
 import com.example.networkmodule.usecase.FirebaseGetProductUseCase
 import com.example.networkmodule.usecase.InsertCartItemUseCase
+import com.example.networkmodule.util.Util.reduceBase64ImageSize
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,10 +38,9 @@ class UserViewModel @Inject constructor(
 
     init {
         launch {
-            withContext(Dispatchers.Default) {
-                getAllProducts()
-                getCategory()
-            }
+            _viewState.postValue(ViewState.Loading)
+            getAllProducts()
+            getCategory()
         }
     }
 
@@ -60,7 +59,6 @@ class UserViewModel @Inject constructor(
                         _viewState.postValue(ViewState.Loading)
                     }
                 }
-
             }
         }
     }
@@ -88,6 +86,10 @@ class UserViewModel @Inject constructor(
             arr.add(item)
             insertToCartUseCase.invoke(arr)
         }
+    }
+
+    fun stopLoading() {
+        _viewState.postValue(ViewState.Success())
     }
 
 }

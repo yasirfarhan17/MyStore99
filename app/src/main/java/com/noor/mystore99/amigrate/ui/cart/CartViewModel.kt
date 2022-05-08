@@ -31,13 +31,13 @@ class CartViewModel @Inject constructor(
         viewModelScope.launch (Dispatchers.IO){
             getCartFromDB()
         }
-
     }
 
 
     private suspend fun getCartFromDB() {
         launch {
-            getCartItemsUseCase().collectLatest { it ->
+            _viewState.postValue(ViewState.Loading)
+            getCartItemsUseCase().collectLatest {
                 when (it) {
                     is Resource.Success -> {
                         _cartFromDB.postValue(it.data as ArrayList<CartEntity>)

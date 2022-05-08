@@ -1,4 +1,4 @@
-package com.example.networkmodule.network
+package com.example.networkmodule.util
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

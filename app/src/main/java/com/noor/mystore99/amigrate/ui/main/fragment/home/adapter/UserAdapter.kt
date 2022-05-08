@@ -10,8 +10,8 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
+import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
-import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
 import com.noor.mystore99.databinding.IndiviewProductsBinding
 
 class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
@@ -20,7 +20,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     private val item = ArrayList<ProductEntity>()
     private val itemFilter = ArrayList<ProductEntity>()
 
-    private lateinit var viewModel:UserViewModel
+    private lateinit var viewModel: UserViewModel
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -29,7 +29,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
         itemFilter.clear()
         itemFilter.addAll(list)
         item.addAll(list)
-        this.viewModel=viewModel
+        this.viewModel = viewModel
         notifyDataSetChanged()
     }
 
@@ -40,16 +40,15 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
                 tvName.text = item.products_name
                 tvMrp.text = item.price
                 tvHindiName.text = item.HindiName
-                item.img!!.decodeToBitmap(500)?.let {
-                    imgProductImage.load(it) {
-                        transformations(CircleCropTransformation())
-                    }
+                imgProductImage.load(item.img?.decodeToBitmap()) {
+                    transformations(CircleCropTransformation())
                 }
 
-                val cartEntity= CartEntity(item.products_name,item.price,item.img,item.quant,item.price)
+                val cartEntity =
+                    CartEntity(item.products_name, item.price, item.img, item.quant, item.price)
                 btAddToCart.setOnClickListener {
                     viewModel.insertToCartDb(cartEntity)
-                    Toast.makeText(it.context,"Item Added successfully",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(it.context, "Item Added successfully", Toast.LENGTH_SHORT).show()
                 }
             }
         }

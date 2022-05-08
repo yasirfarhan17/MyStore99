@@ -94,14 +94,29 @@
                     app:layout_constraintStart_toEndOf="@id/img_cash"
                     app:layout_constraintTop_toTopOf="@id/img_cash" />
 
-                <RadioButton
-                    android:id="@+id/rb_cash"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="20sp"
                     android:layout_marginEnd="25dp"
-                    app:layout_constraintBottom_toBottomOf="@id/img_cash"
+                    android:layout_marginBottom="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/img_cash" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <RadioButton
+                        android:id="@+id/rb_cash"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp" />
+
+                    <RadioButton
+                        android:id="@+id/rb_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp" />
+
+                </RadioGroup>
 
 
                 <com.google.android.material.divider.MaterialDivider
@@ -139,17 +154,6 @@
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@id/img_upi"
                     app:layout_constraintStart_toEndOf="@+id/img_upi"
-                    app:layout_constraintTop_toTopOf="@id/img_upi" />
-
-
-                <RadioButton
-                    android:id="@+id/rb_radio"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginBottom="20dp"
-                    app:layout_constraintBottom_toBottomOf="@id/img_upi"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/img_upi" />
 
 
@@ -275,21 +279,22 @@
             android:text="@string/choose_delivery_date"
             android:textColor="@color/white"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@id/date"
+            app:layout_constraintBottom_toBottomOf="@id/et_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cv_shipping"
-            app:layout_constraintTop_toTopOf="@id/date" />
+            app:layout_constraintTop_toTopOf="@id/et_date" />
 
         <EditText
-            android:id="@+id/date"
+            android:id="@+id/et_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="25dp"
+            android:autofillHints="creditCardExpirationDate"
             android:background="@drawable/background4"
-            android:backgroundTint="@color/colorSecondaryLight"
-            android:focusableInTouchMode="false"
-            android:hint="DD/MM/YYYY"
+            android:backgroundTint="@color/colorSecondaryDark"
+            android:hint="@string/dd_mm_yyyy"
+            android:inputType="date"
             android:padding="5dp"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
@@ -298,13 +303,15 @@
             app:layout_constraintTop_toBottomOf="@+id/cv_shipping" />
 
         <EditText
-            android:id="@+id/pinCode"
-            android:layout_width="102dp"
-            android:layout_height="41dp"
+            android:id="@+id/et_pincode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="35dp"
+            android:autofillHints="postalCode"
             android:focusableInTouchMode="false"
-            android:hint="DD/MM/YYYY"
+            android:hint="@string/dd_mm_yyyy"
+            android:inputType="number"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="15sp"
@@ -312,7 +319,7 @@
             app:layout_constraintTop_toBottomOf="@+id/deliveryText" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPin"
+            android:id="@+id/bt_change_pin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
@@ -322,9 +329,9 @@
             android:textColor="@color/white"
             android:textSize="17sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/colorSecondaryLight"
+            app:backgroundTint="@color/colorSecondaryDark"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/date" />
+            app:layout_constraintTop_toBottomOf="@+id/et_date" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_check_out"

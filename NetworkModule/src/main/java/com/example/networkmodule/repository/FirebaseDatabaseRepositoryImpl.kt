@@ -33,7 +33,9 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                 dataSnapshot.children.forEach {
                     it.children.forEach { ittt ->
                         val productLocal = ittt.getValue(ProductModel::class.java)
-                        productLocal?.let { it1 -> list.add(it1) }
+                        productLocal?.let { it1 ->
+                            list.add(it1)
+                        }
                     }
                 }
                 Log.d("SAHIL__", "product " + list.size.toString())
@@ -96,5 +98,4 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                 categoryDbRef.removeEventListener(postListener)
             }
         }
-
 }

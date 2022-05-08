@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
-import com.noor.mystore99.amigrate.util.extension.Util.decodeToBitmap
+import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.databinding.IndiviewCartBinding
 
 class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {

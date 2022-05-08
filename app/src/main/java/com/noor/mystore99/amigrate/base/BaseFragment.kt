@@ -59,7 +59,10 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel> : Fragment(
                         hideProgress()
                         handleException(it.throwable?:"")
                     }
-                    else -> Log.d("onserveState", it.toString())
+                    else -> {
+                        hideProgress()
+                        Log.d("onserveState", it.toString())
+                    }
                 }
             }
     }

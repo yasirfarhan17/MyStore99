@@ -35,11 +35,7 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
     private fun setNavView() {
         val navView: BottomNavigationView = binding.bottomNavigationView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-       /* val appBarConfiguration =
-            AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_user))
-        setupActionBarWithNavController(navController, appBarConfiguration)*/
         navView.setupWithNavController(navController)
-
         binding.fabBtCart.setOnClickListener {
             val intent=Intent(this,CartActivity::class.java)
             startActivity(intent)
@@ -48,26 +44,6 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
 
     override fun addObservers() {
-        viewModel.productList.observe(this) {
-            val arr = ArrayList<ProductEntity>()
-            it.onEach { item ->
-
-                val productEntity = ProductEntity(
-                    item.products_name!!,
-                    item.price,
-                    item.img,
-                    item.quant,
-                    item.hindiName,
-                    item.stock
-                )
-                Log.d("yasir ", "" + item)
-                arr.add(productEntity)
-
-
-            }
-            Log.d("yasir ", "" + arr)
-           // viewModel.insertToDB(arr)
-        }
         lifecycleScope.launch {
             viewModel.cartItemCount.collect {
                 Log.d("SAHIL", it.toString())
