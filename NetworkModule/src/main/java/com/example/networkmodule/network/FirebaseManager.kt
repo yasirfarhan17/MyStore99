@@ -27,12 +27,15 @@ object FirebaseManager {
         return firebaseDatabase.reference.child(FirebaseKey.GET_CART_KEY)
     }
 
+    fun getUserDatabaseRef(firebaseDatabase: FirebaseDatabase): DatabaseReference {
+        return firebaseDatabase.reference.child(FirebaseKey.GET_USER_KEY)
+    }
+
     fun getFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
 
     fun getCategoryRef(firebaseDatabase: FirebaseDatabase): DatabaseReference {
-
         return firebaseDatabase.reference.child(FirebaseKey.GET_CATEGORY_KEY)
     }
 

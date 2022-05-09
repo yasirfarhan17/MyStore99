@@ -94,7 +94,7 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.MyViewH
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.name.setText(product1.get(position).getProducts_name()+"\n("+product1.get(position).getHindiName()+")");
+        //holder.name.setText(product1.get(position).getProducts_name()+"\n("+product1.get(position).getHindiName()+")");
         holder.price.setText("₹ "+product1.get(position).getPrice());
         ref= FirebaseDatabase.getInstance().getReference("Add Mrp").child(product1.get(position).getProducts_name());
 

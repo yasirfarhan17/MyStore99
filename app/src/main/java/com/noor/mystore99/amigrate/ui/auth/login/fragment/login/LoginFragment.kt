@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import com.example.networkmodule.network.AuthResource
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -24,7 +25,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, loginViewModel>() {
     var flag: Boolean = false
 
     override fun getViewModelClass(): Class<loginViewModel> = loginViewModel::class.java
-    val ref = FirebaseDatabase.getInstance().getReference("User")
+    var ref = FirebaseDatabase.getInstance().getReference("User")
 
     override fun getLayout(): Int = R.layout.fragment_login
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,14 +36,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, loginViewModel>() {
     fun init() {
         with(binding) {
             checkOut.setOnClickListener {
-                startActivity(
-                    Intent(
-                        it.context,
-                        com.noor.mystore99.amigrate.ui.main.MainActivity::class.java
-                    )
-                )
+                viewModel.doLogin(binding.etPhone.text.toString(), "123")
             }
-
 
             verify.setOnClickListener {
                 startActivity(
@@ -52,8 +47,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, loginViewModel>() {
                     )
                 )
                 Toast.makeText(it.context, "Please wait", Toast.LENGTH_SHORT).show()
-                if (ETPhone.text.toString().isNotEmpty()) {
-                    searchPhone(ETPhone.text.toString())
+                if (etPhone.text.toString().isNotEmpty()) {
+                    searchPhone(etPhone.text.toString())
                 }
             }
 
@@ -94,7 +89,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, loginViewModel>() {
     }
 
     override fun addObservers() {
-
+        viewModel.event.observe(viewLifecycleOwner) {
+            when (it) {
+                is AuthResource.Error -> showToast(it.error)
+                AuthResource.InvalidPhoneNumber -> showToast("Invalid Phone Number")
+                AuthResource.Loading -> showProgress()
+                AuthResource.NoUserFound -> showToast("No User FOund")
+                AuthResource.OtpRequired -> showToast("otp required")
+                AuthResource.Success -> {
+                    hideProgress()
+                    showToast("Successful")
+                }
+                AuthResource.VerificationFailed -> showToast("Verification failed")
+                AuthResource.WrongPassword -> showToast("wrog pass word failed")
+                else -> showToast("error")
+            }
+        }
     }
 
 
