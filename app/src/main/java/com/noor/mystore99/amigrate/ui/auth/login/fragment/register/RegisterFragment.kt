@@ -2,6 +2,7 @@ package com.noor.mystore99.amigrate.ui.auth.login.fragment.register
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.viewModels
 import com.example.networkmodule.network.AuthResource
 import com.noor.mystore99.R
@@ -14,7 +15,6 @@ class RegisterFragment : BaseFragment<FragmentRegistetBinding, RegisterViewModel
 
     private val authManager by lazy { AuthManager(requireActivity()) }
 
-
     override fun getViewModelClass(): Class<RegisterViewModel> = RegisterViewModel::class.java
 
     override fun getLayout(): Int = R.layout.fragment_registet
@@ -22,8 +22,8 @@ class RegisterFragment : BaseFragment<FragmentRegistetBinding, RegisterViewModel
     override fun addObservers() {
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initUi()
         authManager.events.observe(viewLifecycleOwner) {
             when (it) {

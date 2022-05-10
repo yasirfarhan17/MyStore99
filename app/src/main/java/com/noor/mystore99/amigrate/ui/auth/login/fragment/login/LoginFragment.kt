@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
+import com.noor.mystore99.amigrate.ui.main.MainActivity
 import com.noor.mystore99.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
@@ -94,14 +95,27 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, loginViewModel>() {
                 is AuthResource.Error -> showToast(it.error)
                 AuthResource.InvalidPhoneNumber -> showToast("Invalid Phone Number")
                 AuthResource.Loading -> showProgress()
-                AuthResource.NoUserFound -> showToast("No User FOund")
-                AuthResource.OtpRequired -> showToast("otp required")
+                AuthResource.NoUserFound -> {
+                    hideProgress()
+                    showToast("No User FOund")
+                }
+                AuthResource.OtpRequired -> {
+                    hideProgress()
+                    showToast("otp required")
+                }
                 AuthResource.Success -> {
                     hideProgress()
                     showToast("Successful")
+                    startActivity(Intent(requireContext(),MainActivity::class.java))
                 }
-                AuthResource.VerificationFailed -> showToast("Verification failed")
-                AuthResource.WrongPassword -> showToast("wrog pass word failed")
+                AuthResource.VerificationFailed -> {
+                    hideProgress()
+                    showToast("Verification failed")
+                }
+                AuthResource.WrongPassword -> {
+                    hideProgress()
+                    showToast("wrog pass word failed")
+                }
                 else -> showToast("error")
             }
         }
