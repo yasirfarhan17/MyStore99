@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".amigrate.ui.lastPage.CheckoutActivity"
+            android:name=".amigrate.ui.checkout.CheckoutActivity"
             android:exported="false" />
         <activity
             android:name=".amigrate.ui.payment.PaymentActivity"

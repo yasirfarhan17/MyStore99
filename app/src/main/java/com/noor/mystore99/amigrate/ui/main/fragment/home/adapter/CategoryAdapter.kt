@@ -3,18 +3,15 @@ package com.noor.mystore99.amigrate.ui.main.fragment.home.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.util.Util.decodeToBitmap
-import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
 import com.noor.mystore99.databinding.IndiviewCategoryBinding
 
-class CategoryAdapter(val callBAck:UserFragment) :
+class CategoryAdapter(val callback: CategoryAdapterCallback) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
 
@@ -31,13 +28,12 @@ class CategoryAdapter(val callBAck:UserFragment) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CategoryModel) {
             with(binding) {
-                imgCategoryIcon.load(item.categoryIconLink.decodeToBitmap(60)){
+                imgCategoryIcon.load(item.categoryIconLink.decodeToBitmap(60)) {
                     transformations(CircleCropTransformation())
                 }
                 tvCategoryName.text = item.categoryName.uppercase()
-                imgCategoryIcon.invalidate()
                 constraintLayout.setOnClickListener {
-                    callBAck.onItemClick(item.categoryName,it)
+                    callback.onItemClick(item.categoryName)
                 }
             }
         }
@@ -57,7 +53,8 @@ class CategoryAdapter(val callBAck:UserFragment) :
 
 
 }
-interface CallBackCategoryAdapter{
-    fun onItemClick(productName:String,view:View)
+
+interface CategoryAdapterCallback {
+    fun onItemClick(productName: String)
 
 }

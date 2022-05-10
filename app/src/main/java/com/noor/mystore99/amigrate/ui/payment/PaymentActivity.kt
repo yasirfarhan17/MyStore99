@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
-import com.noor.mystore99.amigrate.ui.lastPage.CheckoutActivity
+import com.noor.mystore99.amigrate.ui.checkout.CheckoutActivity
 import com.noor.mystore99.databinding.ActivityPaymentBinding
 import dagger.hilt.android.AndroidEntryPoint
 

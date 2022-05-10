@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -56,12 +57,13 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val list = ArrayList<SliderModel>()
-                dataSnapshot.children.forEach {
-                    it.children.forEach { childSnapShot ->
-                        val val1 = childSnapShot.child("img").value.toString()
-                        val color = childSnapShot.child("color").value.toString()
-                        val obj = SliderModel(val1, color)
-                        list.add(obj)
+                val count = dataSnapshot.childrenCount.toInt()
+                for (i in 0 until count + 1) {
+                    for (dataSnapshot1 in dataSnapshot.children) {
+                        val val1 = dataSnapshot1.child("img").value.toString()
+                        val color = dataSnapshot1.child("color").value.toString()
+                        val ob = SliderModel(val1, color)
+                        list.add(ob)
                     }
                 }
                 Log.d("SAHIL__", "banner " + list.size.toString())
@@ -98,4 +100,37 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                 categoryDbRef.removeEventListener(postListener)
             }
         }
+
+    override suspend fun getAllCategoryProduct(productName: String): Flow<Result<List<ProductModel>>> =
+        callbackFlow {
+            val postListener = object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
+                }
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()
+                            .not() || dataSnapshot.key == null || dataSnapshot.value == null
+                    ) {
+                        this@callbackFlow.trySendBlocking(Result.failure(UnknownOrWrongNodeException()))
+                        return
+                    }
+                    val list = ArrayList<ProductModel>()
+                    dataSnapshot.children.forEach {
+                        val productLocal = it.getValue(ProductModel::class.java)
+                        productLocal?.let { it1 ->
+                            list.add(it1)
+                        }
+                    }
+                    Log.d("SAHIL__", "product " + list.size.toString())
+                    this@callbackFlow.trySendBlocking(Result.success(list.toList()))
+                }
+            }
+            productDbRef.child(productName).addValueEventListener(postListener)
+            awaitClose {
+                productDbRef.removeEventListener(postListener)
+            }
+        }
 }
+
+class UnknownOrWrongNodeException : IOException("Firebase node doesn't exist")

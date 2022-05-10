@@ -9,4 +9,6 @@ interface FirebaseDatabaseRepository {
     suspend fun getAllProduct(): Flow<Result<List<ProductModel>>>
     suspend fun getBanner(): Flow<Result<List<SliderModel>>>
     suspend fun getCategory(): Flow<Result<List<CategoryModel>>>
+    suspend fun getAllCategoryProduct(productName: String): Flow<Result<List<ProductModel>>>
+
 }

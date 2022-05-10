@@ -8,8 +8,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android/MyStore99/app/src/main/res/drawable/minusbtn.xml" value="0.1695" />
-        <entry key="..\:/Android/MyStore99/app/src/main/res/drawable/plusbtn.xml" value="0.1695" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw280dp/fragment_home2.xml" value="0.18659420289855072" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw300dp/activity_last_page.xml" value="0.20784543325526933" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw330dp/activity_payment_option.xml" value="0.1875" />
@@ -18,14 +16,11 @@
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw360dp/activity_last_page.xml" value="0.13632246376811594" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout-sw360dp/sliding_ad_layout.xml" value="0.18070652173913043" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_cart.xml" value="0.33" />
-        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_category.xml" value="0.1802536231884058" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_check_out.xml" value="0.22" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_last_page2.xml" value="0.18854166666666666" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_login.xml" value="0.16145833333333334" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_main2.xml" value="0.16983695652173914" />
-        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_main3.xml" value="0.22" />
-        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_new_cart.xml" value="0.2" />
-        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_payment.xml" value="0.18" />
+        <entry key="..\:/Android/MyStore99/app/src/main/res/layout/activity_main3.xml" value="0.1" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/cardview.xml" value="0.33" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/cart_indi_view.xml" value="0.25" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/layout/content_new_category.xml" value="0.18070652173913043" />
@@ -41,6 +36,32 @@
         <entry key="..\:/Android/MyStore99/app/src/main/res/menu/bottom_nav_login.xml" value="0.18489583333333334" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18854166666666666" />
         <entry key="..\:/Android/MyStore99/app/src/main/res/menu/main.xml" value="0.18489583333333334" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/background5.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/bg_white_rounded.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/border2.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/cartbg.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/cartbg1.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/ic_local_mall_black_24dp.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/round_shape.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/top_rounded.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw280dp/fragment_home2.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_cart.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_category.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_main2.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_main3.xml" value="0.14666666666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_new_cart.xml" value="0.22" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_payment.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/bottom_sheet_cart_details.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/cardview.xml" value="0.171875" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/cart_indi_view.xml" value="0.22538552787663108" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/fragment_home2.xml" value="1.1142857142857143" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/fragment_login.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/fragment_registet.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/indiview_category.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/indiview_products.xml" value="0.4466666666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/layout_dialog.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/sliding_ad_layout.xml" value="1.1142857142857143" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/user_fragment.xml" value="0.14666666666666667" />
         <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw280dp/fragment_home2.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw300dp/fragment_home2.xml" value="0.2525" />
         <entry key="..\:/AndroidProjects/compose/MyStore99/app/src/main/res/layout-sw330dp/fragment_home2.xml" value="0.13425925925925927" />

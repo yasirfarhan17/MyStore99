@@ -4,7 +4,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +31,13 @@ public class sliderAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.slider_layout, container, false);
         ConstraintLayout bannerContainer = view.findViewById(R.id.banner_container);
-
-        if (Build.VERSION.SDK_INT >= 21) {
+        try {
             bannerContainer.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(sliderModelList.get(position).getBackgroundColor())));
+        } catch (IllegalArgumentException e) {
+            bannerContainer.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+
         }
         ImageView banner = view.findViewById(R.id.banner_slide);
         byte[] decodedString = Base64.decode(sliderModelList.get(position).getBanner(), Base64.DEFAULT);

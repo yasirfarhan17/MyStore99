@@ -5,6 +5,9 @@ object FirebaseKey {
     const val GET_BANNER_KEY = "Banner"
     const val GET_CART_KEY = "Cart"
     const val GET_CATEGORY_KEY = "Category"
+    const val GET_USER_KEY = "UserNew"
+
+
 
     //database named parameters
     const val PRODUCT_DATABASE_REF = "PRODUCT_DATABASE_REF"

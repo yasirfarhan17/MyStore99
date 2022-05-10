@@ -1,4 +1,4 @@
-package com.noor.mystore99.amigrate.ui.lastPage
+package com.noor.mystore99.amigrate.ui.checkout
 
 import com.noor.mystore99.amigrate.base.BaseViewModel
 

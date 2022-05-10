@@ -1,13 +1,11 @@
 package com.noor.mystore99.amigrate.ui.main.fragment.home
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -15,15 +13,12 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
-import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.SliderModel
-import com.google.firebase.database.*
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
 import com.noor.mystore99.amigrate.ui.category.CategoryActivity
-import com.noor.mystore99.amigrate.ui.category.CategoryViewModel
-import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CallBackCategoryAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
+import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapterCallback
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapterCallBack
 import com.noor.mystore99.amigrate.util.Util.setVisible
@@ -34,31 +29,37 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() ,UserAdapterCallBack,CallBackCategoryAdapter {
-
+class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAdapterCallBack,
+    CategoryAdapterCallback {
 
 
     override val viewModel: UserViewModel by viewModels()
-     val categoryViewModel: CategoryViewModel by viewModels()
-
-
     override fun getViewModelClass(): Class<UserViewModel> = UserViewModel::class.java
     override fun getLayout(): Int = R.layout.user_fragment
-    lateinit var ref:DatabaseReference
-    var sliderModelList=ArrayList<SliderModel>()
-    private var currentPage=2
+
+    var sliderModelList = ArrayList<SliderModel>()
+    private var currentPage = 2
     private var timer: Timer? = null
     private val delayTime: Long = 3000
     private val periodTime: Long = 3000
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.root
         init()
-        setBanner()
+        addListener()
+    }
+
+    private fun addListener() {
+        binding.searchView.setOnQueryTextFocusChangeListener { view, b ->
+            binding.labelPromoOffer.setVisible(b)
+            binding.rvCategory.setVisible(b)
+            binding.labelCategory.setVisible(b)
+            binding.viewPagerBanners.setVisible(b)
+        }
     }
 
     override fun onStart() {
-        Log.d("USER_FRAGMENT", "onStart")
         binding.rvProduct.layoutManager?.scrollToPosition(0)
         super.onStart()
     }
@@ -81,6 +82,23 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() ,UserAda
                 viewModel
             )
         }
+        viewModel.bannerList.observe(viewLifecycleOwner) {
+            if (it.isNullOrEmpty()) {
+                binding.viewPagerBanners.setVisible(false)
+                binding.labelPromoOffer.setVisible(false)
+                return@observe
+            }
+            binding.viewPagerBanners.setVisible(true)
+            binding.labelPromoOffer.setVisible(true)
+            sliderModelList = it
+            val sliderAdapter = sliderAdapter(sliderModelList)
+            binding.viewPagerBanners.adapter = sliderAdapter
+            binding.viewPagerBanners.clipToPadding = false
+            binding.viewPagerBanners.pageMargin = 20
+            sliderAdapter.notifyDataSetChanged()
+            binding.viewPagerBanners.currentItem = currentPage
+            setBanner()
+        }
         viewModel.categoryList.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
                 binding.labelCategory.setVisible(false)
@@ -89,45 +107,19 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() ,UserAda
             }
             binding.labelCategory.setVisible(true)
             binding.rvCategory.setVisible(true)
-            (binding.rvCategory.adapter as CategoryAdapter).submitList(it as ArrayList<CategoryModel>)
+            (binding.rvCategory.adapter as CategoryAdapter).submitList(it)
         }
 
     }
 
-    fun setBanner(){
-        ref = FirebaseDatabase.getInstance().getReference("Banner")
-        ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val count = dataSnapshot.childrenCount.toInt()
-                    for (i in 0 until count + 1) {
-                        for (dataSnapshot1 in dataSnapshot.children) {
-                            val val1 = dataSnapshot1.child("img").value.toString()
-                            val color = dataSnapshot1.child("color").value.toString()
-                            val ob = SliderModel(val1, color)
-                            sliderModelList.add(ob)
-                        }
-                    }
-                    val sliderAdapter = sliderAdapter(sliderModelList)
-                    binding.viewPagerBanners.setAdapter(sliderAdapter)
-                    binding.viewPagerBanners.setClipToPadding(false)
-                    binding.viewPagerBanners.setPageMargin(20)
-                    sliderAdapter.notifyDataSetChanged()
-                    binding.viewPagerBanners.setCurrentItem(currentPage)
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
-
-
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setBanner() {
         val onPageChangeListener: OnPageChangeListener = object : OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
-            ) {
-            }
+            ) = Unit
 
             override fun onPageSelected(position: Int) {
                 currentPage = position
@@ -140,20 +132,17 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() ,UserAda
             }
         }
         binding.viewPagerBanners.addOnPageChangeListener(onPageChangeListener)
-
-        startbannerslideshow()
-        binding.viewPagerBanners.setOnTouchListener(OnTouchListener { view, motionEvent ->
+        startBannerSlideshow()
+        binding.viewPagerBanners.setOnTouchListener { _, motionEvent ->
             pageLooper()
-            stopbannerslidshow()
+            stopBannerSlideShow()
             if (motionEvent.action == MotionEvent.ACTION_UP) {
-                startbannerslideshow()
+                startBannerSlideshow()
             }
             false
-        })
+        }
     }
 
-
-    /////banner slider
     private fun pageLooper() {
         if (currentPage == sliderModelList.size - 2) {
             currentPage = 2
@@ -165,7 +154,8 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() ,UserAda
         }
     }
 
-    private fun startbannerslideshow() {
+
+    private fun startBannerSlideshow() {
         val handler = Handler()
         val update = Runnable {
             if (currentPage >= sliderModelList.size) {
@@ -181,7 +171,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() ,UserAda
         }, delayTime, periodTime)
     }
 
-    private fun stopbannerslidshow() {
+    private fun stopBannerSlideShow() {
         timer?.cancel()
     }
 
@@ -189,10 +179,10 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() ,UserAda
         viewModel.insertToCartDb(cartEntity)
     }
 
-    override fun onItemClick(productName: String,context:View) {
-        categoryViewModel.getAllCategory(productName)
-
-        startActivity(Intent(context.context,CategoryActivity::class.java))
+    override fun onItemClick(productName: String) {
+        startActivity(Intent(requireContext(), CategoryActivity::class.java).apply {
+            this.putExtra(CategoryActivity.CATEGORY_NAME, productName)
+        })
     }
 
 }

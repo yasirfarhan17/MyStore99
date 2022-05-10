@@ -5,11 +5,8 @@ import com.example.networkmodule.network.Resource
 import com.example.networkmodule.repository.FirebaseDatabaseRepository
 import com.example.networkmodule.util.Util.reduceBase64ImageSize
 import com.example.networkmodule.util.computation
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FirebaseGetProductUseCase @Inject constructor(
@@ -27,9 +24,7 @@ class FirebaseGetProductUseCase @Inject constructor(
                         list.forEach { productModel ->
                             productModel.img = productModel.img?.reduceBase64ImageSize(500)
                         }
-                        withContext(Dispatchers.Main){
-                            send(Resource.Success(list))
-                        }
+                        send(Resource.Success(list))
                     }
                 } else {
                     send(

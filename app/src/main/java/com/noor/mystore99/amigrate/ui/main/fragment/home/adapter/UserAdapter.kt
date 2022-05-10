@@ -76,6 +76,5 @@ class UserAdapter(
 }
 
 interface UserAdapterCallBack{
-
     fun onItemClick(cartEntity: CartEntity)
 }

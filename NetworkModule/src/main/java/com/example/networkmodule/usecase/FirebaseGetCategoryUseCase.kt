@@ -20,12 +20,6 @@ class FirebaseGetCategoryUseCase @Inject constructor(
                     if (list == null) {
                         send(Resource.Error("No Category Found"))
                     } else {
-/*
-                        list.forEach { category ->
-                            category.categoryIconLink =
-                                category.categoryIconLink?.reduceBase64ImageSize(800)
-                        }
-*/
                         send(Resource.Success(list))
                     }
                 } else {

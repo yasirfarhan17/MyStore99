@@ -157,18 +157,11 @@ object FirebaseModule {
         return FirebaseDatabaseRepositoryImpl(productDbRef, bannerDbRef, categoryDbRef)
     }
 
-    @Provides
-    @Singleton
-    fun provideFirebaseCategoryDatabaseRepository(
-        @Named(FirebaseKey.PRODUCT_DATABASE_REF)  categoryAll:DatabaseReference
-    ):FireBaseCategoryRepository{
-        return FireBaseCategoryRepositoryImpl(categoryAll)
-    }
 
     @Provides
     @Singleton
     fun provideFirebaseAllCategoryUseCase(
-        repo: FireBaseCategoryRepository
+        repo: FirebaseDatabaseRepository
     ): FireBaseCategoryUseCase {
         return FireBaseCategoryUseCase(repo)
     }

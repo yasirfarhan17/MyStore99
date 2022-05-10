@@ -5,17 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.ProductModel
+import com.example.networkmodule.model.SliderModel
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.repository.CartRepository
+import com.example.networkmodule.usecase.FirebaseGetBannerUseCase
 import com.example.networkmodule.usecase.FirebaseGetCategoryUseCase
 import com.example.networkmodule.usecase.FirebaseGetProductUseCase
 import com.example.networkmodule.usecase.InsertCartItemUseCase
-import com.example.networkmodule.util.Util.reduceBase64ImageSize
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,22 +27,41 @@ class UserViewModel @Inject constructor(
     private val insertToCartUseCase: InsertCartItemUseCase,
     private val cartRepo: CartRepository,
     private val productUseCase: FirebaseGetProductUseCase,
+    private val bannerUseCase: FirebaseGetBannerUseCase
 
-    ) : BaseViewModel() {
+) : BaseViewModel() {
 
-    private var _categoryList = MutableLiveData<ArrayList<CategoryModel>>()
+    private var _categoryList = MutableLiveData<ArrayList<CategoryModel>?>()
     val categoryList = _categoryList.toLiveData()
 
 
     private var _productList = MutableLiveData<ArrayList<ProductModel>>()
     val productList = _productList.toLiveData()
 
+    private var _bannerList = MutableLiveData<ArrayList<SliderModel>?>()
+    val bannerList = _bannerList.toLiveData()
+
 
     init {
         launch {
             _viewState.postValue(ViewState.Loading)
             getAllProducts()
+            getBanner()
             getCategory()
+        }
+    }
+
+    private fun getBanner() {
+        launch {
+            _viewState.postValue(ViewState.Loading)
+            bannerUseCase.invoke().collectLatest {
+                if (it.data.isNullOrEmpty()) {
+                    _bannerList.postValue(null)
+                    return@collectLatest
+                }
+                _bannerList.postValue(it.data as ArrayList<SliderModel>)
+
+            }
         }
     }
 
@@ -66,13 +87,11 @@ class UserViewModel @Inject constructor(
     private fun getCategory() {
         launch {
             categoryUseCase.invoke().collect {
-                when (it) {
-                    is Resource.Success -> {
-                        _categoryList.postValue(it.data as ArrayList<CategoryModel>)
-                    }
-                    is Resource.Error -> {}
-                    is Resource.Loading -> {}
+                if (it.data.isNullOrEmpty()) {
+                    _categoryList.postValue(null)
+                    return@collect
                 }
+                _categoryList.postValue(it.data as ArrayList<CategoryModel>)
             }
         }
 
@@ -88,8 +107,5 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun stopLoading() {
-        _viewState.postValue(ViewState.Success())
-    }
 
 }
