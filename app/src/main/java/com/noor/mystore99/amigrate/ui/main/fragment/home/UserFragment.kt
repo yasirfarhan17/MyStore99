@@ -1,5 +1,7 @@
 package com.noor.mystore99.amigrate.ui.main.fragment.home
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -11,14 +13,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.SliderModel
 import com.google.firebase.database.*
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
+import com.noor.mystore99.amigrate.ui.category.CategoryActivity
+import com.noor.mystore99.amigrate.ui.category.CategoryViewModel
+import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CallBackCategoryAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
+import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapterCallBack
 import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.databinding.UserFragmentBinding
 import com.noor.mystore99.sliderAdapter
@@ -27,8 +34,14 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
+class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() ,UserAdapterCallBack,CallBackCategoryAdapter {
+
+
+
     override val viewModel: UserViewModel by viewModels()
+     val categoryViewModel: CategoryViewModel by viewModels()
+
+
     override fun getViewModelClass(): Class<UserViewModel> = UserViewModel::class.java
     override fun getLayout(): Int = R.layout.user_fragment
     lateinit var ref:DatabaseReference
@@ -53,10 +66,10 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
     private fun init() {
         with(binding) {
             rvProduct.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-            rvProduct.adapter = UserAdapter()
+            rvProduct.adapter = UserAdapter(this@UserFragment)
             rvCategory.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            binding.rvCategory.adapter = CategoryAdapter()
+            binding.rvCategory.adapter = CategoryAdapter(this@UserFragment)
         }
     }
 
@@ -170,6 +183,16 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>() {
 
     private fun stopbannerslidshow() {
         timer?.cancel()
+    }
+
+    override fun onItemClick(cartEntity: CartEntity) {
+        viewModel.insertToCartDb(cartEntity)
+    }
+
+    override fun onItemClick(productName: String,context:View) {
+        categoryViewModel.getAllCategory(productName)
+
+        startActivity(Intent(context.context,CategoryActivity::class.java))
     }
 
 }
