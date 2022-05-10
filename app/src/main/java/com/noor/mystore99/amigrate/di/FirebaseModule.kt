@@ -57,6 +57,15 @@ object FirebaseModule {
         return FirebaseManager.getBannerDatabaseRef(firebaseDatabase)
     }
 
+    @Named(FirebaseKey.USER_DATABASE_REF)
+    @Provides
+    @Singleton
+    fun getUserRef(
+        firebaseDatabase: FirebaseDatabase
+    ): DatabaseReference {
+        return FirebaseManager.getUserDatabaseRef(firebaseDatabase)
+    }
+
     @Named(FirebaseKey.CART_DATABASE_REF)
     @Provides
     @Singleton
@@ -186,6 +195,22 @@ object FirebaseModule {
         repo: FirebaseDatabaseRepository
     ): FirebaseGetCategoryUseCase {
         return FirebaseGetCategoryUseCase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthUseCase(
+        repo: AuthRepository
+    ): GetLoginUseCase {
+        return GetLoginUseCase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        @Named(FirebaseKey.USER_DATABASE_REF) userDbRef: DatabaseReference,
+    ): AuthRepository {
+        return AuthRepositoryImpl(userDbRef)
     }
 
 }
