@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#192648"
+        android:background="@color/white"
         tools:context=".amigrate.ui.payment.PaymentActivity">
 
 
@@ -73,10 +73,10 @@
                     android:id="@+id/img_cash"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginStart="25dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="5dp"
                     android:contentDescription="@string/icon_for_cash_payment"
-                    android:src="@drawable/ic_shopping_cart"
+                    android:src="@drawable/cash"
                     app:layout_constraintBottom_toTopOf="@id/divider_payment"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -85,7 +85,7 @@
                     android:id="@+id/label_cash"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="20dp"
                     android:fontFamily="@font/convergence"
                     android:text="@string/cash"
                     android:textColor="@color/white"
@@ -134,20 +134,21 @@
                 <ImageView
                     android:id="@+id/img_upi"
                     android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="25dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:contentDescription="@string/icon_for_cash_payment"
-                    android:src="@drawable/ic_shopping_cart"
+                    android:src="@drawable/upii"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider_payment" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider_payment" />
 
                 <TextView
                     android:id="@+id/label_upi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="20dp"
                     android:fontFamily="@font/convergence"
                     android:text="@string/upi"
                     android:textColor="@color/white"
@@ -277,7 +278,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:text="@string/choose_delivery_date"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/et_date"
             app:layout_constraintStart_toStartOf="parent"
@@ -292,7 +293,7 @@
             android:layout_marginEnd="25dp"
             android:autofillHints="creditCardExpirationDate"
             android:background="@drawable/background4"
-            android:backgroundTint="@color/colorSecondaryDark"
+            android:backgroundTint="@color/btnprimary"
             android:hint="@string/dd_mm_yyyy"
             android:inputType="date"
             android:padding="5dp"
@@ -312,6 +313,7 @@
             android:focusableInTouchMode="false"
             android:hint="@string/dd_mm_yyyy"
             android:inputType="number"
+            android:background="@color/btnprimary"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="15sp"
@@ -329,7 +331,7 @@
             android:textColor="@color/white"
             android:textSize="17sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/colorSecondaryDark"
+            app:backgroundTint="@color/btnprimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_date" />
 
@@ -345,7 +347,7 @@
             android:textColor="@color/white"
             android:textSize="17sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/colorSecondaryDark"
+            app:backgroundTint="@color/btnprimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
