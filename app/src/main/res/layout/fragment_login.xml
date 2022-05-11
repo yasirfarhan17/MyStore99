@@ -83,7 +83,7 @@
                         app:helperTextTextColor="#F41808"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/constraintLayout"
-                        app:startIconDrawable="@drawable/ic_local_phone_black_24dp">
+                        app:startIconDrawable="@drawable/ic_local_phone">
 
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -112,7 +112,7 @@
                         app:helperTextTextColor="#F41808"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/verify"
-                        app:startIconDrawable="@drawable/ic_iconfinder_icons_password_1564520">
+                        app:startIconDrawable="@drawable/ic_password">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_cnfrm_password"

@@ -107,7 +107,7 @@
             android:textSize="18dp"
             android:drawablePadding="10dp"
             android:layout_marginLeft="10dp"
-            android:drawableLeft="@drawable/ic_local_phone_black_24dp"
+            android:drawableLeft="@drawable/ic_local_phone"
             android:layout_marginRight="10dp"/>
         <TextView
             android:id="@+id/profileAdd"

@@ -44,9 +44,17 @@
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/ic_local_mall_black_24dp.xml" value="0.118" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/round_shape.xml" value="0.118" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/top_rounded.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw280dp/activity_address1.xml" value="0.115" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw280dp/fragment_home2.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw330dp/activity_address1.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw360dp/activity_address1.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw480dp/activity_address1.xml" value="0.115" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw600dp/activity_address1.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw720dp/activity_address1.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_address1.xml" value="0.32857142857142857" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_cart.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_category.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_login.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_main2.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_main3.xml" value="0.14666666666666667" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/activity_new_cart.xml" value="0.22" />

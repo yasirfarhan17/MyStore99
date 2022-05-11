@@ -70,7 +70,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/constraintLayout"
-                        app:startIconDrawable="@drawable/ic_local_phone_black_24dp">
+                        app:startIconDrawable="@drawable/ic_local_phone">
 
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -101,7 +101,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
-                        app:startIconDrawable="@drawable/ic_iconfinder_icons_password_1564520">
+                        app:startIconDrawable="@drawable/ic_password">
 
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -132,7 +132,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textLayout1"
-                        app:startIconDrawable="@drawable/ic_iconfinder_icons_password_1564520">
+                        app:startIconDrawable="@drawable/ic_password">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_cnfrm_password"

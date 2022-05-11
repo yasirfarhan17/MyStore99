@@ -1,12 +1,12 @@
 package com.noor.mystore99.amigrate.ui.auth.login
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
+import com.noor.mystore99.amigrate.util.Util.flipCard
 import com.noor.mystore99.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,19 +16,49 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
     override val viewModel: MainLoginViewModel by viewModels()
 
 
+
     override fun layoutId(): Int = R.layout.activity_login
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setNavView()
+        initUi()
+        addListener()
+        val scale = applicationContext.resources.displayMetrics.density
 
+
+        binding.cvLogin.cameraDistance = 8000 * scale
+        binding.cvRegister.cameraDistance = 8000 * scale
+
+
+        // Now we will set the event listener
+        binding.tvSignUp.setOnClickListener {/*
+            frontAnim.setTarget(binding.cvLogin);
+            backAnim.setTarget(binding.cvRegister);
+            frontAnim.start()
+            backAnim.start()*/
+            flipCard(binding.cvRegister, binding.cvLogin) {
+                showMessage(it)
+            }
+
+        }
+        binding.tvSignIn.setOnClickListener {
+            /* frontAnim.setTarget(binding.cvRegister)
+             backAnim.setTarget(binding.cvLogin)
+             backAnim.start()
+             frontAnim.start()*/
+            flipCard(binding.cvLogin, binding.cvRegister) {
+                showMessage(it)
+
+            }
+
+        }
     }
 
 
-    private fun setNavView() {
-        val navView: BottomNavigationView = binding.bottomNavigationView1
-        val navController = findNavController(R.id.nav_host_fragment_activity_Login)
+    private fun initUi() {
 
-        navView.setupWithNavController(navController)
+    }
+
+    private fun addListener() {
 
     }
 
