@@ -69,10 +69,10 @@
     <string name="your_cart_is_empty_n_please_add_few_items">Your cart is empty.\n Please add few items</string>
     <string name="payment_methods">Payment Methods</string>
     <string name="payment">Payment</string>
-    <string name="cash">Cash</string>
+    <string name="cash">Cash on Delivery</string>
     <string name="icon_for_cash_payment">Icon for cash payment</string>
     <string name="icon_for_upi_payment">Icon for Upi payment</string>
-    <string name="upi">Upi</string>
+    <string name="upi">Upi/PhonePe,GooglePay</string>
     <string name="shipping_address">Shipping Address</string>
     <string name="address">Address</string>
     <string name="phone_number">Phone Number</string>
