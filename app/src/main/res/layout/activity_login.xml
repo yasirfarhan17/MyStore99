@@ -30,12 +30,12 @@
             android:layout_margin="25dp"
             android:visibility="visible"
             app:cardCornerRadius="10dp"
+            app:layout_constraintTop_toBottomOf="@id/label_header"
             app:cardElevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_header"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -126,14 +126,30 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/mat_cb_remember_me"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/convergence"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="Remember Me"
+                    app:layout_constraintEnd_toEndOf="@id/mat_bt_login"
+                    app:layout_constraintStart_toStartOf="@id/mat_bt_login"
+                    app:layout_constraintTop_toBottomOf="@id/txt_input_password" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/mat_bt_login"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="55dp"
-                    android:layout_margin="20sp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     android:fontFamily="@font/convergence"
                     android:text="@string/login"
-                    app:layout_constraintTop_toBottomOf="@id/txt_input_password" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mat_cb_remember_me" />
 
                 <TextView
                     android:id="@+id/label_sign_up"
@@ -178,13 +194,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
+            app:layout_constraintTop_toBottomOf="@id/label_header"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_header">
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -309,7 +325,7 @@
                     android:layout_height="55dp"
                     android:layout_margin="20sp"
                     android:fontFamily="@font/convergence"
-                    android:text="@string/login"
+                    android:text="@string/register"
                     app:layout_constraintTop_toBottomOf="@id/txt_input_cnfrm_password_sign_up" />
 
                 <TextView

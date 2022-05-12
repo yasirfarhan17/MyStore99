@@ -8,6 +8,6 @@ sealed class AuthResource(val message: String? = null) {
     object Success : AuthResource()
     object OtpSend : AuthResource()
     object OtpRequired : AuthResource()
-    object VerificationFailed : AuthResource()
+    data class VerificationFailed(var error: String) : AuthResource()
     data class Error(var error: String) : AuthResource(error)
 }

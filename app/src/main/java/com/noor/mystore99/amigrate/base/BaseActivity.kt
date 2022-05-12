@@ -7,7 +7,9 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.example.networkmodule.storage.PrefsUtil
 import com.noor.mystore99.amigrate.util.UiUtil
+import javax.inject.Inject
 
 abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
 
@@ -16,8 +18,8 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompat
     private lateinit var uiUtil: UiUtil
 
 
-    /*  @Inject
-      lateinit var prefsUtil: PrefsUtil*/
+      @Inject
+      lateinit var prefsUtil: PrefsUtil
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

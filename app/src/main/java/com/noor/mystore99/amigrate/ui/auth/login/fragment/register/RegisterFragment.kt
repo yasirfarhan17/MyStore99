@@ -32,7 +32,7 @@ class RegisterFragment : BaseFragment<FragmentRegistetBinding, RegisterViewModel
                     showToast("Otp hs been sent")
                 }
                 AuthResource.Success -> showToast("Successfully registered")
-                AuthResource.VerificationFailed -> showToast("Verification Failed")
+                is AuthResource.VerificationFailed -> showToast("Verification Failed")
                 else -> Log.d("SAHIL", "failed")
             }
         }

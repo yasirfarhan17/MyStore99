@@ -106,9 +106,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, loginViewModel>() {
                 AuthResource.Success -> {
                     hideProgress()
                     showToast("Successful")
-                    startActivity(Intent(requireContext(),MainActivity::class.java))
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
                 }
-                AuthResource.VerificationFailed -> {
+                is AuthResource.VerificationFailed -> {
                     hideProgress()
                     showToast("Verification failed")
                 }

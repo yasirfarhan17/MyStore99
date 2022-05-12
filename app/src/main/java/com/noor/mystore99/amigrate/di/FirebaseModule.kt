@@ -1,6 +1,7 @@
 package com.noor.mystore99.amigrate.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.networkmodule.database.SbziTazaLocalDatabase
 import com.example.networkmodule.database.dao.CartDao
@@ -8,6 +9,8 @@ import com.example.networkmodule.database.dao.ProductDao
 import com.example.networkmodule.network.FirebaseKey
 import com.example.networkmodule.network.FirebaseManager
 import com.example.networkmodule.repository.*
+import com.example.networkmodule.storage.PrefsStoreImpl
+import com.example.networkmodule.storage.PrefsUtil
 import com.example.networkmodule.usecase.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -205,5 +208,30 @@ object FirebaseModule {
     ): AuthRepository {
         return AuthRepositoryImpl(userDbRef)
     }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreImpl(
+        @ApplicationContext context: Context
+    ): PrefsStoreImpl {
+        return PrefsStoreImpl(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSharedPreferences(
+        @ApplicationContext context: Context
+    ): SharedPreferences {
+        return context.getSharedPreferences(
+            PrefsUtil.SHARED_PREFERENCE_ID, Context.MODE_PRIVATE
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providePrefUtils(sharedPreferences: SharedPreferences): PrefsUtil {
+        return PrefsUtil(sharedPreferences)
+    }
+
 
 }

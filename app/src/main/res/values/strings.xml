@@ -88,5 +88,6 @@
     <string name="cnfrm_password">Confirm Password</string>
     <string name="have_an_account">Have an account !</string>
     <string name="sign_in">Sign In</string>
+    <string name="register">Register</string>
 
 </resources>

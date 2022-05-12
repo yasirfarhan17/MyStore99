@@ -2,6 +2,7 @@ package com.noor.mystore99.amigrate.ui.auth.login
 
 import androidx.lifecycle.MutableLiveData
 import com.example.networkmodule.network.AuthResource
+import com.example.networkmodule.storage.PrefsStoreImpl
 import com.example.networkmodule.usecase.GetLoginUseCase
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
@@ -13,10 +14,30 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainLoginViewModel @Inject constructor(
-    private var loginUseCase: GetLoginUseCase
+    private var loginUseCase: GetLoginUseCase,
+    private var prefDataStore: PrefsStoreImpl
 ) : BaseViewModel() {
     private val _event = MutableLiveData<AuthResource>()
     val event = _event.toLiveData()
+    private val _phoneAndPassword = MutableLiveData<Pair<String, String>>()
+    val phoneAndPassword = _phoneAndPassword.toLiveData()
+
+    init {
+        isLoggedIn()
+    }
+
+    private fun isLoggedIn() {
+        launch {
+            prefDataStore.isLoggedIn().collect {
+                if (it) {
+                    prefDataStore.getPhoneNumber().collect {
+
+                    }
+                }
+            }
+        }
+    }
+
     fun doLogin(phoneNumber: String, password: String) {
         launch {
             _viewState.postValue(ViewState.Loading)
@@ -32,7 +53,7 @@ class MainLoginViewModel @Inject constructor(
                         _event.postValue(AuthResource.Success)
                         _viewState.postValue(ViewState.Success())
                     }
-                    AuthResource.VerificationFailed -> _viewState.postValue(ViewState.Error("Verification Failed"))
+                    is AuthResource.VerificationFailed -> _viewState.postValue(ViewState.Error("Verification Failed"))
                     AuthResource.WrongPassword -> _viewState.postValue(ViewState.Error("Please enter correct password"))
                 }
             }
