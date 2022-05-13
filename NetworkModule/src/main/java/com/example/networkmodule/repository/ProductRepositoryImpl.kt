@@ -12,5 +12,6 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun insertItems(list: List<ProductEntity>) = dao.insertAllProduct(list)
     override suspend fun clearAllProduct() = dao.clear()
     override suspend fun update(price: String, id: String) = dao.update(price, id)
+    override suspend fun updateCount(count: Int, id: String) = dao.updateCount(count, id)
     override suspend fun getNoOfProducts(): Int? = dao.getCount()
 }

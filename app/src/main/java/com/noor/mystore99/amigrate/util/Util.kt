@@ -18,19 +18,24 @@ object Util {
 
     fun Context.flipCard(visibleView: View, inVisibleView: View, error: (String) -> Unit) {
         try {
-            visibleView.setVisible(true)
+
             val scale = theme.resources.displayMetrics.density
             val cameraDist = 10000 * scale
             visibleView.cameraDistance = cameraDist
             inVisibleView.cameraDistance = cameraDist
-            val flipOutAnimatorSet = AnimatorInflater.loadAnimator(this, R.animator.flip_in) as AnimatorSet
+            val flipOutAnimatorSet =
+                AnimatorInflater.loadAnimator(this, R.animator.flip_in) as AnimatorSet
             flipOutAnimatorSet.setTarget(inVisibleView)
-            val flipInAnimatorSet = AnimatorInflater.loadAnimator(this, R.animator.flip_out) as AnimatorSet
+            val flipInAnimatorSet =
+                AnimatorInflater.loadAnimator(this, R.animator.flip_out) as AnimatorSet
             flipInAnimatorSet.setTarget(visibleView)
             flipOutAnimatorSet.start()
             flipInAnimatorSet.start()
             flipInAnimatorSet.doOnEnd {
                 inVisibleView.setVisible(false)
+            }
+            flipOutAnimatorSet.doOnEnd {
+                visibleView.setVisible(true)
             }
         } catch (e: Exception) {
             error.invoke(e.message.toString())

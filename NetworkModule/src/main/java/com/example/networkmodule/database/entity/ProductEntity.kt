@@ -16,6 +16,7 @@ data class ProductEntity(
     @ColumnInfo val quant: String? = null,
     @ColumnInfo val HindiName: String? = null,
     @ColumnInfo val stock: String? = null,
+    @ColumnInfo var count: Int = 0,
 ) : Parcelable {
     fun toProductModel(): ProductModel {
         return ProductModel(
@@ -24,9 +25,22 @@ data class ProductEntity(
             this.img,
             this.quant,
             this.HindiName,
-            this.stock
+            this.stock,
+            this.count
         )
 
+
+    }
+
+    fun toCartEntity(): CartEntity {
+        return CartEntity(
+            products_name = this.products_name,
+            price = this.price,
+            img = this.img,
+            quant = this.quant,
+            count = this.count,
+            total = ((this.price?.toInt() ?: 1) * this.count).toString()
+        )
 
     }
 

@@ -12,8 +12,9 @@ data class CartModel (
     var img: String? = null,
     var quant: String? = null,
     var total: String? = null,
+    var count:Int=0
 ):Parcelable{
     fun toCartEntity(): CartEntity {
-        return CartEntity(this.products_name!!,this.price,this.img,this.quant,this.total)
+        return CartEntity(this.products_name!!,this.price,this.img,this.quant,this.total,this.count)
     }
 }

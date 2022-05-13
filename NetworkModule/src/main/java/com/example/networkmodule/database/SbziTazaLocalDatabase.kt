@@ -20,7 +20,7 @@ abstract class SbziTazaLocalDatabase : RoomDatabase() {
 
     companion object {
         const val Name = "sbzi_taza_database"
-        const val Version = 5
+        const val Version = 6
 
         @Volatile
         private var instance: SbziTazaLocalDatabase? = null

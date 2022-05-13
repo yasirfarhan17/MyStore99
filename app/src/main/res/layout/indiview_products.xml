@@ -40,13 +40,13 @@
 
                     <TextView
                         android:id="@+id/tv_name"
-                        android:fontFamily="@font/convergence"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="50dp"
                         android:layout_marginEnd="5dp"
                         android:ellipsize="end"
+                        android:fontFamily="@font/convergence"
                         android:gravity="center"
                         android:textAlignment="center"
                         android:textAllCaps="true"
@@ -63,8 +63,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
-                        android:fontFamily="@font/convergence"
                         android:ellipsize="end"
+                        android:fontFamily="@font/convergence"
                         android:gravity="center"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -81,8 +81,8 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:ellipsize="end"
-                        android:gravity="center"
                         android:fontFamily="@font/convergence"
+                        android:gravity="center"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="17sp"
@@ -99,16 +99,67 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
-                        android:padding="8dp"
                         android:backgroundTint="@color/btnprimary"
                         android:fontFamily="@font/convergence"
+                        android:padding="8dp"
                         android:text="@string/add_to_cart"
                         android:textAllCaps="true"
                         android:textSize="12sp"
+                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_mrp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_add_dec"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:padding="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_mrp">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/bt_decrease"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:background="@drawable/minus_btn"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tv_current_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:elevation="10dp"
+                            android:fontFamily="@font/convergence"
+                            android:padding="3dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/bt_increase"
+                            app:layout_constraintStart_toEndOf="@+id/bt_decrease"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="115" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/bt_increase"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:background="@drawable/plus_btn"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

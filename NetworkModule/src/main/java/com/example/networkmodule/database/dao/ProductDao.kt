@@ -24,7 +24,10 @@ interface ProductDao {
     fun getProduct(): Flow<List<ProductEntity>>
 
     @Query("UPDATE productTable SET price = :price WHERE products_name = :id")
-    fun update(price:String, id: String)
+    fun update(price: String, id: String)
+
+    @Query("UPDATE productTable SET count=:count WHERE products_name = :id")
+    fun updateCount(count: Int, id: String)
 
     @Query("SELECT COUNT(*) FROM productTable")
     fun getCount(): Int?

@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noor.mystore99.R
+import com.noor.mystore99.amigrate.base.AppConstant
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.payment.PaymentActivity
 import com.noor.mystore99.amigrate.util.Util.setVisible
@@ -42,6 +43,7 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>() {
                     getString(R.string.all_the_item_in_cart_will_be_cleared)
                 ) {
                     viewModel.clearCart()
+                    sendBroadcast(Intent().apply { action = AppConstant.BROADCAST_CLEAR_CART })
                     itemsPresentInCart(false)
                     (binding.rvCart.adapter as CartAdapter).clearAdapter()
 

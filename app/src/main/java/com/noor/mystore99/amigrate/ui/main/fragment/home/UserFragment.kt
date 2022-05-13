@@ -7,11 +7,11 @@ import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.model.SliderModel
 import com.noor.mystore99.R
@@ -25,6 +25,8 @@ import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.databinding.UserFragmentBinding
 import com.noor.mystore99.sliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -42,6 +44,8 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
     private var timer: Timer? = null
     private val delayTime: Long = 3000
     private val periodTime: Long = 3000
+
+    private var firstTime=true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,11 +80,12 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
     override fun addObservers() {
         viewModel.productList.observe(viewLifecycleOwner) {
+            if (firstTime.not()) return@observe
+            showProgress()
             val list = it.map { productModel -> productModel.toProductEntity() }
-            (binding.rvProduct.adapter as UserAdapter).submitList(
-                list as ArrayList<ProductEntity>,
-                viewModel
-            )
+            (binding.rvProduct.adapter as UserAdapter).submitList(list as ArrayList<ProductEntity>)
+            firstTime=false
+            hideProgress()
         }
         viewModel.bannerList.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
@@ -175,8 +180,65 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         timer?.cancel()
     }
 
-    override fun onItemClick(cartEntity: CartEntity) {
-        viewModel.insertToCartDb(cartEntity)
+    override fun onStop() {
+        super.onStop()
+        firstTime=true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        firstTime=true
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+    }
+    /**
+     * This is used to update the ui in recycler view as we are not observing change in
+     */
+    private fun updateUserAdapterItem(item: ProductEntity, position: Int) {
+        (binding.rvProduct.adapter as UserAdapter).updateItem(item, position)
+    }
+
+    /**
+     * This is called when we click on add to cart button in recycler view
+     */
+    override fun onAddToCartClick(item: ProductEntity, position: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            showProgress()
+            item.count=1
+            updateUserAdapterItem(item, position)
+            viewModel.inertItemToCart(item)
+            delay(1000)
+            hideProgress()
+        }
+
+    }
+
+    override fun onIncreaseItemClick(item: ProductEntity, position: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            showProgress()
+            item.count++
+            updateUserAdapterItem(item, position)
+            viewModel.updateItemToCart(item)
+            delay(1000)
+            hideProgress()
+        }
+    }
+
+    override fun onDecreaseItemClick(item: ProductEntity, position: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            showProgress()
+            if (item.count == 0) {
+                hideProgress()
+                return@launch
+            }
+            item.count--
+            updateUserAdapterItem(item, position)
+            viewModel.updateItemToCart(item)
+            delay(1000)
+            hideProgress()
+        }
     }
 
     override fun onItemClick(productName: String) {

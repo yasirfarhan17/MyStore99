@@ -49,6 +49,11 @@
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/cartbg.xml" value="0.118" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/cartbg1.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/ic_local_mall_black_24dp.xml" value="0.118" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/ic_remove_black_24dp.xml" value="0.1725" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/minus.xml" value="0.1725" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/minus_btn.xml" value="0.1725" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/plus_btn.xml" value="0.1725" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/plusss.xml" value="0.1725" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/round_shape.xml" value="0.118" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/drawable/top_rounded.xml" value="0.118" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout-sw280dp/activity_address1.xml" value="0.115" />
@@ -72,6 +77,7 @@
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/fragment_home2.xml" value="1.1142857142857143" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/fragment_login.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/fragment_registet.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/indiview_cart.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/indiview_category.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/indiview_products.xml" value="0.4466666666666667" />
         <entry key="..\:/AndroidProjects/SabziApp/MyStore99/app/src/main/res/layout/layout_dialog.xml" value="0.16354166666666667" />

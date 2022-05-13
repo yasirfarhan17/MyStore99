@@ -8,5 +8,7 @@ interface CartRepository {
     suspend fun insertItemToCart(list: List<CartEntity>)
     suspend fun clearCart()
     suspend fun update(price: String, id: String)
+    suspend fun updateCount(count: Int, id: String)
     suspend fun getNoOfItemsInCart():Flow<Int?>
+    suspend fun deleteItem(id:String)
 }

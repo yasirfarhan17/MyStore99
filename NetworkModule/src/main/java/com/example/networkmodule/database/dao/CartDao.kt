@@ -20,11 +20,17 @@ interface CartDao {
     @Query("delete from cartTable")
     suspend fun clear()
 
+    @Query("delete From cartTable WHERE products_name = :id")
+    suspend fun deleteItem(id: String)
+
     @Query("select * from cartTable")
     suspend fun getAllCartProduct(): List<CartEntity>
 
     @Query("UPDATE cartTable SET price = :price WHERE products_name = :id")
     fun update(price: String, id: String)
+
+    @Query("UPDATE cartTable SET count = :count WHERE products_name = :id")
+    fun updateCount(count: Int, id: String)
 
     @Query("SELECT COUNT(*) FROM cartTable")
     fun getCount(): Flow<Int?>

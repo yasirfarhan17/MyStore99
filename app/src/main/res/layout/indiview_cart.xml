@@ -83,12 +83,12 @@
                     android:layout_marginStart="22dp"
                     android:textColor="#fd7b01"
                     android:textSize="17sp"
-                    app:layout_constraintStart_toEndOf="@+id/bt_Increase"
-                    app:layout_constraintTop_toTopOf="@+id/bt_Increase"
+                    app:layout_constraintStart_toEndOf="@+id/bt_increase"
+                    app:layout_constraintTop_toTopOf="@+id/bt_increase"
                     tools:text="$ 120" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_minus"
+                    android:id="@+id/bt_decrease"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="10dp"
@@ -98,7 +98,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_current_quant"
+                    android:id="@+id/tv_current_count"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="12dp"
@@ -107,17 +107,17 @@
                     android:padding="3dp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@+id/bt_minus"
-                    app:layout_constraintTop_toTopOf="@+id/bt_minus" />
+                    app:layout_constraintStart_toEndOf="@+id/bt_decrease"
+                    app:layout_constraintTop_toTopOf="@+id/bt_decrease" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_Increase"
+                    android:id="@+id/bt_increase"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/plus_btn"
-                    app:layout_constraintStart_toEndOf="@+id/tv_current_quant"
-                    app:layout_constraintTop_toTopOf="@+id/tv_current_quant" />
+                    app:layout_constraintStart_toEndOf="@+id/tv_current_count"
+                    app:layout_constraintTop_toTopOf="@+id/tv_current_count" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/vBt1"

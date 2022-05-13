@@ -1,8 +1,9 @@
 package com.noor.mystore99.amigrate.ui.cart
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -10,28 +11,11 @@ import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.databinding.IndiviewCartBinding
 
-class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
-
-    private val items = ArrayList<CartEntity>()
-
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: ArrayList<CartEntity>) {
-        items.clear()
-        items.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun clearAdapter() {
-        items.clear()
-        notifyDataSetChanged()
-    }
+class CartAdapter : ListAdapter<CartEntity, CartAdapter.CartViewHolder>(UserComparator) {
 
 
     inner class CartViewHolder(private val binding: IndiviewCartBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: CartEntity) {
             with(binding) {
                 tvName.text = item.products_name
@@ -55,10 +39,22 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-
-        holder.bind(items[position])
-
+        val user = getItem(position)
+        holder.bind(user)
     }
 
-    override fun getItemCount(): Int = items.size
+    fun clearAdapter() {
+        submitList(emptyList())
+    }
+
+}
+
+object UserComparator : DiffUtil.ItemCallback<CartEntity>() {
+    override fun areItemsTheSame(oldItem: CartEntity, newItem: CartEntity): Boolean {
+        return oldItem.products_name == newItem.products_name
+    }
+
+    override fun areContentsTheSame(oldItem: CartEntity, newItem: CartEntity): Boolean {
+        return oldItem == newItem
+    }
 }

@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.noor.mystore99.amigrate.util.toLiveData
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
+import kotlinx.coroutines.*
 
 
 abstract class BaseViewModel() : ViewModel() {
@@ -21,7 +18,7 @@ abstract class BaseViewModel() : ViewModel() {
     fun launch(
         code: suspend CoroutineScope.() -> Unit
     ) {
-        (viewModelScope + exceptionHandler).launch {
+        (viewModelScope + exceptionHandler).launch (Dispatchers.IO){
             code.invoke(this)
         }
     }

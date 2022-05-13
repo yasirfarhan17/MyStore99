@@ -12,7 +12,8 @@ data class ProductModel(
     var img: String? = null,
     var quant: String? = null,
     var hindiName: String? = null,
-    var stock: String? = null
+    var stock: String? = null,
+    var count: Int = 0
 ) : Parcelable {
     fun toProductEntity(): ProductEntity {
         return ProductEntity(
@@ -21,7 +22,8 @@ data class ProductModel(
             this.img,
             this.quant,
             this.hindiName,
-            this.stock
+            this.stock,
+            this.count
         )
     }
 }

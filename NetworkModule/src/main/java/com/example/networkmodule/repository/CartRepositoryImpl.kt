@@ -12,5 +12,7 @@ class CartRepositoryImpl @Inject constructor(
     override suspend fun insertItemToCart(list: List<CartEntity>) = dao.insertAllCartProduct(list)
     override suspend fun clearCart() = dao.clear()
     override suspend fun update(price: String, id: String) = dao.update(price, id)
+    override suspend fun updateCount(count: Int, id: String) = dao.updateCount(count, id)
     override suspend fun getNoOfItemsInCart(): Flow<Int?> = dao.getCount()
+    override suspend fun deleteItem(id: String) = dao.deleteItem(id)
 }

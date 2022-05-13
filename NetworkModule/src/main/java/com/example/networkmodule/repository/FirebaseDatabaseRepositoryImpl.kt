@@ -49,6 +49,26 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllProductCount(): Flow<Result<Long>> = callbackFlow<Result<Long>> {
+        val postListener = object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var listSize: Long = 0
+                dataSnapshot.children.forEach {
+                    listSize += it.childrenCount
+                }
+                this@callbackFlow.trySendBlocking(Result.success(listSize))
+            }
+        }
+        productDbRef.addValueEventListener(postListener)
+        awaitClose {
+            productDbRef.removeEventListener(postListener)
+        }
+    }
+
     override suspend fun getBanner() = callbackFlow<Result<List<SliderModel>>> {
         val postListener = object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {

@@ -4,56 +4,66 @@ package com.noor.mystore99.amigrate.ui.main.fragment.home.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.util.Util.decodeToBitmap
-import com.noor.mystore99.MainActivity
-import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
-import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
+import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.databinding.IndiviewProductsBinding
 
 class UserAdapter(
-    val callBack: UserFragment
+    val callBack: UserAdapterCallBack
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
 
-    private val item = ArrayList<ProductEntity>()
+    private val items = ArrayList<ProductEntity>()
     private val itemFilter = ArrayList<ProductEntity>()
-
-    private lateinit var viewModel: UserViewModel
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: ArrayList<ProductEntity>, viewModel: UserViewModel) {
-        item.clear()
+    fun submitList(list: ArrayList<ProductEntity>) {
+        items.clear()
         itemFilter.clear()
         itemFilter.addAll(list)
-        item.addAll(list)
-        this.viewModel = viewModel
+        items.addAll(list)
         notifyDataSetChanged()
     }
+
+    fun updateItem(item: ProductEntity, position: Int) {
+        items.removeAt(position)
+        items.add(position, item)
+        notifyItemChanged(position)
+    }
+
 
     inner class UserViewHolder(private val binding: IndiviewProductsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ProductEntity) {
             with(binding) {
+                if (item.count == 0) {
+                    clAddDec.setVisible(false)
+                    btAddToCart.setVisible(true)
+                } else {
+                    clAddDec.setVisible(true)
+                    btAddToCart.setVisible(false)
+                }
+                tvCurrentCount.text = item.count.toString()
                 tvName.text = item.products_name
                 tvMrp.text = item.price
                 tvHindiName.text = item.HindiName
                 imgProductImage.load(item.img?.decodeToBitmap()) {
                     transformations(CircleCropTransformation())
                 }
-
-                val cartEntity =
-                    CartEntity(item.products_name, item.price, item.img, item.quant, item.price)
                 btAddToCart.setOnClickListener {
-                    //viewModel.insertToCartDb(cartEntity)
-                    callBack.onItemClick(cartEntity)
-                    Toast.makeText(it.context, "Item Added successfully", Toast.LENGTH_SHORT).show()
+                    callBack.onAddToCartClick(item, adapterPosition)
+                }
+                btIncrease.setOnClickListener {
+                    callBack.onIncreaseItemClick(item, adapterPosition)
+                }
+                btDecrease.setOnClickListener {
+                    callBack.onDecreaseItemClick(item, adapterPosition)
                 }
             }
         }
@@ -65,16 +75,15 @@ class UserAdapter(
         return UserViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(item[position])
-    }
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) =
+        holder.bind(items[position])
 
-    override fun getItemCount(): Int = item.size
-
-
-
+    override fun getItemCount(): Int = items.size
 }
 
-interface UserAdapterCallBack{
-    fun onItemClick(cartEntity: CartEntity)
+interface UserAdapterCallBack {
+    fun onAddToCartClick(item: ProductEntity, position: Int)
+    fun onIncreaseItemClick(item: ProductEntity, position: Int)
+    fun onDecreaseItemClick(item: ProductEntity, position: Int)
+
 }
