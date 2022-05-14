@@ -2,6 +2,7 @@ package com.noor.mystore99.amigrate.ui.main
 
 import android.util.Log
 import com.example.networkmodule.network.Resource
+import com.example.networkmodule.repository.ProductRepository
 import com.example.networkmodule.usecase.GetCartItemsCountUseCase
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,13 +14,23 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val cartItemCountUseCase: GetCartItemsCountUseCase,
+    private val productRepo: ProductRepository
 ) : BaseViewModel() {
 
     private var _cartItemCount = MutableStateFlow(0)
     val cartItemCount: Flow<Int> = _cartItemCount
 
     init {
-        getCartItemCountUseCase()
+        // getCartItemCountUseCase()
+        getCartItem()
+    }
+
+    private fun getCartItem() {
+        launch {
+            productRepo.getNoOfProductsInCart().collectLatest { count ->
+                _cartItemCount.value = count ?: 0
+            }
+        }
     }
 
 

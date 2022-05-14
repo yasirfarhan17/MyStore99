@@ -34,7 +34,6 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
                     android:src="@drawable/ic_local_mall_black_24dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,88 +41,65 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/convergence"
                     android:textColor="@color/white"
                     android:textSize="17sp"
                     app:layout_constraintStart_toEndOf="@+id/img_cart"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="ProductName" />
 
-
                 <TextView
-                    android:id="@+id/tv_cart_type"
+                    android:id="@+id/tv_product_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#fd7b01"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/convergence"
+                    android:textColor="@color/ballReleaseColor"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toTopOf="@id/tv_quantity"
                     app:layout_constraintStart_toEndOf="@+id/img_cart"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_name"
-                    tools:text="Type" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_name"
+                    tools:text="Rs 15/per  kg" />
 
                 <TextView
-                    android:id="@+id/tv_cart_quant"
+                    android:id="@+id/tv_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/convergence"
+                    android:textColor="@color/ballReleaseColor"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toTopOf="@id/bt_500gm"
+                    app:layout_constraintStart_toEndOf="@+id/img_cart"
+                    app:layout_constraintTop_toBottomOf="@id/tv_product_price"
+                    tools:text="2 * 14 kg" />
+
+                <TextView
+                    android:id="@+id/tv_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/convergence"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
-                    app:layout_constraintStart_toEndOf="@+id/img_cart"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_cart_type"
-                    tools:text="quant" />
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/cl_add_dec"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_name"
+                    tools:text="Rs 15/per  kg" />
 
-                <TextView
-                    android:id="@+id/total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="22dp"
-                    android:textColor="#fd7b01"
-                    android:textSize="17sp"
-                    app:layout_constraintStart_toEndOf="@+id/bt_increase"
-                    app:layout_constraintTop_toTopOf="@+id/bt_increase"
-                    tools:text="$ 120" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_decrease"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/minus_btn"
-                    app:layout_constraintStart_toEndOf="@+id/tv_cart_quant"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_cart_type" />
-
-
-                <TextView
-                    android:id="@+id/tv_current_count"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@color/white"
-                    android:elevation="10dp"
-                    android:padding="3dp"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@+id/bt_decrease"
-                    app:layout_constraintTop_toTopOf="@+id/bt_decrease" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_increase"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/plus_btn"
-                    app:layout_constraintStart_toEndOf="@+id/tv_current_count"
-                    app:layout_constraintTop_toTopOf="@+id/tv_current_count" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/vBt1"
+                    android:id="@+id/bt_1kg"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/cartbg"
                     android:backgroundTint="#fd7b01"
                     android:padding="5dp"
@@ -131,13 +107,12 @@
                     android:textSize="10sp"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tv_cart_quant"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_cart_quant"
-                    app:layout_constraintVertical_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@id/img_cart"
+                    tools:ignore="SmallSp"
                     tools:text="1 kg" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/vBt2"
+                    android:id="@+id/bt_500gm"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="6dp"
@@ -148,14 +123,14 @@
                     android:text="@string/_500_gm"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/vBt1"
-                    app:layout_constraintTop_toTopOf="@+id/vBt1" />
+                    app:layout_constraintStart_toEndOf="@+id/bt_1kg"
+                    app:layout_constraintTop_toTopOf="@+id/bt_1kg"
+                    tools:ignore="SmallSp" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/vBt3"
+                    android:id="@+id/bt_250gm"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
@@ -168,8 +143,62 @@
                     android:textSize="10sp"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/vBt2"
-                    app:layout_constraintTop_toTopOf="@+id/vBt2" />
+                    app:layout_constraintStart_toEndOf="@+id/bt_500gm"
+                    app:layout_constraintTop_toTopOf="@+id/bt_500gm"
+                    tools:ignore="SmallSp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_add_dec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/bt_250gm"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/bt_decrease"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/minus_btn"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/tv_current_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:elevation="10dp"
+                        android:fontFamily="@font/convergence"
+                        android:padding="8dp"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/bt_increase"
+                        app:layout_constraintStart_toEndOf="@+id/bt_decrease"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="115" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/bt_increase"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/plus_btn"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

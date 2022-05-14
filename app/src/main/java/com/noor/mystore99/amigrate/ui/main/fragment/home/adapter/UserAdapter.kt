@@ -4,7 +4,6 @@ package com.noor.mystore99.amigrate.ui.main.fragment.home.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -21,6 +20,7 @@ class UserAdapter(
     private val items = ArrayList<ProductEntity>()
     private val itemFilter = ArrayList<ProductEntity>()
 
+    fun getList() = items
 
     @SuppressLint("NotifyDataSetChanged")
     fun submitList(list: ArrayList<ProductEntity>) {
@@ -85,5 +85,4 @@ interface UserAdapterCallBack {
     fun onAddToCartClick(item: ProductEntity, position: Int)
     fun onIncreaseItemClick(item: ProductEntity, position: Int)
     fun onDecreaseItemClick(item: ProductEntity, position: Int)
-
 }

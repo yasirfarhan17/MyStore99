@@ -1,28 +1,31 @@
 package com.noor.mystore99.amigrate.ui.main.fragment.home
 
 import androidx.lifecycle.MutableLiveData
-import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.ProductModel
 import com.example.networkmodule.model.SliderModel
 import com.example.networkmodule.network.Resource
-import com.example.networkmodule.repository.CartRepository
 import com.example.networkmodule.repository.FirebaseDatabaseRepository
 import com.example.networkmodule.repository.ProductRepository
-import com.example.networkmodule.usecase.*
+import com.example.networkmodule.usecase.FirebaseGetBannerUseCase
+import com.example.networkmodule.usecase.FirebaseGetCategoryUseCase
+import com.example.networkmodule.usecase.FirebaseGetProductUseCase
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
     private val categoryUseCase: FirebaseGetCategoryUseCase,
-    private val insertToCartUseCase: InsertCartItemUseCase,
-    private val cartRepo: CartRepository,
+    // private val insertToCartUseCase: InsertCartItemUseCase,
+    // private val cartRepo: CartRepository,
     private val productUseCase: FirebaseGetProductUseCase,
     private val bannerUseCase: FirebaseGetBannerUseCase,
     private val productRepo: ProductRepository,
@@ -32,9 +35,8 @@ class UserViewModel @Inject constructor(
     private var _categoryList = MutableLiveData<ArrayList<CategoryModel>?>()
     val categoryList = _categoryList.toLiveData()
 
-
-    private var _productList = MutableLiveData<ArrayList<ProductModel>>()
-    val productList = _productList.toLiveData()
+    private var _productList = MutableSharedFlow<ArrayList<ProductModel>>()
+    val productList: Flow<ArrayList<ProductModel>> = _productList
 
     private var _bannerList = MutableLiveData<ArrayList<SliderModel>?>()
     val bannerList = _bannerList.toLiveData()
@@ -42,10 +44,12 @@ class UserViewModel @Inject constructor(
 
     init {
         launch {
-            _viewState.postValue(ViewState.Loading)
-            getAllProducts()
-            getBanner()
-            getCategory()
+            async {
+                _viewState.postValue(ViewState.Loading)
+                getAllProducts()
+                getBanner()
+                getCategory()
+            }.onAwait
         }
     }
 
@@ -58,7 +62,6 @@ class UserViewModel @Inject constructor(
                     return@collectLatest
                 }
                 _bannerList.postValue(it.data as ArrayList<SliderModel>)
-
             }
         }
     }
@@ -72,7 +75,7 @@ class UserViewModel @Inject constructor(
                         productRepo.getAllProduct().collect { productEntityList ->
                             val localList =
                                 productEntityList.map { productEntity -> productEntity.toProductModel() } as ArrayList
-                            _productList.postValue(localList)
+                            _productList.emit(localList)
                             _viewState.postValue(ViewState.Success())
                         }
                     } else {
@@ -87,10 +90,10 @@ class UserViewModel @Inject constructor(
     }
 
     private suspend fun getProductFromNetwork() {
-        productUseCase.invoke().collect { dbList ->
+        productUseCase.invoke().collectLatest { dbList ->
             when (dbList) {
                 is Resource.Success -> {
-                    _productList.postValue(dbList.data as ArrayList<ProductModel>)
+                    _productList.emit(dbList.data as ArrayList<ProductModel>)
                     val listToInDb = dbList.data?.map { it.toProductEntity() }
                     listToInDb?.let { productRepo.insertItems(it) }
                     _viewState.postValue(ViewState.Success())
@@ -116,7 +119,6 @@ class UserViewModel @Inject constructor(
                 _categoryList.postValue(it.data as ArrayList<CategoryModel>)
             }
         }
-
     }
 
     /**
@@ -127,7 +129,7 @@ class UserViewModel @Inject constructor(
     fun inertItemToCart(item: ProductEntity) {
         launch {
             productRepo.updateCount(item.count, item.products_name)
-            insertToCartDb(item.toCartEntity())
+            //insertToCartDb(item.toCartEntity())
         }
     }
 
@@ -139,13 +141,25 @@ class UserViewModel @Inject constructor(
     fun updateItemToCart(item: ProductEntity) {
         launch {
             productRepo.updateCount(item.count, item.products_name)
-            if(item.count==0){
-                cartRepo.deleteItem(item.products_name)
-            }else cartRepo.updateCount(item.count, item.products_name)
+            /* if(item.count==0){
+                 cartRepo.deleteItem(item.products_name)
+             }else cartRepo.updateCount(item.count, item.products_name)*/
+        }
+    }
+
+    fun getProductFromDb() {
+        launch {
+            productRepo.getAllProduct().collect { productEntityList ->
+                val localList =
+                    productEntityList.map { productEntity -> productEntity.toProductModel() } as ArrayList
+                _productList.emit(localList)
+            }
+
         }
     }
 
 
+/*
     private fun insertToCartDb(item: CartEntity) {
         launch {
             val arr = ArrayList<CartEntity>()
@@ -154,11 +168,14 @@ class UserViewModel @Inject constructor(
             insertToCartUseCase.invoke(arr)
         }
     }
+*/
 
+/*
     fun deleteItemFormCartDb(item: ProductEntity) {
         launch {
             cartRepo.deleteItem(item.products_name)
         }
     }
+*/
 
 }

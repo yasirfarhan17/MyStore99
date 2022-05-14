@@ -6,7 +6,7 @@
     android:id="@+id/butLay">
 
     <Button
-        android:id="@+id/vBt2"
+        android:id="@+id/bt_500gm"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"

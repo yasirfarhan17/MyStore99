@@ -26,6 +26,7 @@ import com.noor.mystore99.databinding.UserFragmentBinding
 import com.noor.mystore99.sliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -65,6 +66,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
     override fun onStart() {
         binding.rvProduct.layoutManager?.scrollToPosition(0)
+       viewModel.getProductFromDb()
         super.onStart()
     }
 
@@ -78,14 +80,21 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getProductFromDb()
+    }
+
     override fun addObservers() {
-        viewModel.productList.observe(viewLifecycleOwner) {
-            if (firstTime.not()) return@observe
-            showProgress()
-            val list = it.map { productModel -> productModel.toProductEntity() }
-            (binding.rvProduct.adapter as UserAdapter).submitList(list as ArrayList<ProductEntity>)
-            firstTime=false
-            hideProgress()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.productList.collectLatest {
+                if (firstTime.not()) return@collectLatest
+                showProgress()
+                val list = it.map { productModel -> productModel.toProductEntity() }
+                (binding.rvProduct.adapter as UserAdapter).submitList(list as ArrayList<ProductEntity>)
+                firstTime=false
+                hideProgress()
+            }
         }
         viewModel.bannerList.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
@@ -185,14 +194,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         firstTime=true
     }
 
-    override fun onResume() {
-        super.onResume()
-        firstTime=true
-    }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-    }
     /**
      * This is used to update the ui in recycler view as we are not observing change in
      */
@@ -206,7 +208,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
     override fun onAddToCartClick(item: ProductEntity, position: Int) {
         viewLifecycleOwner.lifecycleScope.launch {
             showProgress()
-            item.count=1
+            item.count = 1
             updateUserAdapterItem(item, position)
             viewModel.inertItemToCart(item)
             delay(1000)

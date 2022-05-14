@@ -102,7 +102,7 @@
                         android:padding="5dp" />
 
                     <Button
-                        android:id="@+id/vBt2"
+                        android:id="@+id/bt_500gm"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:text="@string/_500_gm"
@@ -115,7 +115,7 @@
                         android:padding="5dp" />
 
                     <Button
-                        android:id="@+id/vBt3"
+                        android:id="@+id/bt_250gm"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:text="@string/_250_gm"

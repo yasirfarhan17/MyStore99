@@ -77,8 +77,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_order_text"
-            tools:listitem="@layout/indiview_cart"
-            tools:visibility="gone" />
+            tools:listitem="@layout/indiview_cart" />
 
 
         <com.google.android.material.button.MaterialButton

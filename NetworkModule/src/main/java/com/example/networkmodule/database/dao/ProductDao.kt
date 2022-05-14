@@ -23,6 +23,9 @@ interface ProductDao {
     @Query("select * from productTable")
     fun getProduct(): Flow<List<ProductEntity>>
 
+    @Query("select * from productTable WHERE count>0")
+    fun getCartProduct(): Flow<List<ProductEntity>>
+
     @Query("UPDATE productTable SET price = :price WHERE products_name = :id")
     fun update(price: String, id: String)
 
@@ -31,5 +34,8 @@ interface ProductDao {
 
     @Query("SELECT COUNT(*) FROM productTable")
     fun getCount(): Int?
+
+    @Query("SELECT COUNT(*) FROM productTable WHERE count>0")
+    fun getCartCount():Flow<Int?>
 
 }
