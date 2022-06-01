@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.networkmodule.storage.PrefsUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,13 +48,16 @@ public class upiPay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        ad=getIntent().getStringExtra("PayTotal");
-        date=getIntent().getStringExtra("Date");
-        add=getIntent().getStringExtra("address");
-        payToatl=getIntent().getStringExtra("payTotal");
+        key = getIntent().getStringExtra("key");
+        //ad=getIntent().getStringExtra("amount");
+        ad="5";
+        date=currentDate;
+        add="old purulia road";
+        payToatl="250";
 
-        ref= FirebaseDatabase.getInstance().getReference("Myorder").child(key).child("total");
+
+
+        ref= FirebaseDatabase.getInstance().getReference("MyorderNew").child(key).child("total");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -70,9 +74,11 @@ public class upiPay extends AppCompatActivity {
 
             }
         });
-        //Toast.makeText(upiPay.this,val,Toast.LENGTH_SHORT);
+        //Toast.makeText(upiPay.this,val,Toast.LENGTH_SHORT)
+        //
+        // 9117151927@okbizaxis;
 
-        payUsingUpi("SabziTaza", "9117151927@okbizaxis",
+        payUsingUpi("SabziTaza", "9163626276@ybl",
                 "Sabzi Taza Payment", ad);
 
 
@@ -192,15 +198,15 @@ public class upiPay extends AppCompatActivity {
                         String combo=currentDate1+currentTime1;
 
 
-                        ref = FirebaseDatabase.getInstance().getReference("Myorder").child(key).child("Item").child("YourOrder").child(combo);
+                        ref = FirebaseDatabase.getInstance().getReference("MyorderNew").child(key).child("Item").child("YourOrder").child(combo);
                         ref.setValue(list);
-                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Payment");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("Payment");
                         ref.setValue("Payment Paid (UPI)");
                         op = "Payment Paid (UPI)";
-                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Date");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("Date");
                         ref.setValue(date);
 
-                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("address");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("address");
                         ref.setValue(add);
 
                         ref = FirebaseDatabase.getInstance().getReference("User").child(key);
@@ -211,12 +217,12 @@ public class upiPay extends AppCompatActivity {
                                     name1 = dataSnapshot.child("name").getValue().toString();
                                     phone = dataSnapshot.child("phone").getValue().toString();
                                 }
-                                ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("name");
+                                ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("name");
                                 ref.setValue(name1);
-                                ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("phone");
+                                ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("phone");
                                 ref.setValue(phone);
 
-                                sendEmail(combo, list, date, add, name1, phone, ad, op);
+                                //sendEmail(combo, list, date, add, name1, phone, ad, op);
                             }
 
                             @Override
@@ -226,18 +232,18 @@ public class upiPay extends AppCompatActivity {
                         });
 
 
-                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("CurrentDate");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("CurrentDate");
                         ref.setValue(currentDate);
 
-                        ref = FirebaseDatabase.getInstance().getReference("OrderConfirm").child(combo).child("status");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(combo).child("status");
                         ref.setValue("no");
-                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Total");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("Total");
                         ref.setValue(ad);
 
-                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Time");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("Time");
                         ref.setValue(combo);
 
-                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("currentTime");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child(combo).child("currentTime");
                         ref.setValue(currentTime);
 
 
@@ -249,7 +255,7 @@ public class upiPay extends AppCompatActivity {
 
 
 
-                ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child("Item").child(combo).child("ReferenceNo");
+                ref = FirebaseDatabase.getInstance().getReference("OrderDetailNew").child(key).child("Item").child(combo).child("ReferenceNo");
                 ref.setValue(String.valueOf(finalApprovalRefNo));
                 Log.e("UPI", "payment successfull: " + finalApprovalRefNo);
 

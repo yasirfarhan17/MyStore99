@@ -13,6 +13,8 @@ class PrefsUtil(
         private const val IS_LOGGED_IN = "IS_LOGGED_IN"
         private const val NAME = "NAME"
         private const val PASSWORD = "PASSWORD"
+        private const val DATE = "DATE"
+        private const val TIME = "TIME"
     }
 
 
@@ -29,6 +31,12 @@ class PrefsUtil(
     var Name: String?
         get() = pref.getString(NAME, null)
         set(value) = pref.edit { putString(NAME, value).apply() }
+    var date:String?
+        get() = pref.getString(DATE,null)
+        set(value) = pref.edit{putString(DATE,value).apply()}
+    var time:String?
+        get() = pref.getString(TIME,null)
+        set(value) = pref.edit{putString(TIME,value).apply()}
 
     var phoneNo: String?
         get() = pref.getString(PHONE_NO, null)

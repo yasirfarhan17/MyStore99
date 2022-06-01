@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp">
@@ -105,11 +106,74 @@
                         android:text="@string/add_to_cart"
                         android:textAllCaps="true"
                         android:textSize="12sp"
+                        android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_mrp" />
 
+
+                    <TextView
+                        android:id="@+id/outofstock"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:padding="8dp"
+                        android:background="@drawable/buttonborder"
+                        android:fontFamily="@font/convergence"
+                        android:text="Out of stock"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:visibility="invisible"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_mrp" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/bt_minus"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/minus_btn"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/tv_mrp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/tv_current_quant"
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/white"
+                        android:elevation="10dp"
+                        android:padding="3dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/bt_minus"
+                        app:layout_constraintStart_toEndOf="@+id/bt_minus"
+                        app:layout_constraintTop_toTopOf="@id/bt_minus"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/bt_Increase"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="10dp"
+                        android:visibility="gone"
+                        android:background="@drawable/plus_btn"
+                        app:layout_constraintStart_toEndOf="@+id/tv_current_quant"
+                        app:layout_constraintTop_toTopOf="@+id/bt_minus" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 

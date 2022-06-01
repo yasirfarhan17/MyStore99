@@ -8,43 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:334702389312:android:d977102f08433ffe7457a5",
-        "android_client_info": {
-          "package_name": "com.example.mystore99"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "334702389312-85q4ajlp4ks5sq0nu7v5n1e517bpv3cv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.mystore99",
-            "certificate_hash": "fd5cf79e7df3bec0dafa0e5a738b1dcab66cbfc9"
-          }
-        },
-        {
-          "client_id": "334702389312-ur0mrn1l7v7js4e02g4hcenk9hlcn6vc.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCzxejfDKJQ4Y-kkVOVTYWsh0AE-k_euBA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "334702389312-ur0mrn1l7v7js4e02g4hcenk9hlcn6vc.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:334702389312:android:2a4465bb434db9c17457a5",
         "android_client_info": {
           "package_name": "com.example.mystoreupdate"
@@ -89,11 +52,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "334702389312-n2bc9pv5idf5fhn60t7cuhnlbg6holft.apps.googleusercontent.com",
+          "client_id": "334702389312-07pnon06d2etodothe68sraagblmflpf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noor.mystore99",
+            "certificate_hash": "16898cb83e739571c3c9a19a76c0a0e1b8e50627"
+          }
+        },
+        {
+          "client_id": "334702389312-d96dk4vvaqp7ljk9i9n0uob8g16c55ev.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.noor.mystore99",
             "certificate_hash": "fd5cf79e7df3bec0dafa0e5a738b1dcab66cbfc9"
+          }
+        },
+        {
+          "client_id": "334702389312-q8sjd6gpi9bmqr8h2069hceg49goatij.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noor.mystore99",
+            "certificate_hash": "951f1df404b9a8f432fb470911de2fb657d99ae5"
           }
         },
         {

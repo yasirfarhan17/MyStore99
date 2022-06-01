@@ -13,11 +13,12 @@ data class CartEntity(
     @PrimaryKey @ColumnInfo val products_name: String,
     @ColumnInfo val price: String? = null,
     @ColumnInfo val img: String? = null,
-    @ColumnInfo val quant: String? = null,
-    @ColumnInfo val total: String? = null,
+    @ColumnInfo val weight: String? = null,
+    @ColumnInfo var quant: String? = null,
+    @ColumnInfo var total: String? = null,
 ) : Parcelable {
     fun toProductModel(): CartModel {
-        return CartModel(this.products_name, this.price, this.img, this.quant, this.total)
+        return CartModel(this.products_name, this.price, this.img, this.weight,this.quant, this.total)
     }
 
 }

@@ -37,6 +37,18 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/img_clear"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="20dp"
+                    android:contentDescription="@string/icon_to_clear_cart"
+                    android:src="@drawable/ic_delete_black_24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/btnprimary" />
+
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -54,35 +66,40 @@
                 <TextView
                     android:id="@+id/tv_cart_type"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:textColor="#fd7b01"
                     android:textSize="17sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/tv_cart_quant"
                     app:layout_constraintStart_toEndOf="@+id/img_cart"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name"
                     tools:text="Type" />
 
                 <TextView
                     android:id="@+id/tv_cart_quant"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="5dp"
+                    app:layout_constraintEnd_toStartOf="@id/bt_minus"
                     app:layout_constraintStart_toEndOf="@+id/img_cart"
                     app:layout_constraintTop_toBottomOf="@+id/tv_cart_type"
+                    app:layout_constraintBottom_toTopOf="@id/vBt1"
                     tools:text="quant" />
 
                 <TextView
                     android:id="@+id/total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="22dp"
+                    android:layout_marginStart="10dp"
                     android:textColor="#fd7b01"
                     android:textSize="17sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/bt_Increase"
                     app:layout_constraintStart_toEndOf="@+id/bt_Increase"
                     app:layout_constraintTop_toTopOf="@+id/bt_Increase"
                     tools:text="$ 120" />
@@ -99,16 +116,19 @@
 
                 <TextView
                     android:id="@+id/tv_current_quant"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="12dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="24dp"
                     android:background="@color/white"
                     android:elevation="10dp"
                     android:padding="3dp"
+                    android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/bt_minus"
                     app:layout_constraintStart_toEndOf="@+id/bt_minus"
-                    app:layout_constraintTop_toTopOf="@+id/bt_minus" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/bt_Increase"
@@ -117,7 +137,7 @@
                     android:layout_marginStart="10dp"
                     android:background="@drawable/plus_btn"
                     app:layout_constraintStart_toEndOf="@+id/tv_current_quant"
-                    app:layout_constraintTop_toTopOf="@+id/tv_current_quant" />
+                    app:layout_constraintTop_toTopOf="@+id/bt_minus" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/vBt1"

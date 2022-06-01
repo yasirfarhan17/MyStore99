@@ -1,6 +1,10 @@
 package com.noor.mystore99.amigrate.ui.category
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,8 +13,11 @@ import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
+import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
 import com.noor.mystore99.databinding.ActivityCategoryBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -42,8 +49,51 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
         with(binding) {
             categoryRv.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
             categoryRv.adapter = NewCategoryAdapter(this@CategoryActivity)
+
+
+            searchView.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                    viewModel.categoryList.observe(this@CategoryActivity) {
+                        val list = it.map { productModel -> productModel.toProductEntity() }
+                        val localList=ArrayList<ProductEntity>()
+                        var flagNotFound=false
+                        if(p0 ==null || p0.isEmpty())
+                            localList.addAll(list)
+                        else{
+                            for(item in list){
+                                if(item.products_name.lowercase(Locale.ENGLISH).contains(p0.toString().lowercase(
+                                        Locale.ENGLISH))) {
+                                    localList.add(item)
+                                    flagNotFound=true
+
+                                }
+                            }
+                        }
+                        if(!flagNotFound) {
+                            //localList.addAll(list)
+                        Toast.makeText(this@CategoryActivity,"No Item Found",Toast.LENGTH_SHORT).show()
+                        }
+
+                        (binding.categoryRv.adapter as NewCategoryAdapter).submitList(localList)
+                    }
+                    //(binding.rvProduct.adapter as UserAdapter).filter.filter(p0.toString())
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
         }
     }
+
+
+
 
 
     override fun addObservers() {
@@ -54,9 +104,8 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
 
     }
 
-    override fun onItemClick(item: ProductEntity) {
-        val cartEntity =
-            CartEntity(item.products_name, item.price, item.img, item.quant, item.price)
-        viewModel.insertToCartDb(cartEntity)
+    override fun onItemClick(item: CartEntity) {
+
+        viewModel.insertToCartDb(item)
     }
 }

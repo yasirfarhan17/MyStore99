@@ -31,6 +31,10 @@ object FirebaseManager {
         return firebaseDatabase.reference.child(FirebaseKey.GET_USER_KEY)
     }
 
+    fun getOrderDatabaseRef(firebaseDatabase: FirebaseDatabase): DatabaseReference {
+        return firebaseDatabase.reference.child(FirebaseKey.ORDER_KEY)
+    }
+
     fun getFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }

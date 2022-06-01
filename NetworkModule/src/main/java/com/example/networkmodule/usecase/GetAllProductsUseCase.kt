@@ -13,7 +13,7 @@ import javax.inject.Inject
 class GetAllProductsUseCase @Inject constructor(
     private val repository: ProductRepository
 ) {
-    operator fun invoke(): Flow<Resource<Flow<List<ProductEntity>>>> = flow{
+    operator fun invoke() = flow{
         try {
             emit(Resource.Loading())
             val result=repository.getAllProduct()

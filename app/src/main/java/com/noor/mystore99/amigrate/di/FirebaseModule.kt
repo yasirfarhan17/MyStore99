@@ -69,6 +69,14 @@ object FirebaseModule {
         return FirebaseManager.getUserDatabaseRef(firebaseDatabase)
     }
 
+    @Named(FirebaseKey.ORDER_DATABASE_REF)
+    @Provides
+    @Singleton
+    fun getOrderRef(
+        firebaseDatabase: FirebaseDatabase
+    ): DatabaseReference {
+        return FirebaseManager.getOrderDatabaseRef(firebaseDatabase)
+    }
     @Named(FirebaseKey.CART_DATABASE_REF)
     @Provides
     @Singleton
@@ -110,6 +118,35 @@ object FirebaseModule {
     @Singleton
     fun provideCartRepository(cartDao: CartDao): CartRepository {
         return CartRepositoryImpl(cartDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCheckOutRepository(@Named(FirebaseKey.ORDER_DATABASE_REF) orderRef: DatabaseReference): CheckOutRepository {
+        return CheckOutRepositoryImpl(orderRef)
+    }
+    @Provides
+    @Singleton
+    fun checkOutUseCase(repository:CheckOutRepository):CheckOutUseCase{
+        return CheckOutUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun productCountUseCase(repository: ProductRepository):GetProductcountUseCase{
+        return GetProductcountUseCase(repository)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(@Named(FirebaseKey.USER_DATABASE_REF) userRef: DatabaseReference):UserDetail{
+        return UserDetailImpl(userRef)
+    }
+
+    @Provides
+    @Singleton
+    fun userUseCase(repository:UserDetail):UserDetailUseCase{
+        return UserDetailUseCase(repository)
     }
 
     @Singleton
@@ -180,9 +217,10 @@ object FirebaseModule {
     @Provides
     @Singleton
     fun provideFirebaseGetProductUseCase(
-        repo: FirebaseDatabaseRepository
+        repo: FirebaseDatabaseRepository,
+        repository:ProductRepository
     ): FirebaseGetProductUseCase {
-        return FirebaseGetProductUseCase(repo)
+        return FirebaseGetProductUseCase(repo,repository)
     }
 
     @Provides

@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#192648"
+        android:background="@color/white"
         tools:context=".amigrate.ui.cart.NewCartActivity">
 
 
@@ -22,7 +22,7 @@
             app:layout_constraintHorizontal_bias="0.144"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/img_clear_cart"
@@ -34,7 +34,7 @@
             android:src="@drawable/ic_delete_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/black" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -43,7 +43,7 @@
             android:layout_marginTop="15dp"
             android:text="Shopping Cart"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="15dp"
-            android:background="#192648"
+            android:background="@color/white"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/bt_check_out"
             app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:textColor="@color/white"
+            android:textColor="@color/btnprimary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_view_details"
@@ -138,8 +138,8 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie_view"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

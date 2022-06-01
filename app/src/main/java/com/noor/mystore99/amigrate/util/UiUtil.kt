@@ -41,7 +41,7 @@ class UiUtil(private val context: Context) {
         button: Boolean = false,
         buttonText: String = "Ok"
     ) {
-        showSnackBar(message, length, button, buttonText)
+        //showSnackBar(message, length, button, buttonText)
     }
 
     fun showToast(
@@ -110,27 +110,27 @@ class UiUtil(private val context: Context) {
         progressDialog.dismiss()
     }
 
-    private fun showSnackBar(
-        message: String,
-        snackBarLength: Int = Snackbar.LENGTH_LONG,
-        button: Boolean = false,
-        buttonText: String = "Ok"
-    ) {
-        if (!::snackbar.isInitialized) {
-            (context as BaseActivity<*, *>).getLayoutBinding()
-                .root.let {
-                    snackbar = Snackbar.make(it, message, snackBarLength)
-                }
-        }
-        if (button) {
-            snackbar.setAction(buttonText) {
-                openSetting(context)
-            }
-        }
-
-        snackbar.setText(message)
-        snackbar.show()
-    }
+//    private fun showSnackBar(
+//        message: String,
+//        snackBarLength: Int = Snackbar.LENGTH_LONG,
+//        button: Boolean = false,
+//        buttonText: String = "Ok"
+//    ) {
+//        if (!::snackbar.isInitialized) {
+////            (context as BaseActivity<*, *>).getLayoutBinding()
+////                .root.let {
+////                    snackbar = Snackbar.make(it, message, snackBarLength)
+////                }
+//        }
+//        if (button) {
+//            snackbar.setAction(buttonText) {
+//                openSetting(context)
+//            }
+//        }
+//
+//        snackbar.setText(message)
+//        snackbar.show()
+//    }
 
     fun openSetting(context: Context) {
         context.startActivity(

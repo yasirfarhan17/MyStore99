@@ -1,7 +1,6 @@
 package com.noor.mystore99.amigrate.ui.auth
 
 import android.app.Activity
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.networkmodule.network.AuthResource
@@ -15,12 +14,15 @@ import javax.inject.Inject
 
 
 class AuthManager @Inject constructor(
-    var activity: Activity,
+    val activity: Activity,
     var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ) {
 
     lateinit var mResendToken: PhoneAuthProvider.ForceResendingToken
     var mVerificationId: String = ""
+    companion object{
+        var codeOTP = 0
+    }
 
     private val _events: MutableLiveData<AuthResource> by lazy { MutableLiveData<AuthResource>() }
     val events: LiveData<AuthResource> = _events
@@ -51,7 +53,6 @@ class AuthManager @Inject constructor(
             .setCallbacks(mCallbacks)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
-        Toast.makeText(activity.applicationContext, options.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun resend(mobile: String) {
@@ -82,6 +83,7 @@ class AuthManager @Inject constructor(
             mResendToken = forceResendingToken
             mVerificationId = verificationId
             _events.value = AuthResource.OtpSend
+            //codeOTP=AuthResource.OtpSend
         }
 
     }

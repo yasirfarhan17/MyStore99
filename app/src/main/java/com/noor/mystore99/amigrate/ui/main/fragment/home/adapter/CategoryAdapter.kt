@@ -56,5 +56,4 @@ class CategoryAdapter(val callback: CategoryAdapterCallback) :
 
 interface CategoryAdapterCallback {
     fun onItemClick(productName: String)
-
 }

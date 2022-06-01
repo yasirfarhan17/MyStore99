@@ -2,9 +2,14 @@ package com.noor.mystore99.amigrate.ui.auth.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.activity.viewModels
+import com.example.networkmodule.model.UserModel
 import com.example.networkmodule.network.AuthResource
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.auth.AuthManager
@@ -18,6 +23,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
 
     override val viewModel: MainLoginViewModel by viewModels()
+
+    val ref = FirebaseDatabase.getInstance()
+    val users = ref.getReference("UserNew")
 
     private val authManager by lazy { AuthManager(this) }
 
@@ -50,9 +58,107 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
             matBtLogin.setOnClickListener {
                 doLogin()
 
+
             }
             matBtRegister.setOnClickListener {
                 doRegister()
+                //flipCard(binding.cvOtp,binding.cvRegister) { showToast(it) }
+
+            }
+            etOtp1.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if(etOtp1.text?.length== 1){
+                        etOtp2.requestFocus()
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+
+            etOtp2.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                    if(etOtp2.text?.length== 1){
+                        etOtp3.requestFocus()
+                    }
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+            etOtp3.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                    if(etOtp3.text?.length== 1){
+                        etOtp4.requestFocus()
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+            etOtp4.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                    if(etOtp4.text?.length== 1){
+                        etOtp5.requestFocus()
+                    }
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+            etOtp5.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if(etOtp5.text?.length== 1){
+                        etOtp6.requestFocus()
+                    }
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+
+            veryfy.setOnClickListener {
+                if(etOtp1.text!=null && etOtp2.text!=null && etOtp3.text!=null &&etOtp4.text!=null &&etOtp5.text!=null &&etOtp6.text!=null) {
+                    val otpValue:String = etOtp1.text.toString() + etOtp2.text.toString() + etOtp3.text.toString() + etOtp4.text.toString() + etOtp5.text.toString() + etOtp6.text.toString()
+                    authManager.verifyOtp(otpValue)
+                    Log.d("verify",otpValue)
+                }
             }
         }
     }
@@ -60,24 +166,26 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
     private fun doRegister() {
         if (binding.txtInputEtPhoneSignUp.text.isNullOrEmpty()) {
             binding.txtInputEtPhoneSignUp.error = "Phone no cannot be blank."
-            return
+
         }
         if (binding.txtInputEtPhoneSignUp.text.toString().isValidPhoneNumber().not()) {
             binding.txtInputEtPhoneSignUp.error = "Enter correct phone number."
-            return
         }
         if (binding.txtInputEtPasswordSignUp.text.isNullOrEmpty()) {
             binding.txtInputEtPassword.error = "Password cannot be black."
-            return
+
         }
         if (binding.txtInputEtCnfrmPasswordSignUp.text.isNullOrEmpty()) {
             binding.txtInputEtPassword.error = "Confirm Password cannot be black."
-            return
+
         }
         if (binding.txtInputEtCnfrmPasswordSignUp.text == binding.txtInputEtPasswordSignUp.text) {
             showToast("Password and Confirm password must be same")
-            return
+
         }
+
+       // startActivity(Intent(this,MainActivity::class.java))
+
         getOtp("+91"+binding.txtInputEtPhoneSignUp.text.toString())
     }
 
@@ -103,6 +211,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
             binding.txtInputEtPhone.text.toString(),
             binding.txtInputEtPassword.text.toString()
         )
+        prefsUtil.Name = binding.txtInputEtPhone.text.toString()
     }
 
 
@@ -129,14 +238,24 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                 AuthResource.OtpRequired -> showMessage("Otp is required")
                 AuthResource.OtpSend -> {
                     showToast("Otp Sent Successfully")
-                    flipCard(binding.cvRegister, binding.cvOtp) { showToast(it) }
+                    flipCard(binding.cvOtp,binding.cvRegister) { showToast(it) }
+                    Log.d("checkOtp",""+it)
+
                 }
                 AuthResource.Success -> {
-                    if (binding.matCbRememberMe.isChecked) {
-                        prefsUtil.isLoggedIn = true
-                        prefsUtil.Name = binding.txtInputEtPhoneSignUp.text.toString()
-                        prefsUtil.password = binding.txtInputEtCnfrmPasswordSignUp.text.toString()
+//                    if (binding.matCbRememberMe.isChecked) {
+//                        prefsUtil.isLoggedIn = true
+//                        prefsUtil.Name = binding.txtInputEtPhoneSignUp.text.toString()
+//                        prefsUtil.password = binding.txtInputEtCnfrmPasswordSignUp.text.toString()
+//                    }
+                    with(binding){
+                        val obj = UserModel(address = null,pincode = null,name = txtInputEtNameSignUp.text.toString(),password = txtInputEtPasswordSignUp.text.toString(),uid = FirebaseAuth.getInstance().uid!!,otpVerified = true)
+                        obj?.name?.let { it1 -> Log.d("checkObj", it1) }
+                        users.child(txtInputEtPhoneSignUp.text.toString()).setValue(obj)
+                        showToast("Register Successfully")
+
                     }
+//                            sendEmail(name.text.toString(), phone.text.toString())
                     startActivity(Intent(this, MainActivity::class.java))
                 }
                 is AuthResource.VerificationFailed -> {

@@ -10,7 +10,9 @@ import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.databinding.IndiviewCartBinding
 
-class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+class CartAdapter(
+    val callback:CartActivity
+) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     private val items = ArrayList<CartEntity>()
 
@@ -35,13 +37,40 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
         fun bind(item: CartEntity) {
             with(binding) {
                 tvName.text = item.products_name
-                tvCartQuant.text = item.quant
-                tvCartType.text = item.price
-                total.text = item.price
+                tvCartQuant.text = item.weight
+                tvCartType.text = "₹ "+item.price
+                tvCurrentQuant.text=item.quant
+                total.text = "₹ "+item.total
                 item.img!!.decodeToBitmap(500)?.let {
                     imgCart.load(it) {
                         transformations(CircleCropTransformation())
                     }
+                }
+
+                btIncrease.setOnClickListener {
+                    item.quant= (item.quant?.toInt()?.plus(1)).toString()
+                    item.total= (item.price?.toInt()?.times(item.quant!!.toInt())).toString()
+                    callback.onClick(item.total!!,item.products_name, item.quant!!)
+                    tvCurrentQuant.text=item.quant
+                    total.text="₹ " + item.total
+                   // CartActivity.subValue =CartActivity.subValue + item.total!!.toInt()
+                    //notifyDataSetChanged()
+                }
+                btMinus.setOnClickListener {
+                    if(item.quant!!.toInt() > 1) {
+                        item.quant = (item.quant?.toInt()?.minus(1)).toString()
+                        item.total = (item.price?.toInt()?.times(item.quant!!.toInt())).toString()
+                        callback.onClick(item.total!!, item.products_name, item.quant!!)
+                        tvCurrentQuant.text = item.quant
+                        total.text = "₹ " + item.total
+                       // CartActivity.subValue =CartActivity.subValue - item.total!!.toInt()
+                    }
+                    //notifyDataSetChanged()
+                }
+                imgClear.setOnClickListener {
+                    callback.onDelete(item.products_name,position)
+                    notifyItemRemoved(position)
+                    items.removeAt(position)
                 }
             }
         }
@@ -61,4 +90,9 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
     }
 
     override fun getItemCount(): Int = items.size
+}
+
+interface cartCallBack{
+    fun onClick(price:String,id:String,quant:String)
+    fun onDelete(id:String,pos:Int)
 }

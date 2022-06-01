@@ -13,9 +13,9 @@ class RegisterViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private lateinit var authManager: AuthManager
-    fun register(phone: String, etPassword: String, registerFragment: FragmentActivity) {
-        authManager= AuthManager(registerFragment)
-        authManager.sendOtp(mobile =phone,false)
-    }
+//    fun register(phone: String, etPassword: String, registerFragment: FragmentActivity) {
+//        authManager= AuthManager(registerFragment)
+//        authManager.sendOtp(mobile =phone,false)
+//    }
 
 }
