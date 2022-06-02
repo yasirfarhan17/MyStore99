@@ -88,7 +88,7 @@ class UserViewModel @Inject constructor(
                 is Resource.Success -> {
                     it.data?.collectLatest {list->
                         _productList.postValue(list as ArrayList<ProductEntity>)
-                        //_viewState.postValue(ViewState.Success())
+                        _viewState.postValue(ViewState.Success())
                     }
 
                         //val list= (it.data as ArrayList<ProductModel>).map {productModel -> productModel.toProductEntity() }

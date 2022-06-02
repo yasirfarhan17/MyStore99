@@ -10,7 +10,11 @@ import android.widget.GridLayout
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.networkmodule.model.DashBoardModel
+import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
+import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
 import com.noor.mystore99.databinding.ActivityMain2Binding
 
 class DashboardFragment : Fragment() {
@@ -20,6 +24,7 @@ class DashboardFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    val arr=ArrayList<DashBoardModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,10 +34,20 @@ class DashboardFragment : Fragment() {
         val dashboardViewModel =
             ViewModelProvider(this)[DashboardViewModel::class.java]
         _binding = ActivityMain2Binding.inflate(inflater, container, false)
+        arr.clear()
+        arr.add(DashBoardModel(R.drawable.action_user,"My Account"))
+        arr.add(DashBoardModel(R.drawable.ic_local_mall_black_24dp,"My Order"))
+        arr.add(DashBoardModel(R.drawable.about,"About us"))
+        arr.add(DashBoardModel(R.drawable.ic_signout,"Log Out"))
+        binding.rvDash.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvDash.adapter=DashBoardAdapter()
+        (binding.rvDash.adapter as DashBoardAdapter).submitList(arr)
 
-        setSingleEvent(binding.grid)
+        //setSingleEvent(binding.grid)
         return binding.root
     }
+
 
 
 

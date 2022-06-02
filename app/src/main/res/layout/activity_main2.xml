@@ -32,20 +32,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <GridLayout
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hi Yasir"
+            android:textAlignment="center"
+            android:textColor="@color/btnprimary"
+            android:textSize="26dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_profile" />
+
+        <ImageView
+            android:id="@+id/image_profile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/usericon"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.512"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_view" />
+
+       <!-- <GridLayout
             android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:layout_marginTop="25dp"
             android:layout_weight="0"
             android:alignmentMode="alignMargins"
             android:columnCount="2"
             android:columnOrderPreserved="false"
             android:padding="14dp"
             android:rowCount="3"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_view">
+            tools:layout_editor_absoluteY="165dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
@@ -201,7 +227,30 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-        </GridLayout>
+        </GridLayout>-->
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            app:cardCornerRadius="20dp"
+            android:padding="10dp"
+            android:background="@color/primary"
+            app:cardElevation="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_Dash"
+                android:layout_width="match_parent"
+                android:background="@color/primary"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/indiview_dashboard"/>
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

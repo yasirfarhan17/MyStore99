@@ -11,6 +11,9 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -24,6 +27,8 @@ import com.noor.mystore99.amigrate.alarmManager.SetFirebaseDataReciver
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.ui.cart.CartActivity
+import com.noor.mystore99.amigrate.ui.main.fragment.dashboard.DashboardFragment
+import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
 import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
 import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.amigrate.util.toLiveData
@@ -46,6 +51,10 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
      val userModelModel: UserViewModel by viewModels()
     val currentDate1 = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
     val currentTime1 = SimpleDateFormat("HHmmss", Locale.getDefault()).format(Date())
+    lateinit var fm : FragmentTransaction
+
+    private val userFragment=UserFragment()
+    private val dashBoard=DashboardFragment()
     companion object{
         var prductCount=0
     }
@@ -99,12 +108,28 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
     }
 
     private fun setNavView() {
+        replaceFragment(userFragment)
         val navView: BottomNavigationView = binding.bottomNavigationView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navView.setupWithNavController(navController)
+//        navView.setupWithNavController(navController)
+        navView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.navigation_home -> replaceFragment(userFragment)
+                R.id.navigation_user -> replaceFragment(dashBoard)
+            }
+            true
+        }
         binding.fabBtCart.setOnClickListener {
             val intent=Intent(this,CartActivity::class.java)
             startActivity(intent)
+        }
+
+        }
+    private fun replaceFragment(fragment: Fragment){
+        if(fragment != null){
+            val transaction=supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.nav_host_fragment_activity_main,fragment)
+            transaction.commit()
         }
     }
 

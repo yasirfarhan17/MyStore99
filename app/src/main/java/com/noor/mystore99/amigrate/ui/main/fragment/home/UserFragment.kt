@@ -335,6 +335,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
     private fun stopBannerSlideShow() {
         timer?.cancel()
+
     }
 
     override fun onItemClick(cartEntity: CartEntity) {
@@ -349,6 +350,11 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 //               // falg = list.products_name.equals(id)
 //        }
         return false
+    }
+
+    override fun onDestroyView() {
+        timer?.cancel()
+        super.onDestroyView()
     }
 
     override fun onItemClick(productName: String) {
