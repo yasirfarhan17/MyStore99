@@ -14,6 +14,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.networkmodule.model.CategoryModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +36,7 @@ public class CategoryProduct extends AppCompatActivity {
     RecyclerView recyclerView;
     ArrayList<product> list=new ArrayList<>();
     CategoryProductAdapter adapter;
-    categoryModel model=new categoryModel();
+    CategoryModel model=new CategoryModel();
     String name1;int index;
     TextView header;
     SearchView searchView ;

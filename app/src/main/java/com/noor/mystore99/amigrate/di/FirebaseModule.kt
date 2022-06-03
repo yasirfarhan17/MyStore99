@@ -1,15 +1,20 @@
 package com.noor.mystore99.amigrate.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
-import com.example.networkmodule.database.ProductDao
-import com.example.networkmodule.database.ProductDataBase
+import com.example.networkmodule.database.SbziTazaLocalDatabase
+import com.example.networkmodule.database.dao.CartDao
+import com.example.networkmodule.database.dao.ProductDao
 import com.example.networkmodule.network.FirebaseKey
 import com.example.networkmodule.network.FirebaseManager
+import com.example.networkmodule.repository.*
+import com.example.networkmodule.storage.PrefsStoreImpl
+import com.example.networkmodule.storage.PrefsUtil
+import com.example.networkmodule.usecase.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,6 +60,15 @@ object FirebaseModule {
         return FirebaseManager.getBannerDatabaseRef(firebaseDatabase)
     }
 
+    @Named(FirebaseKey.USER_DATABASE_REF)
+    @Provides
+    @Singleton
+    fun getUserRef(
+        firebaseDatabase: FirebaseDatabase
+    ): DatabaseReference {
+        return FirebaseManager.getUserDatabaseRef(firebaseDatabase)
+    }
+
     @Named(FirebaseKey.CART_DATABASE_REF)
     @Provides
     @Singleton
@@ -80,21 +94,144 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideProductDatabase(@ApplicationContext context:Context):ProductDataBase{
-        return Room.databaseBuilder(
-            context,
-            ProductDataBase::class.java,
-            ProductDataBase.Name
-        )
-            .fallbackToDestructiveMigration()
-            .build()
+    fun provideCoilRepository(productDao: ProductDao): ProductRepository {
+        return ProductRepositoryImpl(productDao)
+    }
 
+
+    @Provides
+    @Singleton
+    fun provideUseCase(repository: ProductRepository):
+            GetAllProductsUseCase {
+        return GetAllProductsUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideProductDao(productDatabase:ProductDataBase):ProductDao{
-        return productDatabase.product
+    fun provideCartRepository(cartDao: CartDao): CartRepository {
+        return CartRepositoryImpl(cartDao)
     }
+
+    @Singleton
+    @Provides
+    fun provideCartUseCase(repository: CartRepository): GetCartItemsUseCase {
+        return GetCartItemsUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideInsertCartItemUseCase(repository: CartRepository): InsertCartItemUseCase {
+        return InsertCartItemUseCase(repository)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideProductDatabase(@ApplicationContext context: Context): SbziTazaLocalDatabase {
+        return Room.databaseBuilder(
+            context,
+            SbziTazaLocalDatabase::class.java,
+            SbziTazaLocalDatabase.Name
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductDao(productDatabase: SbziTazaLocalDatabase): ProductDao {
+        return productDatabase.productDao
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideCartDao(database: SbziTazaLocalDatabase): CartDao {
+        return database.cartDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseDatabaseRepository(
+        @Named(FirebaseKey.PRODUCT_DATABASE_REF) productDbRef: DatabaseReference,
+        @Named(FirebaseKey.CATEGORY_DATABASE_REF) categoryDbRef: DatabaseReference,
+        @Named(FirebaseKey.BANNER_DATABASE_REF) bannerDbRef: DatabaseReference,
+    ): FirebaseDatabaseRepository {
+        return FirebaseDatabaseRepositoryImpl(productDbRef, bannerDbRef, categoryDbRef)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAllCategoryUseCase(
+        repo: FirebaseDatabaseRepository
+    ): FireBaseCategoryUseCase {
+        return FireBaseCategoryUseCase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseGetBannerUseCase(
+        repo: FirebaseDatabaseRepository
+    ): FirebaseGetBannerUseCase {
+        return FirebaseGetBannerUseCase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseGetProductUseCase(
+        repo: FirebaseDatabaseRepository
+    ): FirebaseGetProductUseCase {
+        return FirebaseGetProductUseCase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseGetCategoryUseCase(
+        repo: FirebaseDatabaseRepository
+    ): FirebaseGetCategoryUseCase {
+        return FirebaseGetCategoryUseCase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthUseCase(
+        repo: AuthRepository
+    ): GetLoginUseCase {
+        return GetLoginUseCase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        @Named(FirebaseKey.USER_DATABASE_REF) userDbRef: DatabaseReference,
+    ): AuthRepository {
+        return AuthRepositoryImpl(userDbRef)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreImpl(
+        @ApplicationContext context: Context
+    ): PrefsStoreImpl {
+        return PrefsStoreImpl(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSharedPreferences(
+        @ApplicationContext context: Context
+    ): SharedPreferences {
+        return context.getSharedPreferences(
+            PrefsUtil.SHARED_PREFERENCE_ID, Context.MODE_PRIVATE
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providePrefUtils(sharedPreferences: SharedPreferences): PrefsUtil {
+        return PrefsUtil(sharedPreferences)
+    }
+
 
 }

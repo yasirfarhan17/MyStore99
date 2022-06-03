@@ -104,7 +104,7 @@
                         android:padding="5dp" />
 
                     <Button
-                        android:id="@+id/vBt2"
+                        android:id="@+id/bt_500gm"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:text="@string/_500_gm"
@@ -117,7 +117,7 @@
                         android:padding="5dp" />
 
                     <Button
-                        android:id="@+id/vBt3"
+                        android:id="@+id/bt_250gm"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:text="@string/_250_gm"
@@ -162,7 +162,7 @@
                         android:layout_height="20dp"
                         android:layout_marginTop="60dp"
                         android:layout_marginRight="-20dp"
-                        android:background="@drawable/minusbtn"
+                        android:background="@drawable/minus_btn"
 
                         />
 
@@ -173,7 +173,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginTop="30dp"
-                        android:background="@drawable/plusbtn" />
+                        android:background="@drawable/plus_btn" />
 
                     <TextView
                         android:id="@+id/CtTv4"

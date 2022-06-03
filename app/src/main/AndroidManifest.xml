@@ -22,6 +22,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SbziTaza">
+        <activity
+            android:name=".amigrate.ui.category.CategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".amigrate.ui.auth.register.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".amigrate.ui.auth.login.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".amigrate.ui.checkout.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".amigrate.ui.payment.PaymentActivity"
+            android:exported="false" />
         <activity android:name=".AboutPage" />
         <activity android:name=".InstructionPage" />
         <activity android:name=".page1" />
@@ -58,14 +79,10 @@
 
         <activity
             android:name=".amigrate.ui.main.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true"
+            android:hardwareAccelerated="true" />
         <activity android:name=".LastPage" />
+        <activity android:name=".amigrate.ui.cart.CartActivity" />
         <activity android:name=".CategoryProduct" />
         <activity android:name=".CartProductList" />
         <activity android:name=".AddressPage" />

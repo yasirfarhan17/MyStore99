@@ -6,5 +6,5 @@
     <solid android:color="#09F309"/>
 </shape>
 </item>
-    <item android:drawable="@drawable/ic_local_phone_black_24dp"/>
+    <item android:drawable="@drawable/ic_local_phone"/>
 </layer-list>

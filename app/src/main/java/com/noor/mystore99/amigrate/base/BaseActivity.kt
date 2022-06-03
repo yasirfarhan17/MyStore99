@@ -7,7 +7,9 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.example.networkmodule.storage.PrefsUtil
 import com.noor.mystore99.amigrate.util.UiUtil
+import javax.inject.Inject
 
 abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
 
@@ -16,20 +18,18 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompat
     private lateinit var uiUtil: UiUtil
 
 
-    /*  @Inject
-      lateinit var prefsUtil: PrefsUtil*/
+      @Inject
+      lateinit var prefsUtil: PrefsUtil
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindContentView(layoutId())
-        setNavController()
         uiUtil = UiUtil(this)
         observeViewState()
         addObservers()
     }
 
-    abstract fun setNavController()
 
     private fun observeViewState() {
         viewModel.viewState
@@ -52,8 +52,8 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel> : AppCompat
             }
     }
 
-    private fun handleException(throwable: Throwable?) {
-        showMessage(throwable?.message)
+    private fun handleException(throwable: String?) {
+        showMessage(throwable)
 
     }
 

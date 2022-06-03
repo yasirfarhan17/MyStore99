@@ -568,8 +568,8 @@ public class CartAdapter extends RecyclerView.Adapter <CartAdapter.MyViewHolder>
             dltButton=(Button)itemView.findViewById(R.id.deletButton);
             weight=(TextView)itemView.findViewById(R.id.wt);
             vBt1=itemView.findViewById(R.id.vBt1);
-            vBt2=itemView.findViewById(R.id.vBt2);
-            vBt3=itemView.findViewById(R.id.vBt3);
+            vBt2=itemView.findViewById(R.id.bt_500gm);
+            vBt3=itemView.findViewById(R.id.bt_250gm);
 
 
 

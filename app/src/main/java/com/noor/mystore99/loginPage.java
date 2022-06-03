@@ -1,14 +1,6 @@
 package com.noor.mystore99;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import dmax.dialog.SpotsDialog;
-
-import android.Manifest;
 import android.app.ActivityManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,9 +21,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
@@ -44,26 +38,26 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
+
+import dmax.dialog.SpotsDialog;
 
 public class loginPage extends AppCompatActivity {
     TextView text;
-    EditText phone,otp;
-    Button sndOtp,submit;
+    EditText phone, otp;
+    Button sndOtp, submit;
     FirebaseAuth auth;
     //FirebaseAuth.AuthStateListner authStateListner;
     FirebaseDatabase ref;
     DatabaseReference users;
     SharedPreferences preferences;
-    SharedPreferences.Editor editor ;
+    SharedPreferences.Editor editor;
 
     SharedPreferences preferences1;
-    SharedPreferences.Editor editor1 ;
+    SharedPreferences.Editor editor1;
     String code;
-    Animation topAnim,bottomAnim,midd;
+    Animation topAnim, bottomAnim, midd;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private static final int SEND_SMS_CODE = 23;
@@ -73,18 +67,18 @@ public class loginPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
-        text=findViewById(R.id.textView11);
-        phone=findViewById(R.id.LoginPhone);
-        otp=findViewById(R.id.optText);
-        sndOtp=findViewById(R.id.OtpButton);
+        text = findViewById(R.id.textView11);
+        phone = findViewById(R.id.LoginPhone);
+        otp = findViewById(R.id.optText);
+        sndOtp = findViewById(R.id.OtpButton);
 
-        submit=findViewById(R.id.submit);
-        auth= FirebaseAuth.getInstance();
-        ref= FirebaseDatabase.getInstance();
-        users=ref.getReference("User");
-        bottomAnim= AnimationUtils.loadAnimation(this, R.anim.downtoup);
-        topAnim= AnimationUtils.loadAnimation(this, R.anim.uptodown);
-        midd= AnimationUtils.loadAnimation(this, R.anim.myanimation);
+        submit = findViewById(R.id.submit);
+        auth = FirebaseAuth.getInstance();
+        ref = FirebaseDatabase.getInstance();
+        users = ref.getReference("User");
+        bottomAnim = AnimationUtils.loadAnimation(this, R.anim.downtoup);
+        topAnim = AnimationUtils.loadAnimation(this, R.anim.uptodown);
+        midd = AnimationUtils.loadAnimation(this, R.anim.myanimation);
         text.setAnimation(topAnim);
         phone.setAnimation(bottomAnim);
         sndOtp.setAnimation(bottomAnim);
@@ -92,7 +86,7 @@ public class loginPage extends AppCompatActivity {
         submit.setAnimation(bottomAnim);
 
 
-        if(checkInternet()){
+        if (checkInternet()) {
             preferences = PreferenceManager.getDefaultSharedPreferences(this);
             editor = preferences.edit();
             preferences1 = PreferenceManager.getDefaultSharedPreferences(this);
@@ -105,12 +99,11 @@ public class loginPage extends AppCompatActivity {
                     users.orderByChild("phone").equalTo(phone.getText().toString()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
+                            if (dataSnapshot.exists()) {
                                 sendVerificationCode(phone);
                                 //resendVerificationCode(editEmail,mResendToken);
-                            }
-                            else{
-                                Toast.makeText(loginPage.this,"Please Register Fist!!",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(loginPage.this, "Please Register Fist!!", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -138,19 +131,18 @@ public class loginPage extends AppCompatActivity {
                         return;
 
                     }
-                    if(number!=0){
+                    if (number != 0) {
                         Snackbar.make(getWindow().getDecorView().getRootView(), "working", Snackbar.LENGTH_SHORT).show();
                         final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder().setContext(loginPage.this).build();
                         waitingtDialog.show();
                         users = FirebaseDatabase.getInstance().getReference("User");
                         if (number == Integer.parseInt(otp.getText().toString())) {
-                            verifySignInCode(String.valueOf(number),otp.getText().toString());
+                            verifySignInCode(String.valueOf(number), otp.getText().toString());
 
                         }
                         waitingtDialog.dismiss();
 
-                    }
-                    else {
+                    } else {
                         Snackbar.make(getWindow().getDecorView().getRootView(), "working22", Snackbar.LENGTH_SHORT).show();
                         final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder().setContext(loginPage.this).build();
                         waitingtDialog.show();
@@ -162,18 +154,15 @@ public class loginPage extends AppCompatActivity {
             });
 
 
-
-        }
-        else{
-            Toast.makeText(loginPage.this,"No Connection",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(loginPage.this, "No Connection", Toast.LENGTH_LONG).show();
         }
 
 
-        mCallbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                 String code = phoneAuthCredential.getSmsCode();
-
 
 
                 // In case OTP is received
@@ -190,9 +179,9 @@ public class loginPage extends AppCompatActivity {
             @Override
             public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
-                mResendToken=forceResendingToken;
-                code =s;
-                Toast.makeText(loginPage.this,"OTP send successfully!!", Toast.LENGTH_SHORT).show();
+                mResendToken = forceResendingToken;
+                code = s;
+                Toast.makeText(loginPage.this, "OTP send successfully!!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -205,15 +194,16 @@ public class loginPage extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 1){
-            if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED ){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 try {
                     SmsManager smsManager = SmsManager.getDefault();
 
                     Random rnd = new Random();
                     int number = rnd.nextInt(999999);
-                    smsManager.sendTextMessage(phone.getText().toString(), null, String.valueOf(number)+" is your verification code for Sabzi Taza", null, null);
+                    smsManager.sendTextMessage(phone.getText().toString(), null, String.valueOf(number) + " is your verification code for Sabzi Taza", null, null);
                     Toast.makeText(getApplicationContext(), "SMS Sent!",
                             Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
@@ -222,13 +212,15 @@ public class loginPage extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
-            }else{
+            } else {
                 Toast.makeText(loginPage.this, "Access Denied ! Cannot proceed further ", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
     private void resendVerificationCode(String phoneNumber,
                                         PhoneAuthProvider.ForceResendingToken token) {
+/*
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
                 30,                 // Timeout duration
@@ -236,31 +228,32 @@ public class loginPage extends AppCompatActivity {
                 TaskExecutors.MAIN_THREAD,               // Activity (for callback binding)
                 mCallbacks,         // OnVerificationStateChangedCallbacks
                 token);             // ForceResendingToken from callbacks
+*/
     }
 
-    public void verifySignInCode(String codeEdit){
+    public void verifySignInCode(String codeEdit) {
 
         try {
-            String newCode=codeEdit;
+            String newCode = codeEdit;
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(code, newCode);
             signInWithPhoneAuthCredential(credential);
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast toast = Toast.makeText(this, "Verification Code is wrong", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
 
     }
 
-    public void verifySignInCode(String codeEdit,String val){
+    public void verifySignInCode(String codeEdit, String val) {
 
         try {
-            String newCode=codeEdit;
+            String newCode = codeEdit;
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(val, newCode);
             signInWithPhoneAuthCredential(credential);
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast toast = Toast.makeText(this, "Verification Code is wrong", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
 
@@ -273,13 +266,13 @@ public class loginPage extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Intent intent=new Intent(loginPage.this,MainActivity.class);
+                            Intent intent = new Intent(loginPage.this, MainActivity.class);
                             editor.putString("key", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
                             editor.apply();
                             startActivity(intent);
 
                         } else {
-                            Toast.makeText(loginPage.this,"Incorrect code", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(loginPage.this, "Incorrect code", Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -287,63 +280,60 @@ public class loginPage extends AppCompatActivity {
     }
 
 
+    public void sendVerificationCode(EditText editPhone) {
+        String phoneNumber = editPhone.getText().toString();
 
 
-
-    public void sendVerificationCode(EditText editPhone){
-        String phoneNumber=editPhone.getText().toString();
-
-
-        if(phoneNumber.isEmpty()){
+        if (phoneNumber.isEmpty()) {
             editPhone.setError("Phone Number is Required");
             editPhone.requestFocus();
             return;
         }
-        if(phoneNumber.length()<10){
+        if (phoneNumber.length() < 10) {
             editPhone.setError("Enter valid phone number");
             editPhone.requestFocus();
             return;
         }
-        phoneNumber="+91"+phoneNumber;
+        phoneNumber = "+91" + phoneNumber;
         //String phone="+"+cpp.selectCoun
 
 
+/*
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
                 30,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 TaskExecutors.MAIN_THREAD,               // Activity (for callback binding)
                 mCallbacks);        // OnVerificationStateChangedCallbacks
+*/
         // Toast.makeText(first.this,"hiiii",Toast.LENGTH_SHORT).show();
 
     }
 
 
-
-
-    public boolean checkInternet(){
+    public boolean checkInternet() {
         boolean connected = false;
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
             //we are connected to a network
             connected = true;
-        }
-        else
+        } else
             connected = false;
 
         return connected;
 
     }
+
     private void clearAppData() {
         try {
             // clearing app data
             if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-                ((ActivityManager)getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData(); // note: it has a return value!
+                ((ActivityManager) getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData(); // note: it has a return value!
             } else {
                 String packageName = getApplicationContext().getPackageName();
                 Runtime runtime = Runtime.getRuntime();
-                runtime.exec("pm clear "+packageName);
+                runtime.exec("pm clear " + packageName);
             }
 
         } catch (Exception e) {

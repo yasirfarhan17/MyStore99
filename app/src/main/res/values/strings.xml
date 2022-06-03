@@ -1,4 +1,12 @@
 <resources>
+
+    <string-array name="array_name">
+        <item>Array Item One</item>
+        <item>Array Item Two</item>
+        <item>Array Item Three</item>
+        <item>Array Item four</item>
+        <item>Array Item five</item>
+    </string-array>
     <string name="app_name">Sabzi Taza</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -37,5 +45,49 @@
     <string name="title_home">Home</string>
     <string name="title_user">User</string>
     <string name="title_notifications">Notifications</string>
+    <string name="icon_for_notification">Icon for Notification</string>
+    <string name="category">Category</string>
+    <string name="txt_offers_amp_promo"><![CDATA[Offers & Promo]]></string>
+    <string name="icon_for_category">Icon for category</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="imageview_for_product_icon">ImageView for product icon</string>
+    <string name="all_products">All Products</string>
+    <string name="app_name_first">Sabzi</string>
+    <string name="app_name_last">Taza</string>
+    <string name="view_details">View Details</string>
+    <string name="order_details">Order Details</string>
+    <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="txt_clear_cart_question">Clear Cart?</string>
+    <string name="all_the_item_in_cart_will_be_cleared">All the items in cart will be cleared</string>
+    <string name="txt_sub_total">Sub Total</string>
+    <string name="delivery">Delivery</string>
+    <string name="total">Total</string>
+    <string name="icon_to_clear_cart">Icon to clear cart</string>
+    <string name="icon_for_back_press">Icon for back press</string>
+    <string name="bag_something">Lets Bag Something</string>
+    <string name="your_cart_is_empty_n_please_add_few_items">Your cart is empty.\n Please add few items</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="payment">Payment</string>
+    <string name="cash">Cash on Delivery</string>
+    <string name="icon_for_cash_payment">Icon for cash payment</string>
+    <string name="icon_for_upi_payment">Icon for Upi payment</string>
+    <string name="upi">Upi/PhonePe,GooglePay</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="address">Address</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="choose_delivery_date">Choose Delivery Date</string>
+    <string name="change_pincode">Change PinCode</string>
+    <string name="check_out">Check Out</string>
+    <string name="dd_mm_yyyy">DD/MM/YYYY</string>
+    <string name="welcome_to_sabzi_taza">Welcome to Sabzi Taza</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don\'t have an account ?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="cnfrm_password">Confirm Password</string>
+    <string name="have_an_account">Have an account !</string>
+    <string name="sign_in">Sign In</string>
+    <string name="register">Register</string>
 
 </resources>

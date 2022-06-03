@@ -114,10 +114,10 @@
             android:layout_height="50dp"
             android:layout_marginTop="98dp"
             android:background="@drawable/line1"
-            android:tint="@color/gray"
             app:layout_constraintEnd_toStartOf="@+id/payment"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray" />
 
         <TextView
             android:id="@+id/textView8"
@@ -213,7 +213,7 @@
                     android:layout_marginTop="70dp"
                     android:layout_marginEnd="11dp"
                     android:layout_marginBottom="16dp"
-                    android:src="@drawable/ic_local_phone_black_24dp"
+                    android:src="@drawable/ic_local_phone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/saveAdd"
                     app:layout_constraintStart_toStartOf="parent"

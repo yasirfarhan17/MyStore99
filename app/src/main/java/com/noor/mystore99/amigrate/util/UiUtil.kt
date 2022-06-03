@@ -27,14 +27,13 @@ import java.io.IOException
 import java.io.InputStream
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 
 class UiUtil(private val context: Context) {
 
     private lateinit var snackbar: Snackbar
-    private lateinit var progressDialog: ProgressDialog
+    private lateinit var progressDialog: ProgresssDialog
 
     fun showMessage(
         message: String,
@@ -98,14 +97,14 @@ class UiUtil(private val context: Context) {
 
     fun showProgress() {
         if (!::progressDialog.isInitialized) {
-            progressDialog = ProgressDialog(context)
+            progressDialog = ProgresssDialog(context)
         }
         progressDialog.show()
     }
 
     fun hideProgress() {
         if (!::progressDialog.isInitialized) {
-            progressDialog = ProgressDialog(context)
+            progressDialog = ProgresssDialog(context)
             return
         }
         progressDialog.dismiss()
@@ -193,7 +192,7 @@ class UiUtil(private val context: Context) {
                 while (h.length < 2) h = "0$h"
                 hexString.append(h)
             }
-            return hexString.toString().toUpperCase()
+            return hexString.toString().uppercase()
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
         }
@@ -210,26 +209,6 @@ class UiUtil(private val context: Context) {
         return m.matches()
     }
 
-
-    fun getFormattedStopWatchTime(ms: Long, includeMillis: Boolean = false): String {
-        var milliseconds = ms
-        val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
-        milliseconds -= TimeUnit.HOURS.toMillis(hours)
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
-        milliseconds -= TimeUnit.MINUTES.toMillis(minutes)
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
-        if (!includeMillis) {
-            return "${if (hours < 10) "0" else ""}$hours:" +
-                    "${if (minutes < 10) "0" else ""}$minutes:" +
-                    "${if (seconds < 10) "0" else ""}$seconds"
-        }
-        milliseconds -= TimeUnit.SECONDS.toMillis(seconds)
-        milliseconds /= 10
-        return "${if (hours < 10) "0" else ""}$hours:" +
-                "${if (minutes < 10) "0" else ""}$minutes:" +
-                "${if (seconds < 10) "0" else ""}$seconds:" +
-                "${if (milliseconds < 10) "0" else ""}$milliseconds"
-    }
 
     fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }
@@ -282,7 +261,7 @@ class UiUtil(private val context: Context) {
         val byteBuffer = ByteArrayOutputStream()
         val bufferSize = 1024
         val buffer = ByteArray(bufferSize)
-        var len = 0
+        var len: Int
         while (inputStream.read(buffer).also { len = it } != -1) {
             byteBuffer.write(buffer, 0, len)
         }

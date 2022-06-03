@@ -1,6 +1,6 @@
 package com.noor.mystore99;
 
-public class sliderModel {
+class sliderModel {
 
     private String banner;
     private String backgroundColor;
