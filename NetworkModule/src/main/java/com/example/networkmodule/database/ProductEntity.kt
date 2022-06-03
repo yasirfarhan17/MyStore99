@@ -14,7 +14,7 @@ data class ProductEntity (
     @ColumnInfo val HindiName:String?=null,
     @ColumnInfo val stock:String?=null,
     @ColumnInfo val type:String?=null
-        )
+)
 
 
 
