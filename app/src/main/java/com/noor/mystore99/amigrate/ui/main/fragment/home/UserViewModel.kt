@@ -1,5 +1,7 @@
 package com.noor.mystore99.amigrate.ui.main.fragment.home
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +15,10 @@ import com.example.networkmodule.network.Resource
 import com.example.networkmodule.repository.CartRepository
 import com.example.networkmodule.repository.ProductRepository
 import com.example.networkmodule.usecase.*
+import com.example.networkmodule.util.Util.decodeToBitmap
+import com.example.networkmodule.util.Util.getImageUri
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
@@ -51,13 +57,14 @@ class UserViewModel @Inject constructor(
 
     private var _bannerList = MutableLiveData<ArrayList<SliderModel>?>()
     val bannerList = _bannerList.toLiveData()
+    val storageReference=FirebaseStorage.getInstance().getReference()
 
 
     init {
         launch {
-            _viewState.postValue(ViewState.Loading)
-            //getAllProducts()
-            getProductFromDB()
+            //_viewState.postValue(ViewState.Loading)
+            getAllProducts()
+            //getProductFromDB()
            // getNewProductFromDB()
            // getProductRepo()
             getBanner()
@@ -80,30 +87,30 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun getProductFromDB(){
-        launch {
-            _viewState.postValue(ViewState.Loading)
-            getAllProductsUseCase.invoke().collectLatest{
-               when(it){
-                is Resource.Success -> {
-                    it.data?.collectLatest {list->
-                        _productList.postValue(list as ArrayList<ProductEntity>)
-                        _viewState.postValue(ViewState.Success())
-                    }
-
-                        //val list= (it.data as ArrayList<ProductModel>).map {productModel -> productModel.toProductEntity() }
-                       // insertProductToDb(list as ArrayList<ProductEntity>)
-                    }
-                    is Resource.Error -> {
-                        _viewState.postValue(ViewState.Error(it.message))
-                    }
-                    is Resource.Loading -> {
-                        _viewState.postValue(ViewState.Loading)
-                    }
-                }
-            }
-            }
-        }
+//    fun getProductFromDB(){
+//        launch {
+//            _viewState.postValue(ViewState.Loading)
+//            getAllProductsUseCase.invoke().collectLatest{
+//               when(it){
+//                is Resource.Success -> {
+//                    it.data?.collectLatest {list->
+//                        _productList.postValue(list as ArrayList<ProductEntity>)
+//                        _viewState.postValue(ViewState.Success())
+//                    }
+//
+//                        //val list= (it.data as ArrayList<ProductModel>).map {productModel -> productModel.toProductEntity() }
+//                       // insertProductToDb(list as ArrayList<ProductEntity>)
+//                    }
+//                    is Resource.Error -> {
+//                        _viewState.postValue(ViewState.Error(it.message))
+//                    }
+//                    is Resource.Loading -> {
+//                        _viewState.postValue(ViewState.Loading)
+//                    }
+//                }
+//            }
+//            }
+//        }
 
 
      fun getAllProducts() {
@@ -112,9 +119,11 @@ class UserViewModel @Inject constructor(
                 _viewState.postValue(ViewState.Loading)
                 when (it) {
                     is Resource.Success -> {
+
                         val list= it.data?.map {productModel -> productModel.toProductEntity() }
                         _productList.postValue(list as ArrayList<ProductEntity>)
-                       // _viewState.postValue(ViewState.Success())
+
+                        _viewState.postValue(ViewState.Success())
 
                        // insertProductToDb(list as ArrayList<ProductEntity>)
                     }

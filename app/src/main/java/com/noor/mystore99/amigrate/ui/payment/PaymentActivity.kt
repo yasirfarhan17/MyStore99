@@ -98,14 +98,13 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
                     startActivity(intent)
                 }
                 else if(upiFlag){
-                    val intent = Intent(this@PaymentActivity, NewUPIPay::class.java)
-                    //setValueToFirebase()
+                    val intent = Intent(this@PaymentActivity, CheckoutActivity::class.java)
+                    setValueToFirebase()
                     intent.putExtra("pay","UPI")
-                    intent.putExtra("key",key)
                     intent.putExtra("amount",amount)
-                    intent.putExtra("address",address)
-                    intent.putExtra("address",binding.etDate.text.toString())
                     intent.putExtra("combo",combo)
+                    viewModelCart.clearCart()
+                    startActivity(intent)
                     //viewModelCart.clearCart()
                     startActivity(intent)
                 }

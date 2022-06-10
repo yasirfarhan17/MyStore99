@@ -10,7 +10,10 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
+import com.example.networkmodule.model.ProductModelNew
+import com.example.networkmodule.util.Util.bitMapToString
 import com.example.networkmodule.util.Util.decodeToBitmap
+import com.noor.mystore99.R
 import com.noor.mystore99.databinding.IndiviewProductsBinding
 import javax.inject.Inject
 
@@ -34,8 +37,9 @@ class NewCategoryAdapter(
                 tvName.text = item.products_name
                 tvMrp.text = item.price
                 tvHindiName.text = item.HindiName
-                imgProductImage.load(item.img?.decodeToBitmap()) {
+                imgProductImage.load(item.img) {
                     transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_home_black_24dp)
                 }
                 if(item.stock.equals("no")){
                     btAddToCart.visibility=View.GONE

@@ -1,5 +1,6 @@
 package com.example.networkmodule.usecase
 
+import android.content.Context
 import com.example.networkmodule.model.ProductModel
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.repository.FirebaseDatabaseRepository
@@ -23,11 +24,8 @@ class FirebaseGetProductUseCase @Inject constructor(
                     if (list == null) {
                         send(Resource.Error("No Product Found"))
                     } else {
-                        list.forEach { productModel ->
-                            productModel.img = productModel.img?.reduceBase64ImageSize(500)
-                        }
                         val newList=list.map { it.toProductEntity() }
-                        repository.insertItems(newList)
+//                        repository.insertItems(newList)
                         send(Resource.Success(list))
                     }
                 } else {

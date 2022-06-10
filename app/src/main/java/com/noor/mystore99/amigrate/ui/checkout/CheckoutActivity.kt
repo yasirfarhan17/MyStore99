@@ -12,11 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.networkmodule.model.CartModel
 import com.example.networkmodule.model.checkOutModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.zxing.qrcode.encoder.QRCode
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.cart.CartActivity
 import com.noor.mystore99.amigrate.ui.cart.CartViewModel
+import com.noor.mystore99.amigrate.ui.payment.PaymentActivity
+import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel
 import com.noor.mystore99.databinding.ActivityCheckOutBinding
 import com.noor.mystore99.databinding.BottomCheckoutDialogeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,34 +30,36 @@ import dagger.hilt.android.AndroidEntryPoint
 class CheckoutActivity : BaseActivity<ActivityCheckOutBinding, CheckoutViewModel>() {
 
     override val viewModel: CheckoutViewModel by viewModels()
-     val viewModelcart: CartViewModel by viewModels()
+     val viewModelPayment: PaymentViewModel by viewModels()
     lateinit var bindingSheet : BottomCheckoutDialogeBinding
     lateinit var localCheckOut:checkOutModel
-    var counter=0
 
     override fun layoutId(): Int = R.layout.activity_check_out
-    lateinit var amount:String
-    lateinit var paymentMode:String
+
     lateinit var key:String
     lateinit var id:String
-     var  va= ArrayList<String>()
     var localData=ArrayList<CartModel>()
     var qrgEncoder: QRGEncoder? = null
     var bitmap: Bitmap? = null
-
+    lateinit var cartBottomSheetDialog :BottomSheetDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=DataBindingUtil.setContentView(this,R.layout.activity_check_out)
-        amount= intent.getStringExtra("amount").toString()
-        paymentMode= intent.getStringExtra("pay").toString()
+        cartBottomSheetDialog = BottomSheetDialog(this)
+        bindingSheet = DataBindingUtil.inflate<BottomCheckoutDialogeBinding>(
+            layoutInflater,
+            R.layout.bottom_checkout_dialoge,
+            null,
+            false
+        )
         key= prefsUtil.Name.toString()
         id= intent.getStringExtra("combo").toString()
         viewModel.getOrder(key,id)
         addObservers()
         getInit()
-        QRCode()
+
     }
 
 
@@ -68,18 +74,12 @@ class CheckoutActivity : BaseActivity<ActivityCheckOutBinding, CheckoutViewModel
             tvViewDetails.setOnClickListener {
                 showCartDetailsBottomDialog()
             }
-            tvTotalPrice.text=amount
+
 
         }
     }
     private fun showCartDetailsBottomDialog() {
-        val cartBottomSheetDialog = BottomSheetDialog(this)
-        bindingSheet = DataBindingUtil.inflate<BottomCheckoutDialogeBinding>(
-            layoutInflater,
-            R.layout.bottom_checkout_dialoge,
-            null,
-            false
-        )
+
         cartBottomSheetDialog.setContentView(bindingSheet.root)
         bindingSheet.tvSubTotal.text="₹ " + CartActivity.subValue.toString()
         if(CartActivity.deliverCharge ==20){
@@ -92,7 +92,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckOutBinding, CheckoutViewModel
             bindingSheet.tvDeliveryCharge.text="free"
 
 
-        bindingSheet.tvTotal.text= "₹ "+ amount
+//        bindingSheet.tvTotal.text= "₹ "+ amount
         bindingSheet.tvAddress.text=localCheckOut.add.toString()
         bindingSheet.tvPhone.text=localCheckOut.phone.toString()
         cartBottomSheetDialog.create()
@@ -112,23 +112,36 @@ class CheckoutActivity : BaseActivity<ActivityCheckOutBinding, CheckoutViewModel
              binding.orderText.text="Order id:- \n ${localCheckOut.orderId}"
              binding.deliveryDate.text="Delivery Date:- \n ${localCheckOut.date}"
              Log.d("checkList",""+it.list)
+
+             binding.tvTotalPrice.text="₹ "+it.amount.toString()
+             bindingSheet.tvPayment.text=it.paymentMode
+             bindingSheet.tvTotal.text= "₹ "+ it.amount.toString()
+             QRCode(it.amount.toString())
+        }
+        viewModelPayment.userDetail.observe(this){
+            bindingSheet.tvAddress.text=it.address
+            bindingSheet.tvPhone.text=key
         }
     }
 
-    private fun QRCode() {
-        while (counter < localData.size) {
-            va.add(
-                "Name= ${localData[counter].products_name} ,Quantity= ${localData[counter].price}x${localData[counter].quant} ,Total=  ₹  ${localData[counter].total}")
-            //Log.d("Check", "" + qqq)
-            counter++
-        }
+    private fun QRCode(amount :String) {
+
+        val url = "upi://pay?pa=" +   // payment method.
+                "9117151927@okbizaxis" +         // VPA number.
+                "&am="+amount+       // this param is for fixed amount (non editable).
+                "&pn=Sabzi%20Taza"+      // to showing your name in app.
+                "&cu=INR" +                  // Currency code.
+                "&mode=02" +                 // mode O2 for Secure QR Code.
+                "&orgid=189999" +            //If the transaction is initiated by any PSP app then the respective orgID needs to be passed.
+                "&sign=MEYCIQC8bLDdRbDhpsPAt9wR1a0pcEssDaV" +   // Base 64 encoded Digital signature needs to be passed in this tag
+                "Q7lugo8mfJhDk6wIhANZkbXOWWR2lhJOH2Qs/OQRaRFD2oBuPCGtrMaVFR23t"
 
         //Toast.makeText(LastPage.this,""+p,Toast.LENGTH_LONG).show();
         qrgEncoder = QRGEncoder(
-            "OrderId= $id\nItem=$va\n Address=  \"\"\n Payment=",
+            url,
             null,
             QRGContents.Type.TEXT,
-            3000
+            4000
         )
         bitmap = qrgEncoder!!.bitmap
 

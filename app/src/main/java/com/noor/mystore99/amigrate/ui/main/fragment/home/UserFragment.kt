@@ -2,20 +2,21 @@ package com.noor.mystore99.amigrate.ui.main.fragment.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64.DEFAULT
+import android.util.Base64.decode
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Filter
-import android.widget.Filterable
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
@@ -24,15 +25,20 @@ import com.example.networkmodule.database.dao.CartDao
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.model.ProductModel
+import com.example.networkmodule.model.ProductModelNew
 import com.example.networkmodule.model.SliderModel
-import com.example.networkmodule.network.Resource
 import com.example.networkmodule.storage.PrefsUtil
 import com.example.networkmodule.usecase.FirebaseGetProductUseCase
+import com.example.networkmodule.util.Util
+import com.example.networkmodule.util.Util.decodeToBitmap
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.ui.category.CategoryActivity
-import com.noor.mystore99.amigrate.ui.main.MainActivity
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapterCallback
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
@@ -44,11 +50,11 @@ import com.noor.mystore99.sliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import javax.mail.internet.MimeUtility.decode
 import kotlin.collections.ArrayList
 
 
@@ -77,48 +83,16 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
     protected val _viewState = MutableLiveData<ViewState>(ViewState.Idle)
     val viewState = _viewState.toLiveData()
     private var _productList = MutableLiveData<java.util.ArrayList<ProductModel>>()
-    val productList = _productList.toLiveData()
-    val currentDate1 = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-    val currentTime1 = SimpleDateFormat("HHmmss", Locale.getDefault()).format(Date())
       var flag:Boolean=false
        var itemCount:Int=0
 
 
-    private val addItemRunnable: Runnable = object : Runnable {
-        override fun run() {
-
-            if(prefsUtil.date==null){
-                val calendar  =Calendar.getInstance()
-                val time=calendar.timeInMillis
-                //_viewState.postValue(ViewState.Loading)
-                viewModel.getAllProducts()
-                Toast.makeText(activity,"adding value to Db from Null",Toast.LENGTH_SHORT).show()
-                prefsUtil.date=currentDate1.toString()
-                prefsUtil.time=currentTime1.toString()
-                flag=true
-                Log.d("productcount","insidenull")
-            }
-            else if(currentDate1.toLong()> prefsUtil.date?.toLong()!!){
-                val calendar  =Calendar.getInstance()
-                val time=calendar.timeInMillis
-                //_viewState.postValue(ViewState.Loading)
-                viewModel.getAllProducts()
-                Toast.makeText(activity,"adding value to Db from Null",Toast.LENGTH_SHORT).show()
-                prefsUtil.date=currentDate1.toString()
-                prefsUtil.time=currentTime1.toString()
-            }
-            handler.postDelayed(this, 10000)
-
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.root
-        addItemRunnable.run()
         init()
         addListener()
-       // viewModel.getProductFromDB()
+
 
     }
     private fun addListener() {
@@ -168,7 +142,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
                         for(item in it){
                             if(item.products_name.lowercase(Locale.ENGLISH).contains(p0.toString().lowercase(
                                     Locale.ENGLISH))) {
-                                localList.add(item)
+                                    localList.add(item)
                                 flagNotFound=true
 
                             }
@@ -217,32 +191,23 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        // Save pause time so items can be added on resume.
-
-
-        // Cancel handler callback to add item.
-        handler.removeCallbacks(addItemRunnable)
-    }
 
     override fun addObservers() {
 
         viewModel.productList.observe(viewLifecycleOwner) {
             //val list = it.map { productModel -> productModel.toProductEntity() }
-            if(it == null || it.isEmpty()){
+            if (it == null || it.isEmpty()) {
                 _viewState.postValue(ViewState.Loading)
-            }
-            else{
+            } else {
+
+
                 (binding.rvProduct.adapter as UserAdapter).submitList(
                     it,
                     viewModel
                 )
                 _viewState.postValue(ViewState.Success())
-                Log.d("productcount","insideobserver $it")
+                Log.d("productcount", "insideobserver $it")
             }
-
         }
         viewModel.bannerList.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {

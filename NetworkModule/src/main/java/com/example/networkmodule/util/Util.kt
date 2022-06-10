@@ -1,10 +1,14 @@
 package com.example.networkmodule.util
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import java.io.ByteArrayOutputStream
+
 
 object Util {
     fun String.decodeToBitmap(resize: Int): Bitmap? {
@@ -50,5 +54,17 @@ object Util {
 
     fun String.reduceBase64ImageSize(resize: Int): String? {
         return this.decodeToBitmap(resize)?.bitMapToString()
+    }
+
+    fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            inContext.getContentResolver(),
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
     }
 }

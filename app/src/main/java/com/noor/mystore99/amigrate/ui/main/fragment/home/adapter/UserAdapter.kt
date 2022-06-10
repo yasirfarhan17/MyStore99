@@ -2,6 +2,8 @@ package com.noor.mystore99.amigrate.ui.main.fragment.home.adapter
 
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +15,11 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
+import com.example.networkmodule.model.ProductModelNew
+import com.example.networkmodule.util.Util.bitMapToString
 import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.MainActivity
+import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
 import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
 import com.noor.mystore99.databinding.IndiviewProductsBinding
@@ -50,9 +55,11 @@ class UserAdapter(
                 tvName.text = item.products_name
                 tvMrp.text = item.price
                 tvHindiName.text = item.HindiName
-                imgProductImage.load(item.img?.decodeToBitmap()) {
+                imgProductImage.load(item.img) {
                     transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_home_black_24dp)
                 }
+                Log.d("insideAdapter"," ${item.img}")
 
                 if(callBack.searchInCartDB(item.products_name.toString())){
                     btAddToCart.visibility=View.GONE
@@ -75,7 +82,7 @@ class UserAdapter(
                 }
 
                 val cartEntity =
-                    CartEntity(item.products_name, item.price, item.img, item.quant,"1", item.price)
+                    CartEntity(item.products_name!!, item.price, item.img, item.quant,"1", item.price)
                 btAddToCart.setOnClickListener {
                     //viewModel.insertToCartDb(cartEntity)
                     callBack.onItemClick(cartEntity)

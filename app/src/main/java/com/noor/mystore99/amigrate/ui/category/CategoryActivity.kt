@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
+import com.example.networkmodule.model.ProductModelNew
+import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
@@ -29,6 +31,7 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
     }
 
     override val viewModel: CategoryViewModel by viewModels()
+    var arrNew= ArrayList<ProductEntity>()
 
     override fun layoutId(): Int = R.layout.activity_category
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,8 +65,9 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
                         val list = it.map { productModel -> productModel.toProductEntity() }
                         val localList=ArrayList<ProductEntity>()
                         var flagNotFound=false
-                        if(p0 ==null || p0.isEmpty())
-                            localList.addAll(list)
+                        if(p0 ==null || p0.isEmpty()){
+                           localList.addAll(list)
+                        }
                         else{
                             for(item in list){
                                 if(item.products_name.lowercase(Locale.ENGLISH).contains(p0.toString().lowercase(

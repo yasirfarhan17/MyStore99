@@ -1,14 +1,20 @@
 package com.example.networkmodule.repository
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.ProductModel
+import com.example.networkmodule.model.ProductModelNew
 import com.example.networkmodule.model.SliderModel
 import com.example.networkmodule.network.FirebaseKey
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.example.networkmodule.util.Util
+import com.example.networkmodule.util.Util.decodeToBitmap
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +30,9 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
 ) : FirebaseDatabaseRepository {
 
     override suspend fun getAllProduct() = callbackFlow<Result<List<ProductModel>>> {
+//        val storageReference= FirebaseStorage.getInstance().getReference()
+//        var arrNew= ArrayList<ProductModelNew>()
+//        val reference=FirebaseDatabase.getInstance().getReference("NewCategoryProduct")
         val postListener = object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
@@ -35,8 +44,30 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                     it.children.forEach { ittt ->
                         val productLocal = ittt.getValue(ProductModel::class.java)
                         productLocal?.let { it1 ->
+//                                val imageBitmap=it1.img?.decodeToBitmap()
+//                                val uri= Util.getImageUri(context, imageBitmap!!)
+//                                val ref: StorageReference =storageReference.child(System.currentTimeMillis().toString())
+//                                ref.putFile(uri!!).addOnSuccessListener(object :
+//                                    OnSuccessListener<UploadTask.TaskSnapshot> {
+//                                    override fun onSuccess(p0: UploadTask.TaskSnapshot?) {
+//                                        p0!!.metadata!!.reference!!.downloadUrl.addOnSuccessListener(object:OnSuccessListener<Uri>{
+//                                            override fun onSuccess(p0: Uri?) {
+//                                                val url=p0.toString()
+//                                                val productModelNew= ProductModelNew(it1.products_name,it1.price,url,it1.quant,it1.hindiName,it1.stock)
+//                                                arrNew.add(productModelNew)
+//                                                Log.d("insideRepo","$url ${dataSnapshot.value} ${ittt.key}  $arrNew")
+//
+//                                                reference.child(it.key!!).child(it1.products_name.toString()).setValue(productModelNew)
+//                                            }
+//
+//                                        })
+//
+//                                            }
+//
+//                                })
                             list.add(it1)
                         }
+
                     }
                 }
                 Log.d("SAHIL__", "product " + list.size.toString())

@@ -75,15 +75,22 @@ class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
 
     private fun payUsingUpi(name: String, upiId: String, note: String, amount: String) {
         Log.e("main ", "name $name--up--$upiId--$note--$amount")
-        val uri = Uri.parse("upi://pay").buildUpon()
-            .appendQueryParameter("pa", upiId)
-            .appendQueryParameter("mc", "")
-            .appendQueryParameter("tr", combo)
-            .appendQueryParameter("pn", name)
-            .appendQueryParameter("tn", note)
-            .appendQueryParameter("am", amount)
-            .appendQueryParameter("cu", "INR") //.appendQueryParameter("refUrl", "blueapp")
-            .build()
+
+        val uri=Uri.Builder()
+                .scheme("upi")
+                .authority("pay")
+                .appendQueryParameter("pa", upiId)
+                .appendQueryParameter("am", amount)
+                .appendQueryParameter("pn", name)
+                .appendQueryParameter("cu", "INR")
+                .appendQueryParameter("mc", "BCR2DN6T6W7PZD7")
+                .appendQueryParameter("mode", "04")
+                .appendQueryParameter("orgid", "189999")
+                .appendQueryParameter("sign", "MEYCIQC8bLDdRbDhpsPAt9wR1a0pcEssDaV")
+                .appendQueryParameter("tr", combo)
+                .appendQueryParameter("tn", note)
+                 //.appendQueryParameter("refUrl", "blueapp")
+                .build()
 
 
         val upiPayIntent = Intent(Intent.ACTION_VIEW)

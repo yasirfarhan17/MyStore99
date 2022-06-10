@@ -30,6 +30,8 @@ interface CartDao {
 
     @Query("UPDATE cartTable SET total = :price,quant=:quant WHERE products_name like :id")
     fun update(price: String, id: String,quant:String)
+    @Query("UPDATE cartTable SET img = :img WHERE products_name like :id")
+    fun update(img: String, id: String)
 
     @Query("SELECT COUNT(*) FROM cartTable")
     fun getCount(): Flow<Int?>

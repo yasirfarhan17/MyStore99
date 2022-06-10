@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.networkmodule.model.DashBoardModel
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
-import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
+import com.noor.mystore99.amigrate.ui.dashboard.account.myorder.MyOrder
 import com.noor.mystore99.databinding.ActivityMain2Binding
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(),DashBoardCallBack {
 
     private var _binding: ActivityMain2Binding? = null
 
@@ -41,7 +41,7 @@ class DashboardFragment : Fragment() {
         arr.add(DashBoardModel(R.drawable.ic_signout,"Log Out"))
         binding.rvDash.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.rvDash.adapter=DashBoardAdapter()
+        binding.rvDash.adapter=DashBoardAdapter(this)
         (binding.rvDash.adapter as DashBoardAdapter).submitList(arr)
 
         //setSingleEvent(binding.grid)
@@ -93,5 +93,13 @@ class DashboardFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(productName: String) {
+        if(productName.equals("My Order"))
+        {
+            val intent=Intent(activity,MyOrder::class.java)
+            startActivity(intent)
+        }
     }
 }

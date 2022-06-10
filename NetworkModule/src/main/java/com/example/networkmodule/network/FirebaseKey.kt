@@ -1,7 +1,7 @@
 package com.example.networkmodule.network
 
 object FirebaseKey {
-    const val GET_ALL_PRODUCT_KEY = "CategoryProducts"
+    const val GET_ALL_PRODUCT_KEY = "NewCategoryProduct"
     const val GET_BANNER_KEY = "Banner"
     const val GET_CART_KEY = "Cart"
     const val GET_CATEGORY_KEY = "Category"

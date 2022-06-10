@@ -23,9 +23,6 @@ class FireBaseCategoryUseCase @Inject constructor(
                     if (list == null) {
                         send(Resource.Error("No Product Found"))
                     } else {
-                        list.forEach { productModel ->
-                            productModel.img = productModel.img?.reduceBase64ImageSize(500)
-                        }
                         withContext(Dispatchers.Main) {
                             send(Resource.Success(list))
                         }

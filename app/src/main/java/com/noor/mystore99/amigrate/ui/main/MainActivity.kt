@@ -11,7 +11,6 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MutableLiveData
@@ -48,16 +47,7 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
 
     override val viewModel: MainViewModel by viewModels()
-     val userModelModel: UserViewModel by viewModels()
-    val currentDate1 = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-    val currentTime1 = SimpleDateFormat("HHmmss", Locale.getDefault()).format(Date())
-    lateinit var fm : FragmentTransaction
 
-    private val userFragment=UserFragment()
-    private val dashBoard=DashboardFragment()
-    companion object{
-        var prductCount=0
-    }
 
 
     @Inject
@@ -66,72 +56,31 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
     override fun layoutId(): Int = R.layout.activity_main3
 
 
-    private val PREF_PAUSE_TIME_KEY = "exit_time"
 
-    private val MILLIS_IN_DAY = 86400000L
-
-    private val TRIGGER_HOUR = 11
-    private val TRIGGER_MIN = 60000L
-    private val TRIGGER_SEC = 0
-
-    private val handler: Handler = Handler()
-    private var _productList = MutableLiveData<ArrayList<ProductModel>>()
-    val productList = _productList.toLiveData()
     protected val _viewState = MutableLiveData<ViewState>(ViewState.Idle)
     val viewState = _viewState.toLiveData()
 
-    private val calendar = Calendar.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setNavView()
 
-        val calendar  =Calendar.getInstance()
-        val time=calendar.timeInMillis
-//        val timeHours= abs(currentTime1.toInt() - 222500)20220529
-//        val time : Long=((timeHours*3600)*1000).toLong()
-        val timeTenSeconds=1000*10
-        //addItemRunnable.run()
-        Log.d("checkingTime", "${prefsUtil.date} ${prefsUtil.time}")
        // insertDataToFirebase((time+timeTenSeconds))
 
     }
-    override fun onPause() {
-        super.onPause()
-
-        // Save pause time so items can be added on resume.
-
-
-        // Cancel handler callback to add item.
-        //handler.removeCallbacks(addItemRunnable)
-    }
 
     private fun setNavView() {
-        replaceFragment(userFragment)
         val navView: BottomNavigationView = binding.bottomNavigationView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-//        navView.setupWithNavController(navController)
-        navView.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.navigation_home -> replaceFragment(userFragment)
-                R.id.navigation_user -> replaceFragment(dashBoard)
-            }
-            true
-        }
+        navView.setupWithNavController(navController)
         binding.fabBtCart.setOnClickListener {
             val intent=Intent(this,CartActivity::class.java)
             startActivity(intent)
         }
 
         }
-    private fun replaceFragment(fragment: Fragment){
-        if(fragment != null){
-            val transaction=supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.nav_host_fragment_activity_main,fragment)
-            transaction.commit()
-        }
-    }
+
 
 
     override fun addObservers() {
@@ -149,13 +98,6 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
         }
     }
 
-    fun insertDataToFirebase(timeInMilli:Long){
-        val alarmManager :AlarmManager= getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent=Intent(this,SetFirebaseDataReciver::class.java)
-        val pendingIntent=PendingIntent.getBroadcast(this,0,intent,0)
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,timeInMilli,AlarmManager.INTERVAL_DAY,pendingIntent)
-        //snacToast.makeText(this,"inside Alarm manager",Toast.LENGTH_SHORT).show()
-    }
 
 
 

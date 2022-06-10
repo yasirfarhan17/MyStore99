@@ -9,6 +9,7 @@ import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.CartModel
 import com.example.networkmodule.util.Util.decodeToBitmap
+import com.noor.mystore99.R
 import com.noor.mystore99.databinding.IndiviewCheckoutBinding
 
 class CheckoutAdapter :RecyclerView.Adapter<CheckoutAdapter.CheckOutViewHolder>() {
@@ -31,21 +32,20 @@ class CheckoutAdapter :RecyclerView.Adapter<CheckoutAdapter.CheckOutViewHolder>(
                 lastPrice.text="₹ "+item.price
                 finalAmount.text="₹ "+item.total
                 lastQuantity.text=" x "+item.quant
-                item.img!!.decodeToBitmap(500)?.let {
-                    imgCheckout.load(it) {
+                    imgCheckout.load(item.img) {
                         transformations(CircleCropTransformation())
+                        placeholder(R.drawable.ic_home_black_24dp)
                     }
-                }
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckOutViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckoutAdapter.CheckOutViewHolder {
         val binding=IndiviewCheckoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return CheckOutViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CheckOutViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CheckoutAdapter.CheckOutViewHolder, position: Int) {
         holder.bind(items[position])
     }
 

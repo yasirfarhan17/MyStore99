@@ -31,7 +31,7 @@ import javax.inject.Inject
     val productList = _productList.toLiveData()
     override fun onReceive(p0: Context?, p1: Intent?) {
 
-        getAllProducts()
+        //getAllProducts()
         Toast.makeText(p0,"InsideBroadCast",Toast.LENGTH_SHORT).show()
     }
 

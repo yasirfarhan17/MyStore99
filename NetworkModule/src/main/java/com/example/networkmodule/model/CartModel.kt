@@ -1,5 +1,6 @@
 package com.example.networkmodule.model
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import com.example.networkmodule.database.entity.CartEntity
 import kotlinx.parcelize.Parcelize

@@ -8,6 +8,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.util.Util.decodeToBitmap
+import com.noor.mystore99.R
 import com.noor.mystore99.databinding.IndiviewCartBinding
 
 class CartAdapter(
@@ -41,12 +42,10 @@ class CartAdapter(
                 tvCartType.text = "₹ "+item.price
                 tvCurrentQuant.text=item.quant
                 total.text = "₹ "+item.total
-                item.img!!.decodeToBitmap(500)?.let {
-                    imgCart.load(it) {
+                    imgCart.load(item.img) {
                         transformations(CircleCropTransformation())
+                        placeholder(R.drawable.ic_home_black_24dp)
                     }
-                }
-
                 btIncrease.setOnClickListener {
                     item.quant= (item.quant?.toInt()?.plus(1)).toString()
                     item.total= (item.price?.toInt()?.times(item.quant!!.toInt())).toString()
@@ -77,7 +76,7 @@ class CartAdapter(
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartAdapter.CartViewHolder {
         val binding =
             IndiviewCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CartViewHolder(binding)

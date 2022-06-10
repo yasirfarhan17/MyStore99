@@ -1,11 +1,14 @@
 package com.noor.mystore99.amigrate.ui.auth.login
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.SharedMemory
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.core.content.edit
 import com.example.networkmodule.model.UserModel
 import com.example.networkmodule.network.AuthResource
 import com.google.firebase.auth.FirebaseAuth

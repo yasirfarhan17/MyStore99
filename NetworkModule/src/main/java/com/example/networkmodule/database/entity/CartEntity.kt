@@ -1,5 +1,6 @@
 package com.example.networkmodule.database.entity
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -3,6 +3,7 @@ package com.noor.mystore99.amigrate.ui.main.fragment.dashboard
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -14,8 +15,12 @@ import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
 import com.noor.mystore99.databinding.IndiviewCategoryBinding
 import com.noor.mystore99.databinding.IndiviewDashboardBinding
 
-class DashBoardAdapter  :
+class DashBoardAdapter(
+    val callBack: DashboardFragment
+)  :
     RecyclerView.Adapter<DashBoardAdapter.DashBoardViewHolder>() {
+
+
 
 
     private val item = ArrayList<DashBoardModel>()
@@ -38,6 +43,10 @@ class DashBoardAdapter  :
 //                constraintLayout.setOnClickListener {
 //                    //callback.onItemClick(item.categoryName)
 //                }
+                tvDash.setOnClickListener {
+                    callBack.onItemClick(item.name.toString())
+                }
+
             }
         }
     }
@@ -57,6 +66,6 @@ class DashBoardAdapter  :
 
 }
 
-interface CategoryAdapterCallback {
+interface DashBoardCallBack {
     fun onItemClick(productName: String)
 }

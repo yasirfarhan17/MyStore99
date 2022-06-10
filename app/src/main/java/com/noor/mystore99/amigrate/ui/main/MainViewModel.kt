@@ -40,26 +40,26 @@ class MainViewModel @Inject constructor(
 
 
 
-     fun getAllProducts () {
-
-        GlobalScope.launch(Dispatchers.IO) {
-            productUseCase.invoke().collect {
-                when (it) {
-                    is Resource.Success -> {
-                        _productList.postValue(it.data as ArrayList<ProductModel>)
-                        //_viewState.postValue(ViewState.Success())
-                    }
-                    is Resource.Error -> {
-                        // _viewState.postValue(ViewState.Error(it.message))
-                    }
-                    is Resource.Loading -> {
-                        //_viewState.postValue(ViewState.Loading)
-                    }
-                }
-            }
-        }
-
-    }
+//     fun getAllProducts () {
+//
+//        GlobalScope.launch(Dispatchers.IO) {
+//            productUseCase.invoke().collect {
+//                when (it) {
+//                    is Resource.Success -> {
+//                        _productList.postValue(it.data as ArrayList<ProductModel>)
+//                        //_viewState.postValue(ViewState.Success())
+//                    }
+//                    is Resource.Error -> {
+//                        // _viewState.postValue(ViewState.Error(it.message))
+//                    }
+//                    is Resource.Loading -> {
+//                        //_viewState.postValue(ViewState.Loading)
+//                    }
+//                }
+//            }
+//        }
+//
+//    }
 
     private fun getCartItemCountUseCase() {
         launch {
