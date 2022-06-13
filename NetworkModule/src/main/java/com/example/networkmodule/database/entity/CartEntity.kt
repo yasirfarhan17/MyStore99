@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "cartTable")
 data class CartEntity(
-    @PrimaryKey @ColumnInfo val products_name: String,
+    @PrimaryKey @ColumnInfo val products_name: String="",
     @ColumnInfo val price: String? = null,
     @ColumnInfo val img: String? = null,
     @ColumnInfo val weight: String? = null,

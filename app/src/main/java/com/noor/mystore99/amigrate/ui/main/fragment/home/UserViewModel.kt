@@ -108,7 +108,7 @@ class UserViewModel @Inject constructor(
                 _viewState.postValue(ViewState.Error("Phone no cannot be blank"))
                 return@launch
             }
-            addToCartUseCase.invoke(list).collectLatest {
+            addToCartUseCase.invoke(item).collectLatest {
                 _insertToCart.postValue(it.data ?: it.message)
             }
         }

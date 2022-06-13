@@ -2,12 +2,15 @@ package com.example.networkmodule.repository
 
 import android.util.Log
 import com.example.networkmodule.database.entity.CartEntity
+import com.example.networkmodule.model.CartModel
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.ProductModel
 import com.example.networkmodule.model.SliderModel
 import com.example.networkmodule.network.FirebaseKey
 import com.example.networkmodule.storage.PrefsUtil
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.FirebaseException
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -20,6 +23,7 @@ import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
+
 
 class FirebaseDatabaseRepositoryImpl @Inject constructor(
     @Named(FirebaseKey.PRODUCT_DATABASE_REF) private val productDbRef: DatabaseReference,
@@ -160,12 +164,10 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun addItemToCart(cartItemList: ArrayList<CartEntity>): Flow<Result<String>> =
+    override suspend fun addItemToCart(cartItemList: CartEntity): Flow<Result<String>> =
         flow {
-            val taskk = cartDbRef.child(prefsUtil.Name!!).setValue(cartItemList)
-            if (taskk.isSuccessful || taskk.isComplete) {
-                emit(Result.success("Item Added Successfully"))
-            } else emit(Result.failure(FirebaseSomethingWentWrong()))
+            cartDbRef.child(prefsUtil.Name!!).child(cartItemList.products_name).setValue(cartItemList)
+            emit(Result.success("Item Added Successfully"))
         }
 
 
@@ -180,9 +182,13 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                     val cartList = ArrayList<CartEntity>()
                     snapshot.children.forEach {
                         Log.d("SAHIL_CART", "cart $it")
-                        val cartItem = it.getValue(CartEntity::class.java)
+                        val cartItem = it.getValue(CartModel::class.java)?.toCartEntity()
                         Log.d("SAHIL_CART", "cart $snapshot")
-                        cartItem?.let { it1 -> cartList.add(it1) }
+                        cartItem.let { it1 ->
+                            if (it1 != null) {
+                                cartList.add(it1)
+                            }
+                        }
                     }
                     this@callbackFlow.trySendBlocking(Result.success(cartList.toList()))
                 }

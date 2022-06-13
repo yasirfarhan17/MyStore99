@@ -12,7 +12,7 @@ interface FirebaseDatabaseRepository {
     suspend fun getBanner(): Flow<Result<List<SliderModel>>>
     suspend fun getCategory(): Flow<Result<List<CategoryModel>>>
     suspend fun getAllCategoryProduct(productName: String): Flow<Result<List<ProductModel>>>
-    suspend fun addItemToCart(cartItemList: ArrayList<CartEntity>): Flow<Result<String>>
+    suspend fun addItemToCart(cartItemList: CartEntity): Flow<Result<String>>
     suspend fun getCart(): Flow<Result<List<CartEntity>>>
 
 }

@@ -11,7 +11,7 @@ import javax.inject.Inject
 class FireBaseAddToCartUseCase @Inject constructor(
     private val firebaseDatabaseRepository: FirebaseDatabaseRepository
 ) {
-    operator fun invoke(cartItemList: ArrayList<CartEntity>): Flow<Resource<String>> = channelFlow {
+    operator fun invoke(cartItemList: CartEntity): Flow<Resource<String>> = channelFlow {
         send(Resource.Loading())
         firebaseDatabaseRepository.addItemToCart(cartItemList = cartItemList).collectLatest {
             if (it.isSuccess) {
