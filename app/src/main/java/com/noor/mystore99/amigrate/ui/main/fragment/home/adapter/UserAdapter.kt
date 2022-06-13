@@ -61,13 +61,6 @@ class UserAdapter(
                 }
                 Log.d("insideAdapter"," ${item.img}")
 
-                if(callBack.searchInCartDB(item.products_name.toString())){
-                    btAddToCart.visibility=View.GONE
-                    outofstock.visibility=View.GONE
-                    btMinus.visibility=View.VISIBLE
-                    btIncrease.visibility=View.VISIBLE
-                    tvCurrentQuant.visibility=View.VISIBLE
-                }
 
                 if(item.stock.equals("no")){
                     btAddToCart.visibility=View.GONE
@@ -81,16 +74,14 @@ class UserAdapter(
                     tvCurrentQuant.visibility=View.GONE
                 }
 
-                val cartEntity =
-                    CartEntity(item.products_name!!, item.price, item.img, item.quant,"1", item.price)
+                val cartEntity = CartEntity(item.products_name, item.price, item.img, item.quant,"1", item.price)
                 btAddToCart.setOnClickListener {
-                    //viewModel.insertToCartDb(cartEntity)
                     callBack.onItemClick(cartEntity)
                     btAddToCart.visibility=View.GONE
                     btMinus.visibility=View.VISIBLE
                     btIncrease.visibility=View.VISIBLE
                     tvCurrentQuant.visibility=View.VISIBLE
-                    Toast.makeText(it.context, "Item Added successfully", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(it.context, "Item Added successfully", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -115,5 +106,5 @@ class UserAdapter(
 
 interface UserAdapterCallBack{
     fun onItemClick(cartEntity: CartEntity)
-    fun searchInCartDB(id:String) :Boolean
+    fun searchInCartDB(id:String)
 }

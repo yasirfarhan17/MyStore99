@@ -40,9 +40,9 @@ public class sliderAdapter extends PagerAdapter {
 
         }
         ImageView banner = view.findViewById(R.id.banner_slide);
-        byte[] decodedString = Base64.decode(sliderModelList.get(position).getBanner(), Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        Glide.with(container.getContext()).load(decodedByte).apply(new RequestOptions().placeholder(R.drawable.ic_home_black_24dp)).into(banner);
+       // byte[] decodedString = Base64.decode(sliderModelList.get(position).getBanner(), Base64.DEFAULT);
+        //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        //Glide.with(container.getContext()).load(decodedByte).apply(new RequestOptions().placeholder(R.drawable.ic_home_black_24dp)).into(banner);
         container.addView(view, 0);
         return view;
     }

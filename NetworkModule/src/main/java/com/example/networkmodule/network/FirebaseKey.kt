@@ -12,6 +12,7 @@ object FirebaseKey {
 
     //database named parameters
     const val PRODUCT_DATABASE_REF = "PRODUCT_DATABASE_REF"
+    const val ADD_TO_CART_DATABASE_REF = "ADD_TO_CART_DATABASE_REF"
     const val BANNER_DATABASE_REF = "BANNER_DATABASE_REF"
     const val CART_DATABASE_REF = "CART_DATABASE_REF"
     const val CATEGORY_DATABASE_REF = "CATEGORY_DATABASE_REF"

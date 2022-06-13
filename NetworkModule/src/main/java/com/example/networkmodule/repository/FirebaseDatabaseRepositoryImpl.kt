@@ -1,20 +1,17 @@
 package com.example.networkmodule.repository
 
-import android.content.Context
-import android.net.Uri
 import android.util.Log
+import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.ProductModel
-import com.example.networkmodule.model.ProductModelNew
 import com.example.networkmodule.model.SliderModel
 import com.example.networkmodule.network.FirebaseKey
-import com.example.networkmodule.util.Util
-import com.example.networkmodule.util.Util.decodeToBitmap
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
+import com.example.networkmodule.storage.PrefsUtil
+import com.google.firebase.FirebaseException
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
@@ -27,12 +24,11 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
     @Named(FirebaseKey.PRODUCT_DATABASE_REF) private val productDbRef: DatabaseReference,
     @Named(FirebaseKey.BANNER_DATABASE_REF) private val bannerDbRef: DatabaseReference,
     @Named(FirebaseKey.CATEGORY_DATABASE_REF) private val categoryDbRef: DatabaseReference,
+    @Named(FirebaseKey.CART_DATABASE_REF) private val cartDbRef: DatabaseReference,
+    private val prefsUtil: PrefsUtil
 ) : FirebaseDatabaseRepository {
 
     override suspend fun getAllProduct() = callbackFlow<Result<List<ProductModel>>> {
-//        val storageReference= FirebaseStorage.getInstance().getReference()
-//        var arrNew= ArrayList<ProductModelNew>()
-//        val reference=FirebaseDatabase.getInstance().getReference("NewCategoryProduct")
         val postListener = object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
@@ -162,6 +158,55 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                 productDbRef.removeEventListener(postListener)
             }
         }
+
+    override suspend fun addItemToCart(cartItemList: ArrayList<CartEntity>): Flow<Result<String>> =
+        callbackFlow {
+            val postListener = object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
+                }
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                   val taskk= cartDbRef.child(prefsUtil.phoneNo!!).setValue(cartItemList)
+                    if (taskk.isSuccessful){
+                        this@callbackFlow.trySendBlocking(Result.success("Item Added Successfully"))
+                    }else if (taskk.isCanceled){
+                        this@callbackFlow.trySendBlocking(Result.failure(FirebaseSomethingWentWrong()))
+
+                    }else if(taskk.isComplete){
+                        this@callbackFlow.trySendBlocking(Result.success("Item Added Successfully"))
+                    }
+                }
+            }
+            cartDbRef.child(prefsUtil.phoneNo!!).addValueEventListener(postListener)
+            awaitClose {
+                cartDbRef.child(prefsUtil.phoneNo!!).removeEventListener(postListener)
+            }
+        }
+
+    override suspend fun getCart(): Flow<Result<List<CartEntity>>> =
+        callbackFlow {
+            val postListener = object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
+                }
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val cartList = ArrayList<CartEntity>()
+                    snapshot.children.forEach {
+                        Log.d("SAHIL_CART", "cart $it")
+                        val cartItem = it.getValue(CartEntity::class.java)
+                        Log.d("SAHIL_CART", "cart $snapshot")
+                        cartItem?.let { it1 -> cartList.add(it1) }
+                    }
+                    this@callbackFlow.trySendBlocking(Result.success(cartList.toList()))
+                }
+            }
+            cartDbRef.child(prefsUtil.phoneNo!!).addValueEventListener(postListener)
+            awaitClose {
+                cartDbRef.child(prefsUtil.phoneNo!!).removeEventListener(postListener)
+            }
+        }
+
 }
 
-class UnknownOrWrongNodeException : IOException("Firebase node doesn't exist")
+    class UnknownOrWrongNodeException : IOException("Firebase node doesn't exist")
+    class FirebaseSomethingWentWrong : FirebaseException("Something went wrong")

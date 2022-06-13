@@ -19,13 +19,14 @@ object FirebaseManager {
         return firebaseDatabase.reference.child(FirebaseKey.GET_ALL_PRODUCT_KEY)
     }
 
+    fun getCartDatabaseRef(firebaseDatabase: FirebaseDatabase): DatabaseReference {
+        return firebaseDatabase.reference.child(FirebaseKey.GET_CART_KEY)
+    }
+
     fun getBannerDatabaseRef(firebaseDatabase: FirebaseDatabase): DatabaseReference {
         return firebaseDatabase.reference.child(FirebaseKey.GET_BANNER_KEY)
     }
 
-    fun getCartDatabaseRef(firebaseDatabase: FirebaseDatabase): DatabaseReference {
-        return firebaseDatabase.reference.child(FirebaseKey.GET_CART_KEY)
-    }
 
     fun getUserDatabaseRef(firebaseDatabase: FirebaseDatabase): DatabaseReference {
         return firebaseDatabase.reference.child(FirebaseKey.GET_USER_KEY)

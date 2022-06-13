@@ -193,8 +193,10 @@ object FirebaseModule {
         @Named(FirebaseKey.PRODUCT_DATABASE_REF) productDbRef: DatabaseReference,
         @Named(FirebaseKey.CATEGORY_DATABASE_REF) categoryDbRef: DatabaseReference,
         @Named(FirebaseKey.BANNER_DATABASE_REF) bannerDbRef: DatabaseReference,
+        @Named(FirebaseKey.CART_DATABASE_REF) cartDbRef: DatabaseReference,
+        prefsUtil: PrefsUtil
     ): FirebaseDatabaseRepository {
-        return FirebaseDatabaseRepositoryImpl(productDbRef, bannerDbRef, categoryDbRef)
+        return FirebaseDatabaseRepositoryImpl(productDbRef, bannerDbRef, categoryDbRef,cartDbRef,prefsUtil)
     }
 
 

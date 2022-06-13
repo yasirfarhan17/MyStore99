@@ -28,9 +28,9 @@ class CategoryAdapter(val callback: CategoryAdapterCallback) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CategoryModel) {
             with(binding) {
-                imgCategoryIcon.load(item.categoryIconLink.decodeToBitmap(60)) {
+               /* imgCategoryIcon.load(item.categoryIconLink.decodeToBitmap(60)) {
                     transformations(CircleCropTransformation())
-                }
+                }*/
                 tvCategoryName.text = item.categoryName.uppercase()
                 constraintLayout.setOnClickListener {
                     callback.onItemClick(item.categoryName)

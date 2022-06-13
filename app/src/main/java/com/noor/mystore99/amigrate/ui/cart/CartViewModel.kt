@@ -7,12 +7,12 @@ import com.example.networkmodule.database.dao.CartDao
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.usecase.ClearCartItemsUseCase
+import com.example.networkmodule.usecase.FireBaseCartUseCase
 import com.example.networkmodule.usecase.GetCartItemsUseCase
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -24,6 +24,8 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val getCartItemsUseCase: GetCartItemsUseCase,
     private val clearCartItemsUseCase: ClearCartItemsUseCase,
+    private val getCart: FireBaseCartUseCase,
+
     private val dao: CartDao
 ) : BaseViewModel() {
 
@@ -31,16 +33,16 @@ class CartViewModel @Inject constructor(
     val cartFromDB = _cartFromDB.toLiveData()
 
     init {
-        viewModelScope.launch (Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             getCartFromDB()
         }
     }
 
 
-     suspend fun getCartFromDB() {
+    suspend fun getCartFromDB() {
         launch {
             _viewState.postValue(ViewState.Loading)
-            getCartItemsUseCase().collectLatest {
+            getCart().collectLatest {
                 when (it) {
                     is Resource.Success -> {
                         _cartFromDB.postValue(it.data as ArrayList<CartEntity>)
@@ -60,9 +62,9 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun updateQuant(price:String,id:String,quant:String){
+    fun updateQuant(price: String, id: String, quant: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.update(price,id,quant)
+            dao.update(price, id, quant)
         }
     }
 
@@ -75,7 +77,8 @@ class CartViewModel @Inject constructor(
 
         }
     }
-    fun clear(id:String){
+
+    fun clear(id: String) {
         launch {
             //_viewState.postValue(ViewState.Loading)
             dao.clearIndi(id)
