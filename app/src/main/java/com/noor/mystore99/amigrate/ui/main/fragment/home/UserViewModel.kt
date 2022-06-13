@@ -104,7 +104,7 @@ class UserViewModel @Inject constructor(
         launch {
             val list = ArrayList<CartEntity>()
             list.add(item)
-            if (prefsUtil.phoneNo.isNullOrEmpty()) {
+            if (prefsUtil.Name.isNullOrEmpty()) {
                 _viewState.postValue(ViewState.Error("Phone no cannot be blank"))
                 return@launch
             }

@@ -16,6 +16,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
@@ -160,28 +161,13 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
         }
 
     override suspend fun addItemToCart(cartItemList: ArrayList<CartEntity>): Flow<Result<String>> =
-        callbackFlow {
-            val postListener = object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                    this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
-                }
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                   val taskk= cartDbRef.child(prefsUtil.phoneNo!!).setValue(cartItemList)
-                    if (taskk.isSuccessful){
-                        this@callbackFlow.trySendBlocking(Result.success("Item Added Successfully"))
-                    }else if (taskk.isCanceled){
-                        this@callbackFlow.trySendBlocking(Result.failure(FirebaseSomethingWentWrong()))
-
-                    }else if(taskk.isComplete){
-                        this@callbackFlow.trySendBlocking(Result.success("Item Added Successfully"))
-                    }
-                }
-            }
-            cartDbRef.child(prefsUtil.phoneNo!!).addValueEventListener(postListener)
-            awaitClose {
-                cartDbRef.child(prefsUtil.phoneNo!!).removeEventListener(postListener)
-            }
+        flow {
+            val taskk = cartDbRef.child(prefsUtil.Name!!).setValue(cartItemList)
+            if (taskk.isSuccessful || taskk.isComplete) {
+                emit(Result.success("Item Added Successfully"))
+            } else emit(Result.failure(FirebaseSomethingWentWrong()))
         }
+
 
     override suspend fun getCart(): Flow<Result<List<CartEntity>>> =
         callbackFlow {
@@ -189,6 +175,7 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                 override fun onCancelled(error: DatabaseError) {
                     this@callbackFlow.trySendBlocking(Result.failure(error.toException()))
                 }
+
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val cartList = ArrayList<CartEntity>()
                     snapshot.children.forEach {
@@ -200,13 +187,13 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                     this@callbackFlow.trySendBlocking(Result.success(cartList.toList()))
                 }
             }
-            cartDbRef.child(prefsUtil.phoneNo!!).addValueEventListener(postListener)
+            cartDbRef.child(prefsUtil.Name!!).addValueEventListener(postListener)
             awaitClose {
-                cartDbRef.child(prefsUtil.phoneNo!!).removeEventListener(postListener)
+                cartDbRef.child(prefsUtil.Name!!).removeEventListener(postListener)
             }
         }
 
 }
 
-    class UnknownOrWrongNodeException : IOException("Firebase node doesn't exist")
-    class FirebaseSomethingWentWrong : FirebaseException("Something went wrong")
+class UnknownOrWrongNodeException : IOException("Firebase node doesn't exist")
+class FirebaseSomethingWentWrong : FirebaseException("Something went wrong")
