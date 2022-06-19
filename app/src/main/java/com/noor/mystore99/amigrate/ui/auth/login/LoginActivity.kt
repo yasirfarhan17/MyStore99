@@ -7,12 +7,18 @@ import android.os.SharedMemory
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.edit
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import com.example.networkmodule.model.UserModel
 import com.example.networkmodule.network.AuthResource
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.auth.AuthManager
@@ -21,6 +27,7 @@ import com.noor.mystore99.amigrate.util.Util.flipCard
 import com.noor.mystore99.amigrate.util.extension.StringExtension.isValidPhoneNumber
 import com.noor.mystore99.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
@@ -50,6 +57,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun addListener() {
         with(binding) {
             tvSignUp.setOnClickListener {
@@ -60,8 +68,20 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
             }
             matBtLogin.setOnClickListener {
                 doLogin()
+//                val intent=Intent(this@LoginActivity,MainActivity::class.java)
+//                startActivity(intent)
 
 
+
+            }
+            matBtSetlogin.setOnClickListener {
+                setPassWord()
+            }
+            cvLoginPage.setOnClickListener {
+                flipCard(cvLogin,cvForget){showMessage(it)}
+            }
+            tvForget.setOnClickListener {
+                flipCard(binding.cvForget,cvLogin){showMessage(it)}
             }
             matBtRegister.setOnClickListener {
                 doRegister()
@@ -156,6 +176,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
 
             })
 
+
             veryfy.setOnClickListener {
                 if(etOtp1.text!=null && etOtp2.text!=null && etOtp3.text!=null &&etOtp4.text!=null &&etOtp5.text!=null &&etOtp6.text!=null) {
                     val otpValue:String = etOtp1.text.toString() + etOtp2.text.toString() + etOtp3.text.toString() + etOtp4.text.toString() + etOtp5.text.toString() + etOtp6.text.toString()
@@ -163,8 +184,34 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                     Log.d("verify",otpValue)
                 }
             }
+
         }
     }
+
+    private fun setPassWord(){
+        if (binding.txtInputEtSetPhone.text.isNullOrEmpty()) {
+            binding.txtInputEtSetPhone.error = "Phone no cannot be blank."
+
+        }
+        if (binding.txtInputEtSetPhone.text.toString().isValidPhoneNumber().not()) {
+            binding.txtInputEtSetPhone.error = "Enter correct phone number."
+        }
+        if (binding.txtInputEtSetpassword.text.isNullOrEmpty()) {
+            binding.txtInputEtSetpassword.error = "Password cannot be black."
+
+        }
+        if (binding.txtInputEtConfirmpassword.text.isNullOrEmpty()) {
+            binding.txtInputEtConfirmpassword.error = "Confirm Password cannot be black."
+
+        }
+        if (binding.txtInputEtSetpassword.text == binding.txtInputEtConfirmpassword.text) {
+            showToast("Password and Confirm password must be same")
+
+        }
+        getOtp("+91"+binding.txtInputEtSetPhone.text.toString())
+    }
+
+
 
     private fun doRegister() {
         if (binding.txtInputEtPhoneSignUp.text.isNullOrEmpty()) {
@@ -195,6 +242,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
     private fun getOtp(phoneNumber: String) {
         authManager.sendOtp(phoneNumber, false)
     }
+
+
+
 
 
     private fun doLogin() {
@@ -240,9 +290,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                 }
                 AuthResource.OtpRequired -> showMessage("Otp is required")
                 AuthResource.OtpSend -> {
+                    if(binding.txtInputEtNameSignUp.text.isNullOrEmpty()) {
+
+                        flipCard(binding.cvOtp, binding.cvRegister) { showToast(it) }
+                        Log.d("checkOtp", "" + it)
+                    }
+                    else{
+                        flipCard(binding.cvOtp, binding.cvForget) { showToast(it) }
+                        Log.d("checkOtp", "" + it)
+                    }
                     showToast("Otp Sent Successfully")
-                    flipCard(binding.cvOtp,binding.cvRegister) { showToast(it) }
-                    Log.d("checkOtp",""+it)
 
                 }
                 AuthResource.Success -> {
@@ -251,12 +308,30 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
 //                        prefsUtil.Name = binding.txtInputEtPhoneSignUp.text.toString()
 //                        prefsUtil.password = binding.txtInputEtCnfrmPasswordSignUp.text.toString()
 //                    }
-                    with(binding){
-                        val obj = UserModel(address = null,pincode = null,name = txtInputEtNameSignUp.text.toString(),password = txtInputEtPasswordSignUp.text.toString(),uid = FirebaseAuth.getInstance().uid!!,otpVerified = true)
-                        obj?.name?.let { it1 -> Log.d("checkObj", it1) }
-                        users.child(txtInputEtPhoneSignUp.text.toString()).setValue(obj)
-                        showToast("Register Successfully")
+                    if(binding.txtInputEtNameSignUp.text.isNullOrEmpty()){
+                        val ref1=FirebaseDatabase.getInstance().getReference("UserNew")
+                        ref1.child(binding.txtInputEtSetPhone.text.toString()).child("password").setValue(binding.txtInputEtSetpassword.text.toString())
+                        ref1.child(binding.txtInputEtSetPhone.text.toString()).child("otpVerified").setValue(true)
+                        prefsUtil.isLoggedIn = true
+                        prefsUtil.Name = binding.txtInputEtSetPhone.text.toString()
+                        prefsUtil.password = binding.txtInputEtSetpassword.text.toString()
+                        showToast("Password set Successfully")
+                    }
+                    else {
+                        with(binding) {
+                            val obj = UserModel(
+                                address = null,
+                                pincode = null,
+                                name = txtInputEtNameSignUp.text.toString(),
+                                password = txtInputEtPasswordSignUp.text.toString(),
+                                uid = FirebaseAuth.getInstance().uid!!,
+                                otpVerified = true
+                            )
+                            obj?.name?.let { it1 -> Log.d("checkObj", it1) }
+                            users.child(txtInputEtPhoneSignUp.text.toString()).setValue(obj)
+                            showToast("Register Successfully")
 
+                        }
                     }
 //                            sendEmail(name.text.toString(), phone.text.toString())
                     startActivity(Intent(this, MainActivity::class.java))

@@ -3,17 +3,19 @@ package com.example.networkmodule.usecase
 import android.content.Context
 import com.example.networkmodule.model.ProductModel
 import com.example.networkmodule.network.Resource
+import com.example.networkmodule.repository.CartRepository
 import com.example.networkmodule.repository.FirebaseDatabaseRepository
 import com.example.networkmodule.repository.ProductRepository
 import com.example.networkmodule.util.Util.reduceBase64ImageSize
 import com.example.networkmodule.util.computation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
 class FirebaseGetProductUseCase @Inject constructor(
     private val firebaseDatabaseRepository: FirebaseDatabaseRepository,
-    private val repository:ProductRepository
 ) {
     operator fun invoke(): Flow<Resource<List<ProductModel>>> = channelFlow {
         send(Resource.Loading())
@@ -37,6 +39,8 @@ class FirebaseGetProductUseCase @Inject constructor(
                 }
             }
         }
+
+
     }
 
 }

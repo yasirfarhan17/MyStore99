@@ -22,6 +22,7 @@ import com.noor.mystore99.MainActivity
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
 import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
+import com.noor.mystore99.cartItem
 import com.noor.mystore99.databinding.IndiviewProductsBinding
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,18 +33,26 @@ class UserAdapter(
 
 
     private val item = ArrayList<ProductEntity>()
+    private val itemCart = ArrayList<CartEntity>()
     private val itemFilter = ArrayList<ProductEntity>()
 
-    private lateinit var viewModel: UserViewModel
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: ArrayList<ProductEntity>, viewModel: UserViewModel) {
+    fun submitList(list: ArrayList<ProductEntity>,cartItem:ArrayList<CartEntity>) {
+        item.clear()
+        itemFilter.clear()
+        itemCart.clear()
+        itemCart.addAll(cartItem)
+        itemFilter.addAll(list)
+        item.addAll(list)
+        notifyDataSetChanged()
+    }
+    fun submitListNew(list: ArrayList<ProductEntity>) {
         item.clear()
         itemFilter.clear()
         itemFilter.addAll(list)
         item.addAll(list)
-        this.viewModel = viewModel
         notifyDataSetChanged()
     }
 
@@ -59,12 +68,12 @@ class UserAdapter(
                     transformations(CircleCropTransformation())
                     placeholder(R.drawable.ic_home_black_24dp)
                 }
-                Log.d("insideAdapter"," ${item.img}")
-
-
                 if(item.stock.equals("no")){
                     btAddToCart.visibility=View.GONE
                     outofstock.visibility=View.VISIBLE
+                    btMinus.visibility=View.GONE
+                    btIncrease.visibility=View.GONE
+                    tvCurrentQuant.visibility=View.GONE
                 }
                 else{
                     btAddToCart.visibility=View.VISIBLE
@@ -73,6 +82,24 @@ class UserAdapter(
                     btIncrease.visibility=View.GONE
                     tvCurrentQuant.visibility=View.GONE
                 }
+
+                itemCart.forEach {
+
+                    if(it.products_name.equals(item.products_name))
+                    {
+                        Log.d("insideItemcart",""+it.products_name)
+                        btAddToCart.visibility=View.GONE
+                        btMinus.visibility=View.VISIBLE
+                        btIncrease.visibility=View.VISIBLE
+                        tvCurrentQuant.visibility=View.VISIBLE
+                        tvCurrentQuant.text=it.quant
+                    }
+                }
+
+                Log.d("insideAdapter"," ${item.img}")
+
+
+
 
                 val cartEntity = CartEntity(item.products_name, item.price, item.img, item.quant,"1", item.price)
                 btAddToCart.setOnClickListener {

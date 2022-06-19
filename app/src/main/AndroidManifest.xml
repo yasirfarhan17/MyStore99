@@ -29,6 +29,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SbziTaza">
         <activity
+            android:name=".amigrate.ui.dashboard.account.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".amigrate.ui.dashboard.account.myorder.MyOrder"
             android:exported="false" />
         <activity

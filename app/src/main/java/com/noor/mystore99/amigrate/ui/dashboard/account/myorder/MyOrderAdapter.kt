@@ -14,7 +14,9 @@ import com.noor.mystore99.amigrate.ui.checkout.CheckoutAdapter
 import com.noor.mystore99.databinding.IndiviewCheckoutBinding
 import com.noor.mystore99.databinding.IndiviewMyorderBinding
 
-class MyOrderAdapter : RecyclerView.Adapter<MyOrderAdapter.MYOrderViewHolder>() {
+class MyOrderAdapter(
+    val callback:MyOrderCallBack
+) : RecyclerView.Adapter<MyOrderAdapter.MYOrderViewHolder>() {
     private val items = ArrayList<checkOutModel>()
 
 
@@ -35,6 +37,9 @@ class MyOrderAdapter : RecyclerView.Adapter<MyOrderAdapter.MYOrderViewHolder>() 
                 tvOrderId.text= "OrderId:-"+item.orderId
                 //tvPayment.text="Not Paid"
                 tvStatus.text="Status:-delivered"
+                cardView3.setOnClickListener {
+                    callback.onItemClick(item.orderId.toString())
+                }
                 }
             }
         }
@@ -50,4 +55,8 @@ class MyOrderAdapter : RecyclerView.Adapter<MyOrderAdapter.MYOrderViewHolder>() 
     }
 
     override fun getItemCount(): Int =items.size
+}
+
+interface MyOrderCallBack{
+    fun onItemClick(orderId:String)
 }

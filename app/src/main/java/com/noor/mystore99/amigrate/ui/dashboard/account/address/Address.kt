@@ -12,8 +12,9 @@ import com.noor.mystore99.databinding.ActivityAddressBinding
 class Address : BaseActivity<ActivityAddressBinding,AdressViewModel>() {
 
     override val viewModel: AdressViewModel by viewModels()
+    val key= prefsUtil.Name.toString()
 
-    val user=FirebaseDatabase.getInstance().getReference("UserNew").child("9163626276")
+    val user=FirebaseDatabase.getInstance().getReference("UserNew").child(key)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

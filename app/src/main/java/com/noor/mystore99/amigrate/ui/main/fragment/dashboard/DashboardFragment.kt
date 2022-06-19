@@ -1,5 +1,6 @@
 package com.noor.mystore99.amigrate.ui.main.fragment.dashboard
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -7,24 +8,47 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
+import androidx.activity.viewModels
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.networkmodule.model.DashBoardModel
+import com.example.networkmodule.storage.PrefsUtil
+import com.noor.mystore99.AboutPage
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
 import com.noor.mystore99.amigrate.ui.dashboard.account.myorder.MyOrder
+import com.noor.mystore99.amigrate.ui.dashboard.account.profile.ProfileActivity
+import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel
 import com.noor.mystore99.databinding.ActivityMain2Binding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DashboardFragment : Fragment(),DashBoardCallBack {
 
     private var _binding: ActivityMain2Binding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
+    val payment: PaymentViewModel by viewModels()
     private val binding get() = _binding!!
     val arr=ArrayList<DashBoardModel>()
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
+    lateinit var key:String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        key=prefsUtil.Name.toString()
+        payment.getUserDet(key)
+        addObservers()
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,46 +72,19 @@ class DashboardFragment : Fragment(),DashBoardCallBack {
         return binding.root
     }
 
-
-
-
-    private fun setSingleEvent(mGrid: GridLayout) {
-        for (i in 0 until mGrid.childCount) {
-            val cardView = mGrid.getChildAt(i) as CardView
-            cardView.setOnClickListener {
-                if (cardView.cardBackgroundColor.defaultColor == -1) {
-                    cardView.setCardBackgroundColor(Color.parseColor("#41CEFC"))
-                    //Toast.makeText(Visitor_Home.this,""+final1,Toast.LENGTH_LONG).show();
-                } else {
-                    cardView.setCardBackgroundColor(Color.parseColor("#41CEFC"))
-                }
-                if (i == 0) {
-                    val intent = Intent(activity, Address::class.java)
-                    //intent.putExtra("id",userId);
-                    startActivity(intent)
-                }
-                if (i == 1) {
-                    //val intent = Intent(this@MainActivity, product1::class.java)
-                    //intent.putExtra("id",userId);
-                    //startActivity(intent)
-                }
-                if (i == 2) {
-                    //val intent = Intent(this@MainActivity, OrderHomecheck::class.java)
-                    //intent.putExtra("id",userId);
-                   // startActivity(intent)
-                }
-                if (i == 3) {
-                    //val intent = Intent(this@MainActivity, BannerHome::class.java)
-                    //intent.putExtra("id",userId);
-                   // startActivity(intent)
-                }
-                if (i == 4) {
-                    //val intent = Intent(this@MainActivity, User::class.java)
-                    //intent.putExtra("id",userId);
-                   // startActivity(intent)
-                }
+    @SuppressLint("SetTextI18n")
+     fun addObservers() {
+        payment.userDetail.observe(this){
+            with(binding){
+                tvName.text="Hi ${it.name}"
+                //tvName.setText(it.name)
+                if(it.photo!=null)
+                    imageProfile.load(it.photo){
+                        transformations(CircleCropTransformation())
+                    }
             }
         }
+
     }
 
     override fun onDestroyView() {
@@ -99,6 +96,16 @@ class DashboardFragment : Fragment(),DashBoardCallBack {
         if(productName.equals("My Order"))
         {
             val intent=Intent(activity,MyOrder::class.java)
+            startActivity(intent)
+        }
+        else if(productName.equals("My Account"))
+        {
+            val intent=Intent(activity, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+        else if(productName.equals("About us"))
+        {
+            val intent=Intent(activity, AboutPage::class.java)
             startActivity(intent)
         }
     }

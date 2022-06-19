@@ -47,6 +47,7 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
 
     override val viewModel: MainViewModel by viewModels()
+     val viewModel1: UserViewModel by viewModels()
 
 
 
@@ -85,14 +86,15 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
     override fun addObservers() {
         lifecycleScope.launch {
-            viewModel.cartItemCount.collect {
-                Log.d("SAHIL", it.toString())
-                if (it == 0) {
-                    binding.clBatch.setVisible(false)
-                    return@collect
+            viewModel1.cartFromDB.observe(this@MainActivity){
+                if(it.size>0) {
+                    val count = it.size
+                    binding.clBatch.setVisible(true)
+                    binding.tvBatch.text = count.toString()
                 }
-                binding.clBatch.setVisible(true)
-                binding.tvBatch.text = it.toString()
+                else{
+                    binding.clBatch.setVisible(false)
+                }
             }
 
         }

@@ -1,7 +1,14 @@
 package com.example.networkmodule.model
 
-/*
+
 data class User(
-    var name: String, var password: String, var uid: String, var isOtpVerified: Boolean
+    var address:String?=null,
+    var name: String?=null,
+    var otpVerified: Boolean?=null,
+    var password: String?=null,
+    val pincode:String?=null,
+    var uid: String?=null,
+    var image: String?=null
+
 )
-*/
+

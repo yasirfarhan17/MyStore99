@@ -1,5 +1,6 @@
 package com.example.networkmodule.usecase
 
+import android.util.Log
 import com.example.networkmodule.model.User
 import com.example.networkmodule.network.AuthResource
 import com.example.networkmodule.network.Resource
@@ -25,8 +26,11 @@ class GetLoginUseCase @Inject constructor(
                         return@collect
                     }
                     val obj = it.data.getValue(User::class.java)
-                    if (obj?.password == password) {
-                        if (obj.otpVerified) {
+                    //Log.d("checkDoLogin", "insidepass${obj?.password} $password")
+                    if (obj?.password.equals(password)) {
+
+                        if (obj?.otpVerified!!) {
+
                             //emit(AuthResource.OtpRequired)
                             emit(AuthResource.Success)
                             return@collect

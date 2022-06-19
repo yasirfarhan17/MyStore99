@@ -6,6 +6,7 @@ data class UserModel(
     val otpVerified:Boolean=false,
     val password:String?=null,
     val pincode:String?=null,
-    val uid:String?=null
+    val uid:String?=null,
+    val photo:String?=null
 
 )

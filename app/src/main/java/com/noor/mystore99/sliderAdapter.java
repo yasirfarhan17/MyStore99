@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +41,8 @@ public class sliderAdapter extends PagerAdapter {
 
         }
         ImageView banner = view.findViewById(R.id.banner_slide);
-       // byte[] decodedString = Base64.decode(sliderModelList.get(position).getBanner(), Base64.DEFAULT);
-        //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        //Glide.with(container.getContext()).load(decodedByte).apply(new RequestOptions().placeholder(R.drawable.ic_home_black_24dp)).into(banner);
+        Log.d("insideSlider",sliderModelList.get(position).getBanner());
+        Glide.with(container.getContext()).load(sliderModelList.get(position).getBanner()).apply(new RequestOptions().placeholder(R.drawable.ic_home_black_24dp)).into(banner);
         container.addView(view, 0);
         return view;
     }

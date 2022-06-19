@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.networkmodule.model.CartModel
+import com.example.networkmodule.model.ProductModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -20,6 +21,9 @@ data class CartEntity(
 ) : Parcelable {
     fun toProductModel(): CartModel {
         return CartModel(this.products_name, this.price, this.img, this.weight,this.quant, this.total)
+    }
+    fun toProductNewModel(): ProductModel {
+        return ProductModel(this.products_name, this.price, this.img, this.weight,this.quant, this.total)
     }
 
 }

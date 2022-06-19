@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.example.networkmodule.database.entity.CartEntity
+import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.model.SliderModel
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
@@ -71,11 +74,57 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
         }
 
+        binding.searchView.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-        binding.searchView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                viewModel.productList.observe(viewLifecycleOwner) {
+                    //val list = it.map { productModel -> productModel.toProductEntity() }
+                    val localList=ArrayList<ProductEntity>()
+                    var flagNotFound=false
+                    if(p0 ==null || p0.isEmpty()) {
+                        localList.addAll(it)
+                        flagNotFound=true
+                        binding.labelPromoOffer.visibility=View.VISIBLE
+                        binding.rvCategory.visibility=View.VISIBLE
+                        binding.labelCategory.visibility=View.VISIBLE
+                        binding.viewPagerBanners.visibility=View.VISIBLE
+
+                    }
+                    else{
+                        for(item in it){
+                            if(item.products_name.lowercase(Locale.ENGLISH).contains(p0.toString().lowercase(
+                                    Locale.ENGLISH))) {
+                                localList.add(item)
+                                flagNotFound=true
+
+                            }
+                        }
+
+                        if(!flagNotFound) {
+                            //localList.addAll(it)
+                            Toast.makeText(activity,"No Item Found",Toast.LENGTH_SHORT).show()
+                        }
+                        binding.labelPromoOffer.visibility=View.GONE
+                        binding.rvCategory.visibility=View.GONE
+                        binding.labelCategory.visibility=View.GONE
+                        binding.viewPagerBanners.visibility=View.GONE
+                    }
+
+                    (binding.rvProduct.adapter as UserAdapter).submitListNew(
+                        localList
+                    )
+                }
+                //(binding.rvProduct.adapter as UserAdapter).filter.filter(p0.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
         })
     }
 
@@ -103,10 +152,19 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
                 if (onlyViewIsDestroyed) {
                     delay(2000)
                 }
-                (binding.rvProduct.adapter as UserAdapter).submitList(it, viewModel)
+                viewModel.cartFromDB.observe(viewLifecycleOwner) { itt ->
+                    if (itt != null) {
+                            Log.d("indideCart",""+itt)
+                        (binding.rvProduct.adapter as UserAdapter).submitList(it, itt)
+                    }
+//                    else{
+//                        (binding.rvProduct.adapter as UserAdapter).submitListNew(it, viewModel)
+//                    }
+                }
 
             }
         }
+
         viewModel.bannerList.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
                 binding.viewPagerBanners.setVisible(false)
@@ -116,6 +174,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
             binding.viewPagerBanners.setVisible(true)
             binding.labelPromoOffer.setVisible(true)
             sliderModelList = it
+            Log.d("checkBanner",""+it)
             val sliderAdapter = sliderAdapter(sliderModelList)
             binding.viewPagerBanners.adapter = sliderAdapter
             binding.viewPagerBanners.clipToPadding = false
@@ -134,9 +193,9 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
             binding.rvCategory.setVisible(true)
             (binding.rvCategory.adapter as CategoryAdapter).submitList(it)
         }
-        viewModel.insertToCart.observe(viewLifecycleOwner){
-            showToast(it)
-        }
+//        viewModel.insertToCart.observe(viewLifecycleOwner){
+//            showToast(it)
+//        }
 
     }
 
@@ -206,6 +265,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
     override fun onItemClick(cartEntity: CartEntity) {
         viewModel.insertToCart(cartEntity)
+        showToast("Item Added Successfully")
     }
 
     override fun searchInCartDB(id: String) {

@@ -222,7 +222,7 @@ object FirebaseModule {
         repo: FirebaseDatabaseRepository,
         repository:ProductRepository
     ): FirebaseGetProductUseCase {
-        return FirebaseGetProductUseCase(repo,repository)
+        return FirebaseGetProductUseCase(repo)
     }
 
     @Provides
@@ -239,6 +239,13 @@ object FirebaseModule {
         repo: AuthRepository
     ): GetLoginUseCase {
         return GetLoginUseCase(repo)
+    }
+    @Provides
+    @Singleton
+    fun provideCombineUseCase(
+        repo: FirebaseDatabaseRepository
+    ): CombineUseCase {
+        return CombineUseCase(repo)
     }
 
     @Provides

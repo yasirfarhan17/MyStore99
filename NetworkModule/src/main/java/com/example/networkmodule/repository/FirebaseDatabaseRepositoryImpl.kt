@@ -41,6 +41,7 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val list = ArrayList<ProductModel>()
+
                 dataSnapshot.children.forEach {
                     it.children.forEach { ittt ->
                         val productLocal = ittt.getValue(ProductModel::class.java)
@@ -92,8 +93,8 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                 val count = dataSnapshot.childrenCount.toInt()
                 for (i in 0 until count + 1) {
                     for (dataSnapshot1 in dataSnapshot.children) {
-                        val val1 = dataSnapshot1.child("img").value.toString()
-                        val color = dataSnapshot1.child("color").value.toString()
+                        val val1 = dataSnapshot1.child("banner").value.toString()
+                        val color = dataSnapshot1.child("backgroundColor").value.toString()
                         val ob = SliderModel(val1, color)
                         list.add(ob)
                     }
