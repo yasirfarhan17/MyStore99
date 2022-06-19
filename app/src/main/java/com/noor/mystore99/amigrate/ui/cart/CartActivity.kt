@@ -33,7 +33,6 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
     lateinit var  key:String
 
     companion object{
-
         var subValue:Int=0
         var finalTotalPrice:Int=0
         var deliverCharge=0
@@ -58,7 +57,7 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
                 }
                 else{
                     update_counter()
-                    var intent=Intent(this@CartActivity, PaymentActivity::class.java)
+                    val intent=Intent(this@CartActivity, PaymentActivity::class.java)
                     Log.d("checkamt", ""+finalTotalPrice)
                     intent.putExtra("amount", finalTotalPrice.toString())
                     startActivity(intent)
@@ -102,18 +101,19 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
             false
         )
         cartBottomSheetDialog.setContentView(bindingSheet.root)
-        bindingSheet.tvSubTotal.text="₹ " +subValue.toString()
-        if(deliverCharge==20){
-            bindingSheet.tvDeliveryCharge.text="₹ 20"
+        bindingSheet.tvSubTotal.text= "₹ $subValue"
+        when (deliverCharge) {
+            20 -> {
+                bindingSheet.tvDeliveryCharge.text="₹ 20"
+            }
+            10 -> {
+                bindingSheet.tvDeliveryCharge.text="₹ 10"
+            }
+            else -> bindingSheet.tvDeliveryCharge.text="free"
         }
-        else if (deliverCharge==10){
-            bindingSheet.tvDeliveryCharge.text="₹ 10"
-        }
-        else
-            bindingSheet.tvDeliveryCharge.text="free"
 
 
-        bindingSheet.tvTotal.text= "₹ "+finalTotalPrice
+        bindingSheet.tvTotal.text= "₹ $finalTotalPrice"
         cartBottomSheetDialog.create()
         cartBottomSheetDialog.show()
     }
@@ -124,8 +124,6 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
             rvCart.layoutManager = LinearLayoutManager(this@CartActivity)
             rvCart.adapter = CartAdapter(this@CartActivity)
         }
-
-
     }
 
     override fun addObservers() {
@@ -144,17 +142,12 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
     }
 
     fun getTotalPrice(totalPrice:ArrayList<CartEntity>) {
-
         subValue=0
         var deliveryCharge:Int=0
-
         for(totals in totalPrice){
             subValue += totals.total!!.toInt()
         }
-
-
         finalTotalPrice= subValue
-
        // update_counter()
     }
 
@@ -180,18 +173,15 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
     fun update_counter(){
         if(subValue in 401..1000) {
             deliverCharge=10
-
         }
-
         else if(subValue in 100..400) {
             deliverCharge=20
         }
         else {
             deliverCharge=0
-
         }
         finalTotalPrice= subValue+ deliverCharge
-        binding.tvTotalPrice.text="₹ " + finalTotalPrice
+        binding.tvTotalPrice.text= "₹ $finalTotalPrice"
         }
 
     override fun onDelete(id: String,pos:Int) {
@@ -204,7 +194,5 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
             itemsPresentInCart(false)
         }
         showMessage("Removed Successfully")
-        //addObservers()
-        //(binding.rvCart.adapter as CartAdapter).submitList(cartValue)
     }
 }
