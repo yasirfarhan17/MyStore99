@@ -7,10 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.networkmodule.database.entity.CartEntity
-import com.example.networkmodule.model.CartModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
@@ -20,8 +18,6 @@ import com.noor.mystore99.amigrate.util.Util.showAlert
 import com.noor.mystore99.databinding.ActivityNewCartBinding
 import com.noor.mystore99.databinding.BottomSheetCartDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -184,9 +180,11 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
         binding.tvTotalPrice.text= "₹ $finalTotalPrice"
         }
 
-    override fun onDelete(id: String,pos:Int) {
-        viewModel.clear(id)
+
+    override fun onDelete(id: String, pos: Int, item: CartEntity) {
+        viewModel.deleteItemFromCart(item)
         cartValue.removeAt(pos)
+        (binding.rvCart.adapter as CartAdapter).submitList(cartValue)
         Log.d("checkcart", ""+cartValue.size)
         getTotalPrice(cartValue)
         update_counter()

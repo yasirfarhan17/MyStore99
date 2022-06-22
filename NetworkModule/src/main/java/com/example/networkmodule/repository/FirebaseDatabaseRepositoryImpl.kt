@@ -8,9 +8,7 @@ import com.example.networkmodule.model.ProductModel
 import com.example.networkmodule.model.SliderModel
 import com.example.networkmodule.network.FirebaseKey
 import com.example.networkmodule.storage.PrefsUtil
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -167,7 +165,8 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun addItemToCart(cartItemList: CartEntity): Flow<Result<String>> =
         flow {
-            cartDbRef.child(prefsUtil.Name!!).child(cartItemList.products_name).setValue(cartItemList)
+            cartDbRef.child(prefsUtil.Name!!).child(cartItemList.products_name)
+                .setValue(cartItemList)
             emit(Result.success("Item Added Successfully"))
         }
 
@@ -198,6 +197,12 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
             awaitClose {
                 cartDbRef.child(prefsUtil.Name!!).removeEventListener(postListener)
             }
+        }
+
+    override suspend fun deleteItemFromCart(cartEntity: CartEntity): Flow<Result<String>> =
+        flow {
+            cartDbRef.child(prefsUtil.Name!!).child(cartEntity.products_name).ref.removeValue()
+            emit(Result.success("Item Added Successfully"))
         }
 
 }

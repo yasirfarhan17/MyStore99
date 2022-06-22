@@ -5,6 +5,8 @@ import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.ProductModel
 import com.example.networkmodule.model.SliderModel
+import com.example.networkmodule.network.Resource
+import com.google.firebase.database.DataSnapshot
 import kotlinx.coroutines.flow.Flow
 
 interface FirebaseDatabaseRepository {
@@ -14,5 +16,6 @@ interface FirebaseDatabaseRepository {
     suspend fun getAllCategoryProduct(productName: String): Flow<Result<List<ProductModel>>>
     suspend fun addItemToCart(cartItemList: CartEntity): Flow<Result<String>>
     suspend fun getCart(): Flow<Result<List<CartEntity>>>
+    suspend fun deleteItemFromCart(cartEntity: CartEntity) : Flow<Result<String>>
 
 }

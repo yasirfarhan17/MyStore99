@@ -7,6 +7,7 @@ import com.example.networkmodule.database.dao.CartDao
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.usecase.ClearCartItemsUseCase
+import com.example.networkmodule.usecase.DeleteCartItemUseCase
 import com.example.networkmodule.usecase.FireBaseCartUseCase
 import com.example.networkmodule.usecase.GetCartItemsUseCase
 import com.noor.mystore99.amigrate.base.BaseViewModel
@@ -25,6 +26,7 @@ class CartViewModel @Inject constructor(
     private val getCartItemsUseCase: GetCartItemsUseCase,
     private val clearCartItemsUseCase: ClearCartItemsUseCase,
     private val getCart: FireBaseCartUseCase,
+    private val deleteCartItemUseCase: DeleteCartItemUseCase,
 
     private val dao: CartDao
 ) : BaseViewModel() {
@@ -75,6 +77,15 @@ class CartViewModel @Inject constructor(
             delay(300)
             _viewState.postValue(ViewState.Success())
 
+        }
+    }
+
+    fun deleteItemFromCart(cartItem:CartEntity){
+        launch {
+            _viewState.postValue(ViewState.Loading)
+            deleteCartItemUseCase.invoke(cartItem).collectLatest {
+                _viewState.postValue(ViewState.Success())
+            }
         }
     }
 

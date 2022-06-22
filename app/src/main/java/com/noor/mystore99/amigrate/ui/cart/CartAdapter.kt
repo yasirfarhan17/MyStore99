@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
-import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.R
 import com.noor.mystore99.databinding.IndiviewCartBinding
 
@@ -67,7 +66,7 @@ class CartAdapter(
                     //notifyDataSetChanged()
                 }
                 imgClear.setOnClickListener {
-                    callback.onDelete(item.products_name,position)
+                    callback.onDelete(item.products_name,position,item)
                     notifyItemRemoved(position)
                     items.removeAt(position)
                 }
@@ -93,5 +92,5 @@ class CartAdapter(
 
 interface cartCallBack{
     fun onClick(price:String,id:String,quant:String)
-    fun onDelete(id:String,pos:Int)
+    fun onDelete(id: String, pos: Int, item: CartEntity,)
 }
