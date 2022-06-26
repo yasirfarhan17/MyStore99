@@ -1,14 +1,18 @@
 package com.noor.mystore99.amigrate.ui.upi
 
 import android.app.Activity
+import java.util.Base64
+
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.networkmodule.model.CartModel
 import com.example.networkmodule.model.checkOutModel
@@ -21,13 +25,18 @@ import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel
 import com.noor.mystore99.cartItem
 import com.shreyaspatil.EasyUpiPayment.EasyUpiPayment
 import com.shreyaspatil.EasyUpiPayment.listener.PaymentStatusListener
+import com.shreyaspatil.EasyUpiPayment.model.Payment
 import com.shreyaspatil.EasyUpiPayment.model.TransactionDetails
 import dagger.hilt.android.AndroidEntryPoint
+import java.nio.charset.StandardCharsets
+import java.security.KeyPairGenerator
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
+open class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
 
 
     val viewModel: PaymentViewModel by viewModels()
@@ -39,6 +48,7 @@ class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
     lateinit var amount: String
     lateinit var address: String
     lateinit var date: String
+    lateinit var automaticSignatureBytes: ByteArray
     var list = ArrayList<CartModel>()
     lateinit var ref1: DatabaseReference
     val UPI_PAYMENT = 0
@@ -55,7 +65,7 @@ class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
         )
         combo = currentDate1 + currentTime1
         //amount=getIntent().getStringExtra("amount");
-        amount = "10.00"
+        amount = "1"
         address = intent.getStringExtra("address").toString()
         date = intent.getStringExtra("date").toString()
 
@@ -65,12 +75,16 @@ class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
 
         //Toast.makeText(upiPay.this,val,Toast.LENGTH_SHORT)
         //
-        // 9117151927@okbizaxis;
-        payUsingUpi(
-            "SabziTaza", "9117151927@okbizaxis",
-            "Sabzi Taza Payment", "1"
-        )
+        // 9117151927@okbizaxis;  BCR2DN6T6PW7PZD7
+
         //("1.00","9117151927@okbizaxis","Sabzi Taza","Sabzi Taza Payment",combo)
+
+
+            payUsingUpi(
+                "SabziTaza", "9117151927@okbizaxis",
+                "Sabzi Taza Payment", "1.00"
+            )
+
     }
 
     private fun payUsingUpi(name: String, upiId: String, note: String, amount: String) {
@@ -80,17 +94,16 @@ class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
                 .scheme("upi")
                 .authority("pay")
                 .appendQueryParameter("pa", upiId)
-                .appendQueryParameter("am", amount)
                 .appendQueryParameter("pn", name)
-                .appendQueryParameter("cu", "INR")
-                .appendQueryParameter("mc", "BCR2DN6T6W7PZD7")
-                .appendQueryParameter("mode", "04")
-                .appendQueryParameter("orgid", "189999")
-                .appendQueryParameter("sign", "MEYCIQC8bLDdRbDhpsPAt9wR1a0pcEssDaV")
+                .appendQueryParameter("mc", "BCR2DN6T6PW7PZD7")
                 .appendQueryParameter("tr", combo)
-                .appendQueryParameter("tn", note)
+                 .appendQueryParameter("tn", note)
+                .appendQueryParameter("am", amount)
+                .appendQueryParameter("cu", "INR")
+                .appendQueryParameter("mode", "05")
                  //.appendQueryParameter("refUrl", "blueapp")
                 .build()
+        Log.d("upiii", ""+uri)
 
 
         val upiPayIntent = Intent(Intent.ACTION_VIEW)
@@ -116,7 +129,7 @@ class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
             UPI_PAYMENT -> if (Activity.RESULT_OK == resultCode || resultCode == 11) {
                 if (data != null) {
                     val trxt = data.getStringExtra("response")
-                    Log.e("UPI", "onActivityResult: $trxt")
+                    Log.e("UPIonActivity", "onActivityResult: $trxt")
                     val dataList = ArrayList<String>()
                     if (trxt != null) {
                         dataList.add(trxt)

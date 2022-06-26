@@ -291,12 +291,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                 AuthResource.OtpRequired -> showMessage("Otp is required")
                 AuthResource.OtpSend -> {
                     if(binding.txtInputEtNameSignUp.text.isNullOrEmpty()) {
+                        flipCard(binding.cvOtp, binding.cvForget) { showToast(it) }
 
-                        flipCard(binding.cvOtp, binding.cvRegister) { showToast(it) }
                         Log.d("checkOtp", "" + it)
                     }
                     else{
-                        flipCard(binding.cvOtp, binding.cvForget) { showToast(it) }
+                        flipCard(binding.cvOtp, binding.cvRegister) { showToast(it) }
                         Log.d("checkOtp", "" + it)
                     }
                     showToast("Otp Sent Successfully")

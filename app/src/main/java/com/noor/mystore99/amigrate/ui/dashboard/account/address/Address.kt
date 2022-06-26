@@ -8,17 +8,21 @@ import com.google.firebase.database.FirebaseDatabase
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.databinding.ActivityAddressBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class Address : BaseActivity<ActivityAddressBinding,AdressViewModel>() {
 
     override val viewModel: AdressViewModel by viewModels()
-    val key= prefsUtil.Name.toString()
+    lateinit var  key:String
 
-    val user=FirebaseDatabase.getInstance().getReference("UserNew").child(key)
+    var user=FirebaseDatabase.getInstance().getReference("UserNew")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=DataBindingUtil.setContentView(this,R.layout.activity_address)
+        key= prefsUtil.Name.toString()
+        user=user.child(key)
 
         binding.submit.setOnClickListener {
             getInit()

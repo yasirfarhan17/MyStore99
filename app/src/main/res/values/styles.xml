@@ -13,6 +13,12 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="itemTextColor">@color/btnprimary</item>
+        <item name="itemIconTint">@color/gray</item>
+    </style>
+
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">

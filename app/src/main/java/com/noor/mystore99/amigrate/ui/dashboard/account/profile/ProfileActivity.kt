@@ -21,6 +21,7 @@ import com.google.firebase.storage.UploadTask
 import com.noor.mystore99.ProfileEdit
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
+import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
 import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel
 import com.noor.mystore99.databinding.ActivityProfileBinding
 import com.squareup.picasso.Picasso
@@ -36,7 +37,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding,ProfileViewModel>() 
 
     override fun layoutId(): Int =R.layout.activity_profile
     private val PICK_IMAGE_REQUEST = 1
-    private lateinit var  uri: Uri
+    private  var  uri: Uri?=null
     lateinit var key:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +61,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding,ProfileViewModel>() 
                     val ref: StorageReference =
                         storageReference.child(System.currentTimeMillis().toString())
                     if (uri != null) {
-                        ref.putFile(uri).addOnSuccessListener(object :
+                        ref.putFile(uri!!).addOnSuccessListener(object :
                             OnSuccessListener<UploadTask.TaskSnapshot> {
                             override fun onSuccess(p0: UploadTask.TaskSnapshot?) {
                                 p0!!.metadata!!.reference!!.downloadUrl.addOnSuccessListener(object :
@@ -92,6 +93,9 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding,ProfileViewModel>() 
                         showToast("Successfully updated")
                     }
                 }
+            }
+            changeAddress.setOnClickListener {
+                startActivity(Intent(this@ProfileActivity,Address::class.java))
             }
         }
     }
