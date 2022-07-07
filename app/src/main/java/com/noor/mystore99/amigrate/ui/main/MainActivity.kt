@@ -51,6 +51,7 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
 
 
+
     @Inject
     lateinit var productUseCase: FirebaseGetProductUseCase
 
@@ -65,7 +66,10 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel1.getCartFromDB()
+        addObservers()
         setNavView()
+
 
        // insertDataToFirebase((time+timeTenSeconds))
 
@@ -75,6 +79,7 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
         val navView: BottomNavigationView = binding.bottomNavigationView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
+        //binding.clBatch.setVisible(false)
         binding.fabBtCart.setOnClickListener {
             val intent=Intent(this,CartActivity::class.java)
             startActivity(intent)
@@ -82,6 +87,11 @@ class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
         }
 
+    override fun onResume() {
+        viewModel1.getCartFromDB()
+        addObservers()
+        super.onResume()
+    }
 
 
     override fun addObservers() {

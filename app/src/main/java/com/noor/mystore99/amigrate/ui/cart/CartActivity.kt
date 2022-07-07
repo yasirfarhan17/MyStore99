@@ -10,8 +10,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.networkmodule.database.entity.CartEntity
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.database.FirebaseDatabase
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
+import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
+import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
 import com.noor.mystore99.amigrate.ui.payment.PaymentActivity
 import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.amigrate.util.Util.showAlert
@@ -24,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartCallBack {
 
     override val viewModel: CartViewModel by viewModels()
+     val userviewModel: UserViewModel by viewModels()
     override fun layoutId(): Int = R.layout.activity_new_cart
     lateinit var bindingSheet : BottomSheetCartDetailsBinding
     lateinit var  key:String
@@ -47,6 +51,8 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
     private fun addListener() {
         with(binding) {
             update_counter()
+            if(finalTotalPrice==0)
+                itemsPresentInCart(false)
             btCheckOut.setOnClickListener {
                 if(subValue<100){
                     Toast.makeText(this@CartActivity,"Please add more item",Toast.LENGTH_SHORT).show()
@@ -67,9 +73,11 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
                     getString(R.string.txt_clear_cart_question),
                     getString(R.string.all_the_item_in_cart_will_be_cleared)
                 ) {
-                    viewModel.clearCart()
+                    FirebaseDatabase.getInstance().getReference("CartNew").child(key).removeValue()
+                    finalTotalPrice=0
                     itemsPresentInCart(false)
                     (binding.rvCart.adapter as CartAdapter).clearAdapter()
+                    //UserAdapter.clearAdapter()
 
                 }
             }
@@ -144,6 +152,7 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
             subValue += totals.total!!.toInt()
         }
         finalTotalPrice= subValue
+        Log.d("finalTotalPrice",""+ finalTotalPrice)
        // update_counter()
     }
 
@@ -158,7 +167,7 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
     }
 
     override fun onClick(price: String, id: String, quant: String) {
-        viewModel.updateQuant(price,id,quant)
+        userviewModel.updateQuant(price,id,quant)
         //addObservers()
         getTotalPrice(cartValue)
         update_counter()
@@ -181,6 +190,10 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
         }
 
 
+    override fun onResume() {
+        addObservers()
+        super.onResume()
+    }
     override fun onDelete(id: String, pos: Int, item: CartEntity) {
         viewModel.deleteItemFromCart(item)
         cartValue.removeAt(pos)

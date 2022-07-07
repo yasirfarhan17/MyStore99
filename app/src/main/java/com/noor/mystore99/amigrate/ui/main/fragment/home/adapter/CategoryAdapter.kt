@@ -10,6 +10,7 @@ import coil.transform.CircleCropTransformation
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.databinding.IndiviewCategoryBinding
+import com.noor.mystore99.databinding.IndiviewNewCategoryBinding
 
 class CategoryAdapter(val callback: CategoryAdapterCallback) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
@@ -24,14 +25,13 @@ class CategoryAdapter(val callback: CategoryAdapterCallback) :
         notifyDataSetChanged()
     }
 
-    inner class CategoryViewHolder(private val binding: IndiviewCategoryBinding) :
+    inner class CategoryViewHolder(private val binding: IndiviewNewCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CategoryModel) {
             with(binding) {
-                imgCategoryIcon.load(item.categoryIconLink) {
-                    transformations(CircleCropTransformation())
+                categoryIcon.load(item.categoryIconLink) {
                 }
-                tvCategoryName.text = item.categoryName.uppercase()
+                categoryName.text = item.categoryName.uppercase()
                 constraintLayout.setOnClickListener {
                     callback.onItemClick(item.categoryName)
                 }
@@ -41,7 +41,7 @@ class CategoryAdapter(val callback: CategoryAdapterCallback) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding =
-            IndiviewCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            IndiviewNewCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CategoryViewHolder(binding)
     }
 

@@ -6,15 +6,15 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#E4E3E3">
 
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:backgroundTint="@android:color/transparent"
+            android:background="#E4E3E3"
             android:fitsSystemWindows="true">
 
 
@@ -24,6 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
+                android:background="#E4E3E3"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
                 app:titleCollapseMode="fade"
                 app:toolbarId="@+id/toolbar">
@@ -121,10 +122,39 @@
 
 
                     <TextView
+                        android:id="@+id/label_promo_offer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/convergence"
+                        android:padding="5dp"
+                        android:text="@string/txt_offers_amp_promo"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        />
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/view_pager_banners"
+                        android:layout_width="match_parent"
+                        android:layout_height="179dp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"  />
+
+
+
+                    <TextView
                         android:id="@+id/label_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:layout_gravity="center"
                         android:fontFamily="@font/convergence"
                         android:padding="5dp"
                         android:text="@string/category"
@@ -134,7 +164,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp">
+                        android:layout_height="wrap_content">
                         <com.google.android.material.progressindicator.CircularProgressIndicator
                             android:id="@+id/category_progress_bar"
                             android:layout_width="wrap_content"
@@ -155,33 +185,14 @@
                             android:layout_height="match_parent"
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
-                            android:orientation="horizontal"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            tools:itemCount="5"
-                            tools:listitem="@layout/indiview_category" />
+                            tools:itemCount="5" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                    <TextView
-                        android:id="@+id/label_promo_offer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:fontFamily="@font/convergence"
-                        android:padding="5dp"
-                        android:text="@string/txt_offers_amp_promo"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
-                        />
 
-                    <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/view_pager_banners"
-                        android:layout_width="match_parent"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginEnd="2dp"
-                        android:layout_height="182dp" />
 
                     <TextView
                         android:id="@+id/label_all_product"
@@ -190,6 +201,7 @@
                         android:layout_margin="10dp"
                         android:fontFamily="@font/convergence"
                         android:text="@string/all_products"
+                        android:layout_gravity="center"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="18sp"
                         android:visibility="visible"
@@ -214,7 +226,7 @@
             app:layout_anchorGravity="bottom"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:itemCount="2"
-            tools:listitem="@layout/indiview_products" />
+            tools:listitem="@layout/indiview_new_products" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

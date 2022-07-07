@@ -232,6 +232,13 @@ object FirebaseModule {
     ): FirebaseGetCategoryUseCase {
         return FirebaseGetCategoryUseCase(repo)
     }
+    @Provides
+    @Singleton
+    fun provideFirebaseUpdateQuantUseCase(
+        repo: FirebaseDatabaseRepository
+    ): FireBaseUpdateQuantUseCase {
+        return FireBaseUpdateQuantUseCase(repo)
+    }
 
     @Provides
     @Singleton

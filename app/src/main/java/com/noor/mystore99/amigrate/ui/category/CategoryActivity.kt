@@ -3,10 +3,12 @@ package com.noor.mystore99.amigrate.ui.category
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.networkmodule.database.entity.CartEntity
@@ -15,9 +17,12 @@ import com.example.networkmodule.model.ProductModelNew
 import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
+import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
 import com.noor.mystore99.databinding.ActivityCategoryBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,6 +36,7 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
     }
 
     override val viewModel: CategoryViewModel by viewModels()
+    val userviewModel: UserViewModel by viewModels()
     var arrNew= ArrayList<ProductEntity>()
 
     override fun layoutId(): Int = R.layout.activity_category
@@ -83,7 +89,7 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
                         Toast.makeText(this@CategoryActivity,"No Item Found",Toast.LENGTH_SHORT).show()
                         }
 
-                        (binding.categoryRv.adapter as NewCategoryAdapter).submitList(localList)
+                        (binding.categoryRv.adapter as NewCategoryAdapter).submitListNew(localList)
                     }
                     //(binding.rvProduct.adapter as UserAdapter).filter.filter(p0.toString())
                 }
@@ -103,7 +109,20 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
     override fun addObservers() {
         viewModel.categoryList.observe(this@CategoryActivity) {
             val list = it.map { productModel -> productModel.toProductEntity() }
-            (binding.categoryRv.adapter as NewCategoryAdapter).submitList(list as ArrayList<ProductEntity>)
+
+            lifecycleScope.launch {
+                userviewModel.cartFromDB.observe(this@CategoryActivity) { itt ->
+                    if (itt != null) {
+                        Log.d("indideCart",""+itt)
+                        (binding.categoryRv.adapter as NewCategoryAdapter).submitList(list as ArrayList<ProductEntity>,itt)
+                    }
+                    else{
+                        (binding.categoryRv.adapter as NewCategoryAdapter).submitListNew(list as ArrayList<ProductEntity>)
+                    }
+                }
+
+            }
+
         }
 
     }
@@ -111,5 +130,10 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
     override fun onItemClick(item: CartEntity) {
 
         viewModel.insertToCartDb(item)
+    }
+
+    override fun onClick(price: String, id: String, quant: String) {
+        userviewModel.updateQuant(price,id,quant)
+
     }
 }

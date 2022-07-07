@@ -10,8 +10,12 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
@@ -21,6 +25,7 @@ import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.model.SliderModel
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
+import com.noor.mystore99.amigrate.ui.cart.CartViewModel
 import com.noor.mystore99.amigrate.ui.category.CategoryActivity
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapterCallback
@@ -41,6 +46,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
 
     override val viewModel: UserViewModel by viewModels()
+    val cartviewModel: CartViewModel by viewModels()
     override fun getViewModelClass(): Class<UserViewModel> = UserViewModel::class.java
     override fun getLayout(): Int = R.layout.user_fragment
 
@@ -55,12 +61,15 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        addObservers()
         if (savedInstanceState == null) {
             initUi()
             addListener()
         }
+
         super.onViewCreated(view, savedInstanceState)
     }
+
 
     private fun addListener() {
         with(binding) {
@@ -74,7 +83,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
         }
 
-        binding.searchView.addTextChangedListener(object :TextWatcher{
+        binding.searchView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -83,35 +92,40 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
                 viewModel.productList.observe(viewLifecycleOwner) {
                     //val list = it.map { productModel -> productModel.toProductEntity() }
-                    val localList=ArrayList<ProductEntity>()
-                    var flagNotFound=false
-                    if(p0 ==null || p0.isEmpty()) {
+                    val localList = ArrayList<ProductEntity>()
+                    var flagNotFound = false
+                    if (p0 == null || p0.isEmpty()) {
                         localList.addAll(it)
-                        flagNotFound=true
-                        binding.labelPromoOffer.visibility=View.VISIBLE
-                        binding.rvCategory.visibility=View.VISIBLE
-                        binding.labelCategory.visibility=View.VISIBLE
-                        binding.viewPagerBanners.visibility=View.VISIBLE
+                        flagNotFound = true
+                        binding.labelPromoOffer.visibility = View.VISIBLE
+                        binding.rvCategory.visibility = View.VISIBLE
+                        binding.labelCategory.visibility = View.VISIBLE
+                        binding.viewPagerBanners.visibility = View.VISIBLE
+                        binding.labelAllProduct.visibility=View.VISIBLE
 
-                    }
-                    else{
-                        for(item in it){
-                            if(item.products_name.lowercase(Locale.ENGLISH).contains(p0.toString().lowercase(
-                                    Locale.ENGLISH))) {
+                    } else {
+                        for (item in it) {
+                            if (item.products_name.lowercase(Locale.ENGLISH).contains(
+                                    p0.toString().lowercase(
+                                        Locale.ENGLISH
+                                    )
+                                )
+                            ) {
                                 localList.add(item)
-                                flagNotFound=true
+                                flagNotFound = true
 
                             }
                         }
 
-                        if(!flagNotFound) {
+                        if (!flagNotFound) {
                             //localList.addAll(it)
-                            Toast.makeText(activity,"No Item Found",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity, "No Item Found", Toast.LENGTH_SHORT).show()
                         }
-                        binding.labelPromoOffer.visibility=View.GONE
-                        binding.rvCategory.visibility=View.GONE
-                        binding.labelCategory.visibility=View.GONE
-                        binding.viewPagerBanners.visibility=View.GONE
+                        binding.labelPromoOffer.visibility = View.GONE
+                        binding.rvCategory.visibility = View.GONE
+                        binding.labelCategory.visibility = View.GONE
+                        binding.viewPagerBanners.visibility = View.GONE
+                        binding.labelAllProduct.visibility=View.GONE
                     }
 
                     (binding.rvProduct.adapter as UserAdapter).submitListNew(
@@ -139,31 +153,35 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         with(binding) {
             rvProduct.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
             rvProduct.adapter = UserAdapter(this@UserFragment)
-            rvCategory.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+            val gridLayoutManager = GridLayoutManager(context, 2)
+            gridLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+            rvCategory.setLayoutManager(gridLayoutManager)
             binding.rvCategory.adapter = CategoryAdapter(this@UserFragment)
         }
     }
 
 
     override fun addObservers() {
+        var c = 0
         viewModel.productList.observe(viewLifecycleOwner) {
             viewLifecycleOwner.lifecycleScope.launch {
-                if (onlyViewIsDestroyed) {
-                    delay(2000)
-                }
-                viewModel.cartFromDB.observe(viewLifecycleOwner) { itt ->
-                    if (itt != null) {
-                            Log.d("indideCart",""+itt)
-                        (binding.rvProduct.adapter as UserAdapter).submitList(it, itt)
-                    }
-//                    else{
-//                        (binding.rvProduct.adapter as UserAdapter).submitListNew(it, viewModel)
-//                    }
+                    (binding.rvProduct.adapter as UserAdapter).submitListNew(it)
+
                 }
 
+
+            }
+        viewModel.cartFromDB.observe(viewLifecycleOwner) { itt ->
+            if (itt != null) {
+                Log.d("indideCart", "" + itt)
+                (binding.rvProduct.adapter as UserAdapter).submitList(itt)
             }
         }
+//        viewModel.combineData.observe(viewLifecycleOwner){
+//            Log.d("inssideCombine",""+it.first)
+//            (binding.rvProduct.adapter as UserAdapter).submitListNeww(it.first)
+
 
         viewModel.bannerList.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
@@ -268,6 +286,8 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         showToast("Item Added Successfully")
     }
 
+
+
     override fun searchInCartDB(id: String) {
     }
 
@@ -275,7 +295,6 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         super.onSaveInstanceState(outState)
         outState.putBoolean("VIEW_DESTROYED", true)
     }
-
     override fun onDestroyView() {
         timer?.cancel()
 
@@ -288,5 +307,9 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         })
     }
 
+    override fun onClick(price: String, id: String, quant: String) {
+        viewModel.updateQuant(price,id,quant)
+
+    }
 
 }

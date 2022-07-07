@@ -24,6 +24,7 @@ class UserViewModel @Inject constructor(
     private val productUseCase: FirebaseGetProductUseCase,
     private val bannerUseCase: FirebaseGetBannerUseCase,
     private val addToCartUseCase: FireBaseAddToCartUseCase,
+    private val updateQuantUseCase: FireBaseUpdateQuantUseCase,
     private val getCart: FireBaseCartUseCase,
     private val prefsUtil: PrefsUtil,
     private var combineUseCase: CombineUseCase
@@ -38,10 +39,15 @@ class UserViewModel @Inject constructor(
     private var _productList = MutableLiveData<ArrayList<ProductEntity>>()
     val productList = _productList.toLiveData()
 
+    private var _combineData = MutableLiveData<Pair<ArrayList<ProductEntity>,ArrayList<CartEntity>>>()
+    val combineData = _combineData.toLiveData()
+
     private var _bannerList = MutableLiveData<ArrayList<SliderModel>?>()
     val bannerList = _bannerList.toLiveData()
     private var _insertToCart = MutableLiveData<String?>()
     val insertToCart = _insertToCart.toLiveData()
+    private var _quant = MutableLiveData<String?>()
+    val quant = _quant.toLiveData()
 
 
 
@@ -49,7 +55,7 @@ class UserViewModel @Inject constructor(
         launch {
             getAllProducts()
             getCartFromDB()
-            combine()
+           //  combine()
             getBanner()
             getCategory()
         }
@@ -69,7 +75,7 @@ class UserViewModel @Inject constructor(
     }
 
 
-    private fun getAllProducts() {
+     fun getAllProducts() {
         launch {
             _viewState.postValue(ViewState.Loading)
             productUseCase.invoke().collect {
@@ -90,7 +96,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    private fun getCartFromDB() {
+     fun getCartFromDB() {
         launch {
             _viewState.postValue(ViewState.Loading)
             getCart().collectLatest {
@@ -136,10 +142,9 @@ class UserViewModel @Inject constructor(
                         is Resource.Success -> {
                             val list = it.data?.first?.map { productModel -> productModel.toProductEntity() }
 
-                            Log.d("insidecombi","$list ${it.data?.second}")
-                            _cartFromDB.postValue(it.data?.second as ArrayList<CartEntity>)
-                            _productList.postValue(list as ArrayList<ProductEntity>)
-                            // _viewState.postValue(ViewState.Success())
+                            Log.d("insidecombiUsecase","$list ${it.data?.second}")
+                            _combineData.value=(Pair(list as ArrayList<ProductEntity>,it.data?.second as ArrayList<CartEntity>))
+                             _viewState.postValue(ViewState.Success())
                         }
                         is Resource.Error -> {
                             _viewState.postValue(ViewState.Error(it.message))
@@ -165,6 +170,14 @@ class UserViewModel @Inject constructor(
                 _insertToCart.postValue(it.data ?: it.message)
             }
         }
+    }
+    fun updateQuant(price :String,id:String,qunat:String){
+        launch {
+            updateQuantUseCase.invoke(price,id,qunat).collectLatest {
+                _quant.postValue(it.data?:it.message)
+            }
+        }
+
     }
 
 

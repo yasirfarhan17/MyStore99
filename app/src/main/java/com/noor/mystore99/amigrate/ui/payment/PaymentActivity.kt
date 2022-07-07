@@ -95,6 +95,8 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
                     intent.putExtra("amount",amount)
                     intent.putExtra("combo",combo)
                     viewModelCart.clearCart()
+                    var ref=FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+                    ref.removeValue()
                     startActivity(intent)
                 }
                 else if(upiFlag){
@@ -107,6 +109,8 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
 //                    startActivity(intent)
 //                    //viewModelCart.clearCart()
 //                    startActivity(intent)
+                var ref=FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+                    ref.removeValue()
                     startActivity(Intent(this@PaymentActivity,NewUPIPay::class.java))
                 }
                 else if (binding.etDate.text.isNullOrBlank()){

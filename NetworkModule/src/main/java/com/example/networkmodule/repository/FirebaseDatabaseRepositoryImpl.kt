@@ -170,6 +170,19 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
             emit(Result.success("Item Added Successfully"))
         }
 
+    override suspend fun updateCart(
+        price: String,
+        id: String,
+        quant: String
+    ): Flow<Result<String>> =
+        flow {
+            cartDbRef.child(prefsUtil.Name!!).child(id).child("quant")
+                .setValue(quant)
+            cartDbRef.child(prefsUtil.Name!!).child(id).child("total")
+                .setValue(price)
+            emit(Result.success("update successfully"))
+        }
+
 
     override suspend fun getCart(): Flow<Result<List<CartEntity>>> =
         callbackFlow {
@@ -202,7 +215,7 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
     override suspend fun deleteItemFromCart(cartEntity: CartEntity): Flow<Result<String>> =
         flow {
             cartDbRef.child(prefsUtil.Name!!).child(cartEntity.products_name).ref.removeValue()
-            emit(Result.success("Item Added Successfully"))
+            emit(Result.success("Item Remove Successfully"))
         }
 
 }

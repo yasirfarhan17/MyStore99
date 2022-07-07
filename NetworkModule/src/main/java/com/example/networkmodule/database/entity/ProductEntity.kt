@@ -13,9 +13,10 @@ data class ProductEntity(
     @PrimaryKey @ColumnInfo val products_name: String,
     @ColumnInfo val price: String? = null,
     @ColumnInfo val img: String? = null,
-    @ColumnInfo val quant: String? = null,
+    @ColumnInfo var quant: String? = null,
     @ColumnInfo val HindiName: String? = null,
     @ColumnInfo val stock: String? = null,
+    @ColumnInfo var count: String? = "0",
 ) : Parcelable {
     fun toProductModel(): ProductModel {
         return ProductModel(
@@ -24,7 +25,8 @@ data class ProductEntity(
             this.img,
             this.quant,
             this.HindiName,
-            this.stock
+            this.stock,
+            this.count
         )
 
 

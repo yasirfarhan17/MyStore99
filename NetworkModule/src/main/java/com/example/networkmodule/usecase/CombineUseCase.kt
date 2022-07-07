@@ -5,10 +5,11 @@ import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.ProductModel
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.repository.FirebaseDatabaseRepository
-import com.example.networkmodule.util.io
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.*
-import java.lang.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CombineUseCase
@@ -18,38 +19,48 @@ class CombineUseCase
     operator fun invoke(): Flow<Resource<Pair<List<ProductModel>, List<CartEntity>>>> =
         flow {
             emit(Resource.Loading())
-            io {
 
-                var product = async { firebaseDatabaseRepository.getAllProduct() }
-                var cart = async { firebaseDatabaseRepository.getCart() }
-                val newList = ArrayList<ProductModel>()
-                var result = combine(product.await(), cart.await()) { product, cart ->
-                    Log.d("insideCombine", product.toString() + " " + cart.toString())
+            var product =
+                withContext(Dispatchers.Default) { firebaseDatabaseRepository.getAllProduct() }
+            var cart =
+                withContext(Dispatchers.Default) { firebaseDatabaseRepository.getCart() }
+            val newList = ArrayList<ProductModel>()
+            var result = combine(product, cart) { product, cart ->
+                Log.d("insideCombine", product.toString() + " " + cart.toString())
+
+                newList.clear()
+                product.getOrNull()?.forEach { productItem ->
+
+                    if(cart.getOrNull().isNullOrEmpty()){
+                        newList.clear()
+                        newList.addAll(product.getOrNull()!!)
+                        return@combine Pair(
+                            newList.toList(),
+                            ArrayList<CartEntity>()
+                        )
+                    }
                     cart.getOrNull()?.forEach { cartItem ->
-                        product.getOrNull()?.forEach { productItem ->
-                            if (cartItem.products_name.equals(productItem.products_name)) {
-                                newList.add(cartItem.toProductNewModel())
-                            } else {
-                                newList.add(productItem)
-                            }
+                        if (cartItem.products_name.equals(productItem.products_name) && !newList.contains(productItem)) {
+                            newList.add(cartItem.toProductNewModel())
 
+                        } else {
+                            newList.add(productItem)
                         }
                     }
-                    return@combine Pair(newList.toList(), cart.getOrNull()?.toList() ?: emptyList<CartEntity>())
                 }
-                result.collect{
-                    try {
-//                    emit(Resource.Success(Pair((product.await(), cart.await()))))
-                        emit(Resource.Success(it))
-                    }
-                    catch (e:Exception){
-                        emit(Resource.Error(e.message.toString()))
-                    }
-                }
+                var newVal=ArrayList<ProductModel>()
+                newVal.addAll(newList.distinct())
+                return@combine Pair(
+                    newVal.toList(),
+                    cart.getOrNull() ?: ArrayList<CartEntity>()
+                )
+            }
 
-
-
+            result.collect {
+                emit(Resource.Success(it))
 
             }
+
+
         }
 }

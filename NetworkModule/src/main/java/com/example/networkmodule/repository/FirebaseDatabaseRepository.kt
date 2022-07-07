@@ -15,6 +15,7 @@ interface FirebaseDatabaseRepository {
     suspend fun getCategory(): Flow<Result<List<CategoryModel>>>
     suspend fun getAllCategoryProduct(productName: String): Flow<Result<List<ProductModel>>>
     suspend fun addItemToCart(cartItemList: CartEntity): Flow<Result<String>>
+    suspend fun updateCart(price: String, id: String,quant:String): Flow<Result<String>>
     suspend fun getCart(): Flow<Result<List<CartEntity>>>
     suspend fun deleteItemFromCart(cartEntity: CartEntity) : Flow<Result<String>>
 

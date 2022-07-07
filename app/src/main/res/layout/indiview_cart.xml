@@ -149,7 +149,7 @@
                     android:padding="5dp"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/tv_cart_quant"
                     app:layout_constraintTop_toBottomOf="@+id/tv_cart_quant"
@@ -169,7 +169,7 @@
                     android:textColor="@color/white"
                     android:textSize="10sp"
 
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/vBt1"
                     app:layout_constraintTop_toTopOf="@+id/vBt1" />
@@ -186,7 +186,7 @@
                     android:text="@string/_250_gm"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/vBt2"
                     app:layout_constraintTop_toTopOf="@+id/vBt2" />
