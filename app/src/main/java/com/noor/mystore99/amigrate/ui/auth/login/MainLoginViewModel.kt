@@ -1,5 +1,6 @@
 package com.noor.mystore99.amigrate.ui.auth.login
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.networkmodule.network.AuthResource
@@ -74,10 +75,10 @@ class MainLoginViewModel @Inject constructor(
         })
     }
 
-    fun doLogin(phoneNumber: String, password: String) {
+    fun doLogin(phoneNumber: String, password: String,context:Context) {
         launch {
             _viewState.postValue(ViewState.Loading)
-            loginUseCase.invoke(phoneNumber, password).collectLatest {
+            loginUseCase.invoke(phoneNumber, password, context = context).collectLatest {
                 Log.d("checkDoLogin", "$phoneNumber $password")
                 when (it) {
                     is AuthResource.Error -> _viewState.postValue(ViewState.Error(it.error))

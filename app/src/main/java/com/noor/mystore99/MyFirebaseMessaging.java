@@ -2,6 +2,7 @@ package com.noor.mystore99;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,9 +11,11 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -22,65 +25,60 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
-    private static final String Notification_channel_id="MY_NOTIFICATION_ID";
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
+
+    private final String ADMIN_CHANNEL_ID ="admin_channel";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.d("checkingMessage",remoteMessage.getData().toString());
+        final Intent intent = new Intent(this, MainActivity.class);
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        int notificationID = new Random().nextInt(3000);
 
-        super.onMessageReceived(remoteMessage);
-        firebaseAuth=FirebaseAuth.getInstance();
-        firebaseUser=firebaseAuth.getCurrentUser();
-
-        String notificationType=remoteMessage.getData().get("notificationType");
-        if(notificationType.equals("NewOrder")){
-            String buyerUid=remoteMessage.getData().get("buyerUid");
-            String sellerUid=remoteMessage.getData().get("sellerUid");
-            String orderId=remoteMessage.getData().get("orderId");
-            String notificationTitle=remoteMessage.getData().get("notificationTitle");
-            String notificationDescription=remoteMessage.getData().get("notificationMessage");
-
-            if(firebaseAuth!=null && firebaseAuth.getUid().equals(sellerUid)){
-                showNotification(orderId,sellerUid,buyerUid,notificationTitle,notificationDescription,notificationType);
-            }
-        }
-    }
-    private void  showNotification(String orderId,String sellerUid,String buyerUid,String notification,String notificationDescription,String notificationType){
-        NotificationManager notificationManager=(NotificationManager)getSystemService((Context.NOTIFICATION_SERVICE));
-        int notificationId=new Random().nextInt(3000);
-
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-            setupNoricationChannel(notificationManager);
+      /*
+        Apps targeting SDK 26 or above (Android O) must implement notification channels and add its notifications
+        to at least one of them. Therefore, confirm if version is Oreo or higher, then setup notification channel
+      */
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            setupChannels(notificationManager);
         }
 
-        Intent intent;
-        if(notificationType.equals("NewOrder")){
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this , 0, intent,
+                PendingIntent.FLAG_ONE_SHOT);
 
-        }
-        Bitmap largeIcon= BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
-        Uri notificationSound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder=new NotificationCompat.Builder(this,Notification_channel_id);
-        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
+                R.drawable.ic_delete_black_24dp);
+
+        Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_delete_black_24dp)
                 .setLargeIcon(largeIcon)
-                .setContentTitle(notificationDescription)
-                .setSound(notificationSound)
-                .setAutoCancel(true);
+                .setContentTitle(remoteMessage.getData().get("title"))
+                .setContentText(remoteMessage.getData().get("message"))
+                .setAutoCancel(true)
+                .setSound(notificationSoundUri)
+                .setContentIntent(pendingIntent);
 
-        notificationManager.notify(notificationId,notificationBuilder.build());
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setupNoricationChannel(NotificationManager notificationManager) {
-        CharSequence channelName="Some Sample Text";
-        String channelDescription="Channel Description here";
-        NotificationChannel notificationChannel=new NotificationChannel(Notification_channel_id,channelName,NotificationManager.IMPORTANCE_HIGH);
-        notificationChannel.setDescription(channelDescription);
-        notificationChannel.enableLights(true);
-        notificationChannel.setLightColor(Color.RED);
-        notificationChannel.enableVibration(true);
-        if(notificationManager!=null){
-            notificationManager.createNotificationChannel(notificationChannel);
+        //Set notification color to match your app color template
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimaryDark));
         }
+        notificationManager.notify(notificationID, notificationBuilder.build());
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setupChannels(NotificationManager notificationManager){
+        CharSequence adminChannelName = "New notification";
+        String adminChannelDescription = "Device to devie notification";
 
+        NotificationChannel adminChannel;
+        adminChannel = new NotificationChannel(ADMIN_CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_HIGH);
+        adminChannel.setDescription(adminChannelDescription);
+        adminChannel.enableLights(true);
+        adminChannel.setLightColor(Color.RED);
+        adminChannel.enableVibration(true);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(adminChannel);
+        }
     }
 }

@@ -99,6 +99,9 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
                 }
 
             })
+            back.setOnClickListener {
+                onBackPressed()
+            }
         }
     }
 
@@ -109,27 +112,26 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
     override fun addObservers() {
         viewModel.categoryList.observe(this@CategoryActivity) {
             val list = it.map { productModel -> productModel.toProductEntity() }
+            (binding.categoryRv.adapter as NewCategoryAdapter).submitListNew(list as ArrayList<ProductEntity>)
 
-            lifecycleScope.launch {
-                userviewModel.cartFromDB.observe(this@CategoryActivity) { itt ->
-                    if (itt != null) {
-                        Log.d("indideCart",""+itt)
-                        (binding.categoryRv.adapter as NewCategoryAdapter).submitList(list as ArrayList<ProductEntity>,itt)
-                    }
-                    else{
-                        (binding.categoryRv.adapter as NewCategoryAdapter).submitListNew(list as ArrayList<ProductEntity>)
-                    }
-                }
-
-            }
+//            lifecycleScope.launch {
+//                userviewModel.cartFromDB.observe(this@CategoryActivity) { itt ->
+//                    if (itt != null) {
+//                        Log.d("indideCart",""+itt)
+//                        (binding.categoryRv.adapter as NewCategoryAdapter).submitList(list as ArrayList<ProductEntity>,itt)
+//                    }
+//                }
+//
+//            }
 
         }
 
     }
 
-    override fun onItemClick(item: CartEntity) {
 
-        viewModel.insertToCartDb(item)
+    override fun onItemClick(cartEntity: CartEntity) {
+        userviewModel.insertToCart(cartEntity)
+        showToast("Item Added Successfully")
     }
 
     override fun onClick(price: String, id: String, quant: String) {

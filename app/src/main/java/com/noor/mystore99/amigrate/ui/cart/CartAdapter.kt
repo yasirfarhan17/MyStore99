@@ -1,6 +1,7 @@
 package com.noor.mystore99.amigrate.ui.cart
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.google.firebase.database.*
-import com.noor.mystore99.CartProductList
 import com.noor.mystore99.R
 import com.noor.mystore99.databinding.IndiviewCartBinding
 
@@ -21,11 +21,12 @@ class CartAdapter(
 
     var ref=FirebaseDatabase.getInstance().getReference("Variety")
     var count=0
-
+   lateinit var key:String
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: ArrayList<CartEntity>) {
+    fun submitList(list: ArrayList<CartEntity>,key:String) {
         items.clear()
         items.addAll(list)
+        this.key =key
         notifyDataSetChanged()
     }
 
@@ -39,11 +40,16 @@ class CartAdapter(
     inner class CartViewHolder(private val binding: IndiviewCartBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: CartEntity) {
             with(binding) {
+                Log.d("insideCartAdapter",items.size.toString()+" "+item)
                 tvName.text = item.products_name
                 tvCartQuant.text = item.weight
                 tvCartType.text = "₹ "+item.price
+                binding.vBt1.setVisibility(View.INVISIBLE)
+                binding.vBt2.setVisibility(View.INVISIBLE)
+                binding.vBt3.setVisibility(View.INVISIBLE)
                 tvCurrentQuant.text=item.quant
                 var tot= item.quant?.toInt()?.let { item.price?.toInt()?.times(it) }
                 total.text = "₹ "+tot
@@ -72,9 +78,12 @@ class CartAdapter(
                     //notifyDataSetChanged()
                 }
                 imgClear.setOnClickListener {
-                    callback.onDelete(item.products_name,position,item)
-                    notifyItemRemoved(position)
                     items.removeAt(position)
+                    //Log.d("insideCartAdapter", "$position $items")
+                    notifyItemRemoved(position)
+                    callback.onDelete(item.products_name,position,item)
+
+
                 }
 
 
@@ -106,25 +115,50 @@ class CartAdapter(
                         if (dataSnapshot.child("250gm").exists()) {
                             binding.vBt3.setVisibility(View.VISIBLE)
                         }
+
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
 
+
+
                 binding.vBt1.setOnClickListener(View.OnClickListener {
-                    tvCartQuant.text=("Weight:Per Kg")
+                    tvCartQuant.text=("Per Kg")
                     if (item.weight == "500gm" || item.weight == "500Gm"
                     ) {
                         tvCartType.text = ("₹ " + item.price!!.toInt() * 2)
+
                         val str: String = item.price.toString()
                         val str1 = str.substring(2, str.length)
-                        item.price=(str1)
+                        item.price= (item.price!!.toInt() * 2).toString()
+                        if(item.quant?.toInt()==0){
+                            item.quant= (item.quant?.toInt()?.plus(1)).toString()
+                            binding.total.setText(
+                                "₹ " + (item.price?.toInt()!!).times(1))
+                        }
+                        else{
+                            binding.total.setText(
+                                "₹ " + (item.price?.toInt()!!).times(item.quant?.toInt()!!))
+                        }
+                        Log.d("insideKg",
+                            item.quant?.toInt()?.times(item.price?.toInt()!!).toString()+" "+item.quant+" "+item.price
+
+                        )
+
+
                     } else if (item.weight == "250gm" || item.weight == "250Gm"
                     ) {
                         tvCartType.text=("₹ " + (item.price?.toInt()?.times(4) ?:1))
+
                         val str: String = tvCartType.text.toString()
                         val str1 = str.substring(2, str.length)
                         item.price=(str1)
+                        if(item.quant?.toInt()==0){
+                            item.quant= (item.quant?.toInt()?.plus(1)).toString()
+                        }
+                        binding.total.setText(
+                            "₹ " + (item.quant?.toInt()?.times(item.price?.toInt()!!)))
                     }
                     item.weight=("Per Kg")
                     vBt1.isEnabled = false
@@ -132,59 +166,50 @@ class CartAdapter(
                     vBt3.isEnabled = true
                     val str: String = tvCartType.text.toString()
                     val str1 = str.substring(2, str.length)
-//                    ref = FirebaseDatabase.getInstance().getReference("Cart").child(key)
-//                        .child(item.products_name)
-//                    ref.child("price").setValue(str1)
-//                    ref.child("weight").setValue("Per kg")
-//                    item.weight= ("Per Kg")
-//                    ref = FirebaseDatabase.getInstance().getReference("Cart").child(key)
-//                        .child(item.products_name)
-//                    ref.child("total")
-//                        .setValue(`val`.get(position) * item.price)
-//                    holder.t2.setText(
-//                        "₹ " + (`val`.get(position) * product1.get(position).getPrice()
-//                            .toInt()).toString()
-//                    )
+                    ref = FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+                        .child(item.products_name)
+                    ref.child("weight").setValue("Per kg")
+                    ref.child("price").setValue(item.price)
+                    item.weight= ("Per Kg")
+                    ref.child("total")
+                        .setValue((item.quant?.toInt()?.times(item.price?.toInt()!!)).toString())
+
+                    callback.update_counter()
+                    notifyItemChanged(position)
 //                    rate = 0
 //                    for (i in `val`.indices) {
 //                        rate = rate + `val`.get(i) * product1.get(i).getPrice().toInt()
 //                    }
 //                    CartProductList.update_counter(rate.toString())
-                    vBt1.setBackgroundResource(R.drawable.cartbg1)
-                    vBt2.setBackgroundResource(R.drawable.cartbg)
-                    vBt3.setBackgroundResource(R.drawable.cartbg)
+//                    vBt1.setBackgroundResource(R.drawable.cartbg1)
+//                    vBt2.setBackgroundResource(R.drawable.cartbg)
+//                    vBt3.setBackgroundResource(R.drawable.cartbg)
                 })
 
 
 
                 vBt2.setOnClickListener(View.OnClickListener {
-                    tvCartQuant.setText("Weight:500gm")
-                    vBt1.setEnabled(true)
-                    vBt2.setEnabled(false)
-                    vBt3.setEnabled(true)
+                    tvCartQuant.text = "500gm"
+
                     ref = FirebaseDatabase.getInstance().getReference("variety")
                         .child(item.products_name).child("500gm").child("rate")
                     ref.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 val val1 = dataSnapshot.value.toString()
-                                tvCartType.setText("₹ $val1")
-//                                ref = FirebaseDatabase.getInstance().getReference("Cart").child(key)
-//                                    .child(item.products_name)
-//                                ref.child("price").setValue(val1)
-//                                ref.child("weight").setValue("500gm")
-//                                item.weight=("500gm")
-//                                item.price=(val1)
-//                                holder.t2.setText(
-//                                    "₹ " + (`val`.get(position) * product1.get(
-//                                        position
-//                                    ).getPrice().toInt()).toString()
-//                                )
-//                                ref = FirebaseDatabase.getInstance().getReference("Cart").child(key)
-//                                    .child(item.products_name)
-//                                ref.child("total").setValue(
-//                                    `val`.get(position) * item.price
-//                                )
+                                tvCartType.text = "₹ $val1"
+                                item.price=val1
+
+                                ref = FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+                                    .child(item.products_name)
+                                ref.child("weight").setValue("500gm")
+                                ref.child("price").setValue(val1)
+                                ref.child("total")
+                                    .setValue((item.quant?.toInt()?.times(val1.toInt())).toString())
+                                binding.total.setText(
+                                    "₹ " + ((item.quant?.toInt()?.times(val1.toInt())).toString()))
+                                callback.update_counter()
+                                notifyItemChanged(position)
 //                                rate = 0
 //                                for (i in `val`.indices) {
 //                                    rate = rate + `val`.get(i) * product1.get(i).getPrice().toInt()
@@ -195,34 +220,36 @@ class CartAdapter(
 
                         override fun onCancelled(databaseError: DatabaseError) {}
                     })
-                    vBt2.setBackgroundResource(R.drawable.cartbg1)
-                    vBt1.setBackgroundResource(R.drawable.cartbg)
-                    vBt3.setBackgroundResource(R.drawable.cartbg)
+                    vBt1.isEnabled = true
+                    vBt2.isEnabled = false
+                    vBt3.isEnabled = true
+//                    vBt2.setBackgroundResource(R.drawable.cartbg1)
+//                    vBt1.setBackgroundResource(R.drawable.cartbg)
+//                    vBt3.setBackgroundResource(R.drawable.cartbg)
+
+
                 })
 
                 vBt3.setOnClickListener(View.OnClickListener {
-                    tvCartQuant.setText("Weight:250gm")
+                    tvCartQuant.text = "250gm"
                     ref = FirebaseDatabase.getInstance().getReference("variety")
                         .child(item.products_name).child("250gm").child("rate")
                     ref.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 val val1 = dataSnapshot.value.toString()
-                                tvCartType.setText("₹ $val1")
-//                                ref = FirebaseDatabase.getInstance().getReference("Cart").child(key)
-//                                    .child(item.products_name)
-//                                ref.child("price").setValue(val1)
-//                                ref.child("weight").setValue("250gm")
-//                                item.weight=("250gm")
-//                                item.price=(val1)
-//                                holder.t2.setText(
-//                                    "₹ " + (`val`.get(position) * item.price).toString()
-//                                )
-//                                ref = FirebaseDatabase.getInstance().getReference("Cart").child(key)
-//                                    .child(item.products_name)
-//                                ref.child("total").setValue(
-//                                    `val`.get(position) * item.price.toInt()
-//                                )
+                                tvCartType.text = "₹ $val1"
+                                item.price=val1
+                                ref = FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+                                    .child(item.products_name)
+                                ref.child("weight").setValue("250gm")
+                                ref.child("price").setValue(val1)
+                                ref.child("total")
+                                    .setValue((item.quant?.toInt()?.times(val1.toInt())).toString())
+                                binding.total.setText(
+                                    "₹ " + ((item.quant?.toInt()?.times(val1.toInt())).toString()))
+                                callback.update_counter()
+                                notifyItemChanged(position)
 //                                rate = 0
 //                                for (i in `val`.indices) {
 //                                    rate = rate + `val`.get(i) * product1.get(i).getPrice().toInt()
@@ -233,14 +260,15 @@ class CartAdapter(
 
                         override fun onCancelled(databaseError: DatabaseError) {}
                     })
-                    vBt1.setEnabled(true)
-                    vBt2.setEnabled(true)
-                    vBt3.setEnabled(false)
+                    vBt1.isEnabled = true
+                    vBt2.isEnabled = true
+                    vBt3.isEnabled = false
 
                     //holder.t2.setText("₹ " + String.valueOf(val.get(position) * (Integer.parseInt(product1.get(position).getPrice()))));
-                    vBt3.setBackgroundResource(R.drawable.cartbg1)
-                    vBt2.setBackgroundResource(R.drawable.cartbg)
-                    vBt1.setBackgroundResource(R.drawable.cartbg)
+//                    vBt3.setBackgroundResource(R.drawable.cartbg1)
+//                    vBt2.setBackgroundResource(R.drawable.cartbg)
+//                    vBt1.setBackgroundResource(R.drawable.cartbg)
+
                 })
 
             }

@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.noor.mystore99.MainActivity
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.checkout.CheckoutActivity
@@ -38,6 +39,12 @@ class MyOrder : BaseActivity<ActivityMyOrderBinding,MyOrderViewModel>(),MyOrderC
             rvCart.adapter = MyOrderAdapter(this@MyOrder)
 
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this@MyOrder, com.noor.mystore99.amigrate.ui.main.MainActivity::class.java)
+        startActivity(intent)
     }
 
 

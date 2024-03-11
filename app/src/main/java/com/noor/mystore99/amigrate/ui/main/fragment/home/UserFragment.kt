@@ -7,12 +7,13 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,26 +24,28 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.model.SliderModel
+import com.google.android.material.appbar.AppBarLayout
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
+import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.ui.cart.CartViewModel
 import com.noor.mystore99.amigrate.ui.category.CategoryActivity
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapterCallback
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapterCallBack
+import com.noor.mystore99.amigrate.util.ProgresssDialog
 import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.databinding.UserFragmentBinding
 import com.noor.mystore99.sliderAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
 
 @AndroidEntryPoint
 class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAdapterCallBack,
-    CategoryAdapterCallback {
+    CategoryAdapterCallback  {
 
 
     override val viewModel: UserViewModel by viewModels()
@@ -56,20 +59,21 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
     private var currentPage = 2
     private var timer: Timer? = null
 
+
     private val delayTime: Long = 3000
     private val periodTime: Long = 3000
+    private lateinit var progressDialog: ProgresssDialog
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        addObservers()
+        addObservers()
         if (savedInstanceState == null) {
             initUi()
             addListener()
+            viewModel.getAllProducts(this.requireContext())
         }
-
         super.onViewCreated(view, savedInstanceState)
     }
-
 
     private fun addListener() {
         with(binding) {
@@ -140,6 +144,10 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
             }
 
         })
+        binding.viewMore.setOnClickListener {
+            binding.rvCategory.smoothScrollToPosition(binding.rvCategory.adapter?.itemCount
+                ?.minus(1) ?:2 );
+        }
     }
 
 
@@ -164,8 +172,14 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
     override fun addObservers() {
         var c = 0
+        progressDialog= ProgresssDialog(requireContext())
+        progressDialog.dismiss()
         viewModel.productList.observe(viewLifecycleOwner) {
             viewLifecycleOwner.lifecycleScope.launch {
+                if(it!=null)
+                        it.sortBy { productEntity ->
+                            productEntity.products_name
+                        }
                     (binding.rvProduct.adapter as UserAdapter).submitListNew(it)
 
                 }
@@ -287,7 +301,6 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
     }
 
 
-
     override fun searchInCartDB(id: String) {
     }
 
@@ -295,8 +308,14 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         super.onSaveInstanceState(outState)
         outState.putBoolean("VIEW_DESTROYED", true)
     }
+
+    override fun onPause() {
+        stopBannerSlideShow()
+        super.onPause()
+    }
     override fun onDestroyView() {
         timer?.cancel()
+        stopBannerSlideShow()
 
         super.onDestroyView()
     }

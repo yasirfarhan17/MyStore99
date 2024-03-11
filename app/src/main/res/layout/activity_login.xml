@@ -53,7 +53,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Welcome Back! \n Sign in to your account" />
+                    android:text="LogIn"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txt_input_user_id"
@@ -121,6 +124,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/convergence"
                     android:paddingStart="10dp"
+                    android:visibility="gone"
                     android:paddingEnd="10dp"
                     android:text="Remember Me"
                     app:layout_constraintEnd_toEndOf="@id/mat_bt_login"
@@ -133,6 +137,7 @@
                     android:layout_height="55dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/convergence"
                     android:text="@string/login"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -393,35 +398,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_sign_up_header"
                     tools:text="Get your grocery delivered" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/txt_input_sign_up_phone_no"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="30dp"
-                    android:hint="@string/phone_number"
-                    app:endIconMode="clear_text"
-                    app:helperTextTextColor="@color/colorAccent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txt_input_Name_signUp"
-                    app:startIconDrawable="@drawable/ic_local_phone">
 
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txt_input_et_phone_sign_up"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/convergence"
-                        android:inputType="number"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -455,7 +432,35 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txt_input_sign_up_phone_no"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:hint="@string/phone_number"
+                    app:endIconMode="clear_text"
+                    app:helperTextTextColor="@color/colorAccent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_input_Name_signUp"
+                    app:startIconDrawable="@drawable/ic_local_phone">
 
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txt_input_et_phone_sign_up"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/convergence"
+                        android:inputType="number"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
 
 

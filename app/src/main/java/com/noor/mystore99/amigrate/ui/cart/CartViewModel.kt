@@ -5,11 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.networkmodule.database.dao.CartDao
 import com.example.networkmodule.database.entity.CartEntity
+import com.example.networkmodule.model.CartModel
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.usecase.ClearCartItemsUseCase
 import com.example.networkmodule.usecase.DeleteCartItemUseCase
 import com.example.networkmodule.usecase.FireBaseCartUseCase
 import com.example.networkmodule.usecase.GetCartItemsUseCase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.util.toLiveData
@@ -27,6 +32,7 @@ class CartViewModel @Inject constructor(
     private val clearCartItemsUseCase: ClearCartItemsUseCase,
     private val getCart: FireBaseCartUseCase,
     private val deleteCartItemUseCase: DeleteCartItemUseCase,
+
 
     private val dao: CartDao
 ) : BaseViewModel() {
@@ -47,6 +53,7 @@ class CartViewModel @Inject constructor(
             getCart().collectLatest {
                 when (it) {
                     is Resource.Success -> {
+                        Log.d("indideCartViewModel",it.data.toString())
                         _cartFromDB.postValue(it.data as ArrayList<CartEntity>)
                         _viewState.postValue(ViewState.Success())
                     }
@@ -95,6 +102,32 @@ class CartViewModel @Inject constructor(
             dao.clearIndi(id)
 
         }
+    }
+    fun cartDataCall(key:String){
+        val ref= FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+        ref.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val cartList = ArrayList<CartEntity>()
+                snapshot.children.forEach {
+                    Log.d("SAHIL_CART", "cart $it")
+                    val cartItem = it.getValue(CartModel::class.java)?.toCartEntity()
+
+                    Log.d("SAHIL_CART", "cart $snapshot")
+                    cartItem.let { it1 ->
+                        if (it1 != null) {
+                            cartList.add(it1)
+                        }
+                    }
+                }
+                _cartFromDB.postValue(cartList)
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
     }
 
 

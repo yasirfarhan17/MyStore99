@@ -13,8 +13,8 @@ android {
         applicationId "com.noor.mystore99"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 13
-        versionName "1.11"
+        versionCode 20
+        versionName "1.18"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -180,6 +180,9 @@ dependencies {
     implementation 'com.shreyaspatil:EasyUpiPayment:2.0'
 
     implementation 'com.google.zxing:core:3.3.3'
+
+    implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation 'com.android.volley:volley:1.2.1'
 }
 repositories {
     mavenCentral()

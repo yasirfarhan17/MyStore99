@@ -70,7 +70,6 @@
             android:id="@+id/rv_cart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="15dp"
             android:background="@color/white"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/bt_check_out"
@@ -78,20 +77,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_order_text"
             tools:listitem="@layout/indiview_cart"
-            tools:visibility="gone" />
+            />
 
 
-        <com.google.android.material.button.MaterialButton
+        <ImageView
             android:id="@+id/bt_check_out"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="5dp"
-            android:text="@string/check_out"
+            android:background="@drawable/buttonround"
             android:textColor="@color/white"
             android:textSize="17sp"
-            app:backgroundTint="@color/colorSecondary"
             app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

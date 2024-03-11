@@ -1,6 +1,8 @@
 package com.example.networkmodule.usecase
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.example.networkmodule.model.User
 import com.example.networkmodule.network.AuthResource
 import com.example.networkmodule.network.Resource
@@ -12,7 +14,7 @@ import javax.inject.Inject
 class GetLoginUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
-    operator fun invoke(phoneNumber: String, password: String): Flow<AuthResource> = flow {
+    operator fun invoke(phoneNumber: String, password: String,context: Context): Flow<AuthResource> = flow {
         emit(AuthResource.Loading)
         repository.login(phoneNumber, password).collect {
             when (it) {
@@ -38,7 +40,10 @@ class GetLoginUseCase @Inject constructor(
                             emit(AuthResource.OtpRequired)
                             return@collect
                         }
-                    } else emit(AuthResource.WrongPassword)
+                    } else{
+                        emit(AuthResource.WrongPassword)
+                        Toast.makeText(context,"wrong password",Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

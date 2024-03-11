@@ -1,5 +1,6 @@
 package com.noor.mystore99.amigrate.ui.category
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.networkmodule.database.entity.CartEntity
@@ -37,6 +38,7 @@ class CategoryViewModel @Inject constructor(
                             _viewState.postValue(ViewState.Error("No Product Found"))
                             return@collect
                         }
+                        Log.d("insideCategory",it.data.toString())
                         _categoryList.postValue(it.data as ArrayList<ProductModel>)
                         _viewState.postValue(ViewState.Success())
                     }

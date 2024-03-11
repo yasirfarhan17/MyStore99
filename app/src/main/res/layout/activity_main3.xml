@@ -6,6 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/coordinate"
         tools:context=".MainActivity">
 
         <fragment
@@ -48,7 +49,7 @@
             android:background="@drawable/round_shape"
             android:backgroundTint="#D50000"
             app:layout_anchor="@id/fab_bt_cart"
-            app:layout_anchorGravity="top|right">
+            app:layout_anchorGravity="bottom|right">
             <TextView
                 android:id="@+id/tv_batch"
                 android:layout_width="match_parent"

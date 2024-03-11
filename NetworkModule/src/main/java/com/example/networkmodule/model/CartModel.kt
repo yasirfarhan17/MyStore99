@@ -3,8 +3,8 @@ package com.example.networkmodule.model
 import android.graphics.Bitmap
 import android.os.Parcelable
 import com.example.networkmodule.database.entity.CartEntity
+import com.example.networkmodule.database.entity.ProductEntity
 import kotlinx.parcelize.Parcelize
-
 
 @Parcelize
 data class CartModel (
@@ -14,8 +14,17 @@ data class CartModel (
     var weight: String? = null,
     var quant: String? = null,
     var total: String? = null,
-):Parcelable{
+
+): Parcelable {
     fun toCartEntity(): CartEntity {
-        return CartEntity(this.products_name!!,this.price,this.img,this.weight,this.quant,this.total)
+        return CartEntity(
+            this.products_name!!,
+            this.price,
+            this.img,
+            this.weight,
+            this.quant,
+            this.total,
+
+            )
     }
 }

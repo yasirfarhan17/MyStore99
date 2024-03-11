@@ -2,13 +2,16 @@ package com.noor.mystore99.amigrate.ui.main.fragment.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +23,7 @@ import com.example.networkmodule.model.DashBoardModel
 import com.example.networkmodule.storage.PrefsUtil
 import com.noor.mystore99.AboutPage
 import com.noor.mystore99.R
+import com.noor.mystore99.amigrate.ui.auth.login.LoginActivity
 import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
 import com.noor.mystore99.amigrate.ui.dashboard.account.myorder.MyOrder
 import com.noor.mystore99.amigrate.ui.dashboard.account.profile.ProfileActivity
@@ -78,10 +82,18 @@ class DashboardFragment : Fragment(),DashBoardCallBack {
             with(binding){
                 tvName.text="Hi ${it.name}"
                 //tvName.setText(it.name)
-                if(it.photo!=null)
-                    imageProfile.load(it.photo){
+                if(it.photo!=null) {
+                    val `val`: String = it.photo.toString()
+
+                    val decodedString = Base64.decode(`val`, Base64.DEFAULT)
+                    val decodedByte =
+                        BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+                    // imageProfile.setImageBitmap(decodedByte)
+
+                    imageProfile.load(decodedByte) {
                         transformations(CircleCropTransformation())
                     }
+                }
             }
         }
 
@@ -107,6 +119,49 @@ class DashboardFragment : Fragment(),DashBoardCallBack {
         {
             val intent=Intent(activity, AboutPage::class.java)
             startActivity(intent)
+        }
+        else if(productName.equals("Log Out"))
+        {
+            val alertDialogBuilder = context?.let {
+                AlertDialog.Builder(
+                    it
+                )
+            }
+
+            // set title
+
+            // set title
+            alertDialogBuilder?.setTitle("Exit")
+
+            // set dialog message
+
+            // set dialog message
+            alertDialogBuilder
+                ?.setMessage("Do you really want to exit?")
+                ?.setCancelable(false)
+                ?.setPositiveButton("Yes") { dialog, id ->
+                    // if this button is clicked, close
+                    // current activity
+                    //show_Notification("LogOut","You Log Out Your account at "+ currentTime);
+                    //EmployeeHome.this.finish();
+                    prefsUtil.Name=""
+                    prefsUtil.password=""
+                    startActivity(Intent(activity,LoginActivity::class.java))
+                }
+                ?.setNegativeButton("No") { dialog, id -> // if this button is clicked, just close
+                    // the dialog box and do nothing
+                    dialog.cancel()
+                }
+
+            // create alert dialog
+
+            // create alert dialog
+            val alertDialog = alertDialogBuilder?.create()
+
+            // show it
+
+            // show it
+            alertDialog?.show()
         }
     }
 }

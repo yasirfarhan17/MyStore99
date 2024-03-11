@@ -9,6 +9,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.util.Util.decodeToBitmap
+import com.noor.mystore99.R
 import com.noor.mystore99.databinding.IndiviewCategoryBinding
 import com.noor.mystore99.databinding.IndiviewNewCategoryBinding
 
@@ -30,6 +31,7 @@ class CategoryAdapter(val callback: CategoryAdapterCallback) :
         fun bind(item: CategoryModel) {
             with(binding) {
                 categoryIcon.load(item.categoryIconLink) {
+                    placeholder(R.drawable.vegetable)
                 }
                 categoryName.text = item.categoryName.uppercase()
                 constraintLayout.setOnClickListener {

@@ -2,31 +2,22 @@ package com.noor.mystore99.amigrate.ui.main.fragment.home.adapter
 
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
-import com.example.networkmodule.model.ProductModelNew
-import com.example.networkmodule.util.Util.bitMapToString
-import com.example.networkmodule.util.Util.decodeToBitmap
-import com.noor.mystore99.MainActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.main.fragment.home.UserFragment
-import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
-import com.noor.mystore99.cartItem
 import com.noor.mystore99.databinding.IndiviewNewProductsBinding
-import com.noor.mystore99.databinding.IndiviewProductsBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class UserAdapter(
     val callBack: UserFragment
@@ -36,6 +27,7 @@ class UserAdapter(
     private val item = ArrayList<ProductEntity>()
     private val itemCart = ArrayList<CartEntity>()
     private val itemFilter = ArrayList<ProductEntity>()
+    var ref=FirebaseDatabase.getInstance().reference
 
 
 
@@ -78,7 +70,7 @@ class UserAdapter(
                 price.text = "₹ " + item.price
                 quantBox.text = item.quant
                 productImg.load(item.img) {
-                    placeholder(R.drawable.ic_home_black_24dp)
+                    placeholder(R.drawable.vegetable)
                 }
                 if (item.stock.equals("no")) {
                     addBtn.visibility = View.GONE
@@ -93,6 +85,24 @@ class UserAdapter(
                     btIncrease.visibility = View.GONE
                     tvCurrentQuant.visibility = View.GONE
                 }
+
+                ref = FirebaseDatabase.getInstance().getReference("Add Mrp")
+                    .child(item.products_name)
+
+                ref.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            binding.mrp.setVisibility(View.VISIBLE)
+                            binding.textMrp.setVisibility(View.VISIBLE)
+                            binding.mrp.setText("₹ " + snapshot.value.toString())
+                        } else {
+                            binding.mrp.setVisibility(View.INVISIBLE)
+                            binding.textMrp.setVisibility(View.INVISIBLE)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
 
 
 //                    itemCart?.forEach{

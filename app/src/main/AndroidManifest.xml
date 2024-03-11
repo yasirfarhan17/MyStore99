@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <queries>
         <package android:name="com.google.android.apps.nbu.paisa.user" />
@@ -28,6 +29,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SbziTaza">
+        <activity
+            android:name=".amigrate.ui.splash.NewSplashActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".amigrate.ui.payment.confirmOrder"
+            android:exported="false" />
+        <activity
+            android:name=".amigrate.util.PushNotification"
+            android:exported="false" />
         <activity
             android:name=".amigrate.ui.dashboard.account.profile.ProfileActivity"
             android:exported="false" />
@@ -54,12 +70,8 @@
 
         <activity
             android:name=".amigrate.ui.auth.login.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".amigrate.ui.checkout.CheckoutActivity"
@@ -127,9 +139,11 @@
 
         <service
             android:name=".MyFirebaseMessaging"
-            android:exported="false">
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
     </application>

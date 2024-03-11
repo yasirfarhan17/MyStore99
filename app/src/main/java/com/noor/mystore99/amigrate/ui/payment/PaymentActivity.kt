@@ -7,20 +7,17 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.CartModel
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.cart.CartViewModel
-import com.noor.mystore99.amigrate.ui.checkout.CheckoutActivity
 import com.example.networkmodule.model.checkOutModel
+import com.google.firebase.database.*
 import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
 import com.noor.mystore99.amigrate.ui.upi.NewUPIPay
+import com.noor.mystore99.amigrate.util.PushNotification
 import com.noor.mystore99.databinding.ActivityPaymentBinding
 import com.noor.mystore99.setDate
-import com.noor.mystore99.upiPay
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +37,8 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
     lateinit var address:String
     lateinit var ref : DatabaseReference
     lateinit var ref1 : DatabaseReference
+    lateinit var ref2 : DatabaseReference
+    lateinit var name : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_payment)
@@ -53,7 +52,9 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
         Log.d("checkamt", ""+ amount)
         ref= FirebaseDatabase.getInstance().getReference("UserNew").child(key)
         ref1= FirebaseDatabase.getInstance().getReference("orderNew").child(key)
+        ref2= FirebaseDatabase.getInstance().getReference("PinCode")
         viewModel.getUserDet(key)
+        viewModelCart.cartDataCall(key)
         initUi()
     }
 
@@ -68,7 +69,11 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
                 address=tvAddress.text.toString()
                 tvPhoneNumber.text=key
                 etPincode.setText(it.pincode.toString())
+                name=it.name.toString()
 
+            }
+            imgBack.setOnClickListener {
+                onBackPressed()
             }
             rbCash.setOnClickListener {
                 cashFlag=true
@@ -89,16 +94,53 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
 
             btCheckOut.setOnClickListener {
                 if(cashFlag){
-                    val intent = Intent(this@PaymentActivity, CheckoutActivity::class.java)
-                    setValueToFirebase()
-                    intent.putExtra("pay","Cash on delivery")
-                    intent.putExtra("amount",amount)
-                    intent.putExtra("combo",combo)
-                    viewModelCart.clearCart()
-                    var ref=FirebaseDatabase.getInstance().getReference("CartNew").child(key)
-                    ref.removeValue()
-                    startActivity(intent)
+                    if(etDate.text == null || etDate.text.isNullOrBlank()){
+                        Toast.makeText(this@PaymentActivity,"Please choose delivery date",Toast.LENGTH_SHORT).show()
+                    }
+                    else if(tvAddress.text.toString().equals("null Pincode:-null") ||tvAddress.text==null||tvAddress.text.isNullOrEmpty()){
+                        Toast.makeText(this@PaymentActivity,"Address is required",Toast.LENGTH_SHORT).show()
+                    }
+                    else if(etPincode.text.toString().equals("null")|| etPincode.text ==null || etPincode.text.isNullOrBlank()){
+                        Toast.makeText(this@PaymentActivity,"Pin code is required",Toast.LENGTH_SHORT).show()
+                    }
+
+
+                    else {
+                        Log.d("checkingPincode",etPincode.text.toString())
+                        ref2.child(etPincode.text.toString()).addValueEventListener(object :ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if(snapshot.exists()){
+                                    val status=snapshot.child("status").value
+                                    if(status?.equals("on") == true){
+                                        val intent = Intent(this@PaymentActivity, confirmOrder::class.java)
+                                        setValueToFirebase(etPincode.text.toString())
+                                        intent.putExtra("pay", "Cash on delivery")
+                                        intent.putExtra("amount", amount)
+                                        intent.putExtra("combo", combo)
+                                        intent.putExtra("pincode", etPincode.text.toString())
+
+                                        viewModelCart.clearCart()
+                                        ref.child("pincode").setValue(etPincode.text.toString())
+                                        val ref = FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+                                        ref.removeValue()
+                                        startActivity(intent)
+                                    }
+
+                                }
+                                else{
+                                    Toast.makeText(this@PaymentActivity,"Please change the Pin code",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+
+                            }
+
+                        })
+
+                    }
                 }
+
                 else if(upiFlag){
 //                    val intent = Intent(this@PaymentActivity, CheckoutActivity::class.java)
 //                    setValueToFirebase()
@@ -113,12 +155,10 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
                     ref.removeValue()
                     startActivity(Intent(this@PaymentActivity,NewUPIPay::class.java))
                 }
-                else if (binding.etDate.text.isNullOrBlank()){
-                    Toast.makeText(this@PaymentActivity,"Please select delivery date",Toast.LENGTH_SHORT).show()
-                }
                 else{
-                    Toast.makeText(this@PaymentActivity,"Please select the payment option",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PaymentActivity,"Please select payment option",Toast.LENGTH_SHORT).show()
                 }
+
 
             }
         }
@@ -134,19 +174,26 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
         }
     }
 
-    private fun setValueToFirebase(){
+    private fun setValueToFirebase(pincode:String){
         val currentDate1 = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
         val currentTime1 = SimpleDateFormat("HHmmss", Locale.getDefault()).format(
             Date()
         )
+        viewModel.userDetail.observe(this@PaymentActivity){
+            address=it.address.toString()+" Pincode:-"+pincode
+        }
+        val currentDate = SimpleDateFormat("ddMMyyyy", Locale.getDefault()).format(Date())
         combo = currentDate1 + currentTime1
         val model: checkOutModel
         if(upiFlag){
-            model= checkOutModel(list,combo,binding.etDate.text.toString(),currentTime1,address,amount,"upi",key)
+            model= checkOutModel(list,combo,binding.etDate.text.toString(),currentTime1,currentDate,address,amount,"upi",key,name)
         }
         else{
-            model= checkOutModel(list,combo,binding.etDate.text.toString(),currentTime1,address,amount,"cod",key)
+            model= checkOutModel(list,combo,binding.etDate.text.toString(),currentTime1,currentDate,address,amount,"cod",key,name)
         }
+        val title="New Order"
+        val message="orderId:- $combo Phone:- $key Amount:- $amount time:-$currentTime1"
+        //val pushNotification=PushNotification(title,message)
         ref1.child(combo).setValue(model)
 
     }

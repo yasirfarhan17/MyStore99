@@ -14,7 +14,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
-import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapter
 import com.noor.mystore99.amigrate.ui.payment.PaymentActivity
 import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.amigrate.util.Util.showAlert
@@ -44,17 +43,18 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_new_cart)
         key=prefsUtil.Name.toString()
+        viewModel.cartDataCall(key)
         initUi()
         addListener()
     }
 
     private fun addListener() {
         with(binding) {
-            update_counter()
-            if(finalTotalPrice==0)
-                itemsPresentInCart(false)
+//            update_counter()
+//            if(finalTotalPrice==0)
+//                itemsPresentInCart(false)
             btCheckOut.setOnClickListener {
-                if(subValue<100){
+                if(subValue<150){
                     Toast.makeText(this@CartActivity,"Please add more item",Toast.LENGTH_SHORT).show()
                 }
                 else{
@@ -130,14 +130,19 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
         }
     }
 
+
     override fun addObservers() {
+
+
+
         viewModel.cartFromDB.observe(this) { cartList ->
             if (cartList.isNullOrEmpty()) {
                 itemsPresentInCart(false)
+                Log.d("cartcheck", "" + cartList)
                 return@observe
             }
             itemsPresentInCart(true)
-            (binding.rvCart.adapter as CartAdapter).submitList(cartList)
+            (binding.rvCart.adapter as CartAdapter).submitList(cartList,key)
             cartValue=cartList
             getTotalPrice(cartList)
             update_counter()
@@ -191,13 +196,47 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartC
 
 
     override fun onResume() {
-        addObservers()
+//        val ref=FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+//        ref.addValueEventListener(object: ValueEventListener{
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                val cartList = ArrayList<CartEntity>()
+//                snapshot.children.forEach {
+//                    Log.d("SAHIL_CART", "cart $it")
+//                    val cartItem = it.getValue(CartModel::class.java)?.toCartEntity()
+//                    Log.d("SAHIL_CART", "cart $snapshot")
+//                    cartItem.let { it1 ->
+//                        if (it1 != null) {
+//                            cartList.add(it1)
+//                        }
+//                    }
+//                }
+//                if (cartList.isNullOrEmpty()) {
+//                    itemsPresentInCart(false)
+//                    Log.d("cartcheck", "" + cartList)
+//
+//                }
+//                else {
+//                    Log.d("cartcheck", "" + cartList)
+//                    itemsPresentInCart(true)
+//                    (binding.rvCart.adapter as CartAdapter).submitList(cartList, key)
+//                    cartValue = cartList
+//                    getTotalPrice(cartList)
+//                    update_counter()
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//
+//            }
+//
+//        })
+        viewModel.cartDataCall(key)
         super.onResume()
     }
     override fun onDelete(id: String, pos: Int, item: CartEntity) {
         viewModel.deleteItemFromCart(item)
         cartValue.removeAt(pos)
-        (binding.rvCart.adapter as CartAdapter).submitList(cartValue)
+        (binding.rvCart.adapter as CartAdapter).submitList(cartValue,key)
         Log.d("checkcart", ""+cartValue.size)
         getTotalPrice(cartValue)
         update_counter()

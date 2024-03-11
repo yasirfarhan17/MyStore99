@@ -14,6 +14,10 @@ import com.example.networkmodule.database.entity.ProductEntity
 import com.example.networkmodule.model.ProductModelNew
 import com.example.networkmodule.util.Util.bitMapToString
 import com.example.networkmodule.util.Util.decodeToBitmap
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.R
 import com.noor.mystore99.cartItem
 import com.noor.mystore99.databinding.IndiviewNewProductsBinding
@@ -25,6 +29,7 @@ class NewCategoryAdapter(
 ) : RecyclerView.Adapter<NewCategoryAdapter.NewCategoryViewHolder>() {
     private val item = ArrayList<ProductEntity>()
     private val itemCart = ArrayList<CartEntity>()
+    var ref=FirebaseDatabase.getInstance().reference
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -45,70 +50,91 @@ class NewCategoryAdapter(
         fun bind(item: ProductEntity) {
             with(binding) {
                 name.text = "${item.products_name}\n (${item.HindiName})"
-                price.text = "₹ "+item.price
-                quantBox.text=item.quant
+                price.text = "₹ " + item.price
+                quantBox.text = item.quant
                 productImg.load(item.img) {
-                    placeholder(R.drawable.ic_home_black_24dp)
+                    placeholder(R.drawable.vegetable)
                 }
-                if(item.stock.equals("no")){
-                    addBtn.visibility=View.GONE
-                    stock.visibility=View.VISIBLE
-                    btMinus.visibility=View.GONE
-                    btIncrease.visibility=View.GONE
-                    tvCurrentQuant.visibility=View.GONE
-                }
-                else{
-                    addBtn.visibility=View.VISIBLE
-                    stock.visibility=View.GONE
-                    btMinus.visibility=View.GONE
-                    btIncrease.visibility=View.GONE
-                    tvCurrentQuant.visibility=View.GONE
+                if (item.stock.equals("no")) {
+                    addBtn.visibility = View.GONE
+                    stock.visibility = View.VISIBLE
+                    btMinus.visibility = View.GONE
+                    btIncrease.visibility = View.GONE
+                    tvCurrentQuant.visibility = View.GONE
+                } else {
+                    addBtn.visibility = View.VISIBLE
+                    stock.visibility = View.GONE
+                    btMinus.visibility = View.GONE
+                    btIncrease.visibility = View.GONE
+                    tvCurrentQuant.visibility = View.GONE
                 }
 
-                itemCart.forEach {
+                ref = FirebaseDatabase.getInstance().getReference("Add Mrp")
+                    .child(item.products_name)
 
-                    if(it.products_name.equals(item.products_name))
-                    {
-                        Log.d("insideItemcart",""+it.products_name)
-                        addBtn.visibility=View.GONE
-                        btMinus.visibility=View.VISIBLE
-                        btIncrease.visibility=View.VISIBLE
-                        tvCurrentQuant.visibility=View.VISIBLE
-                        tvCurrentQuant.text=it.quant
+                ref.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            binding.mrp.setVisibility(View.VISIBLE)
+                            binding.textMrp.setVisibility(View.VISIBLE)
+                            binding.mrp.setText("₹ " + snapshot.value.toString())
+                        } else {
+                            binding.mrp.setVisibility(View.INVISIBLE)
+                            binding.textMrp.setVisibility(View.INVISIBLE)
+                        }
                     }
-                }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+
+
+//                    itemCart?.forEach{
+//                        if(it.products_name.equals(item.products_name))
+//                        //Log.d("insideItemcart",""+it.products_name)
+//                        addBtn.visibility=View.GONE
+//                        btMinus.visibility=View.VISIBLE
+//                        btIncrease.visibility=View.VISIBLE
+//                        tvCurrentQuant.visibility=View.VISIBLE
+//                        tvCurrentQuant.text=item.count
+//                    }
+
                 btIncrease.setOnClickListener {
-                    item.count= (tvCurrentQuant.text.toString()).toInt().plus(1).toString()
-                    val total= item.price?.toInt()?.times(item.count!!.toInt())
-                    callBack.onClick(total.toString(),item.products_name, item.count!!)
-                    tvCurrentQuant.text=item.count
+                    item.count = (tvCurrentQuant.text.toString()).toInt().plus(1).toString()
+                    val total = item.price?.toInt()?.times(item.count!!.toInt())
+                    callBack.onClick(total.toString(), item.products_name, item.count!!)
+                    tvCurrentQuant.text = item.count
                 }
                 btMinus.setOnClickListener {
-                    if(item.count!!.toInt() > 1) {
+                    if (item.count!!.toInt() > 1) {
                         item.count = (tvCurrentQuant.text.toString().toInt().minus(1)).toString()
-                        val total= item.price?.toInt()?.times(item.count!!.toInt())
+                        val total = item.price?.toInt()?.times(item.count!!.toInt())
                         callBack.onClick(total.toString(), item.products_name, item.count!!)
 
                     }
                     //notifyDataSetChanged()
                 }
 
-                Log.d("insideAdapter"," ${item.img}")
+                Log.d("insideAdapter", " ${item.img}")
 
 
-
-
-                val cartEntity = CartEntity(item.products_name, item.price, item.img, item.quant,"1", item.price)
+                val cartEntity = CartEntity(
+                    item.products_name,
+                    item.price,
+                    item.img,
+                    item.quant,
+                    "1",
+                    item.price
+                )
                 addBtn.setOnClickListener {
                     callBack.onItemClick(cartEntity)
-                    addBtn.visibility=View.GONE
-                    btMinus.visibility=View.VISIBLE
-                    btIncrease.visibility=View.VISIBLE
-                    tvCurrentQuant.visibility=View.VISIBLE
-                    item.count= 1.toString();
-                    val total= item.price?.toInt()?.times(item.count!!.toInt())
-                    callBack.onClick(total.toString(),item.products_name, item.count!!)
-                    tvCurrentQuant.text=item.count
+//                    addBtn.visibility = View.GONE
+//                    btMinus.visibility = View.VISIBLE
+//                    btIncrease.visibility = View.VISIBLE
+//                    tvCurrentQuant.visibility = View.VISIBLE
+//                    item.count = 1.toString();
+//                    val total = item.price?.toInt()?.times(item.count!!.toInt())
+//                    callBack.onClick(total.toString(), item.products_name, item.count!!)
+//                    tvCurrentQuant.text = item.count
                     //Toast.makeText(it.context, "Item Added successfully", Toast.LENGTH_SHORT).show()
                 }
             }

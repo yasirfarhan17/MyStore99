@@ -65,7 +65,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-                android:hint="Address"
+                android:hint="Full Address"
                 app:endIconMode="clear_text"
                 app:helperTextTextColor="@color/colorAccent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -87,6 +87,36 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutladmark"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="landmark"
+                app:endIconMode="clear_text"
+                app:layout_constraintTop_toBottomOf="@id/layoutaddress"
+                app:layout_constraintBottom_toTopOf="@id/txt_input_city"
+                app:helperTextTextColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:startIconDrawable="@drawable/ic_pin"
+                tools:layout_editor_absoluteY="20dp">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_input_et_landmark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/convergence"
+                    android:inputType="text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_input_city"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -100,7 +130,7 @@
             app:endIconMode="clear_text"
             app:helperTextTextColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutaddress"
+            app:layout_constraintTop_toBottomOf="@id/layoutladmark"
             app:startIconDrawable="@drawable/ic_home_black_24dp">
 
 

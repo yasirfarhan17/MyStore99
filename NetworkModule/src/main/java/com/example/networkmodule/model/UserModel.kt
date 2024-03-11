@@ -7,6 +7,7 @@ data class UserModel(
     val password:String?=null,
     val pincode:String?=null,
     val uid:String?=null,
-    val photo:String?=null
+    val photo:String?=null,
+    val time:String?=null
 
 )

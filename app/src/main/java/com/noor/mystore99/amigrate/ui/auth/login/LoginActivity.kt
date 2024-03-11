@@ -9,9 +9,11 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.OptIn
 import androidx.core.content.edit
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import com.example.networkmodule.model.NotificationModel
 import com.example.networkmodule.model.UserModel
 import com.example.networkmodule.network.AuthResource
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
+import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.ui.auth.AuthManager
 import com.noor.mystore99.amigrate.ui.main.MainActivity
 import com.noor.mystore99.amigrate.util.Util.flipCard
@@ -28,6 +31,9 @@ import com.noor.mystore99.amigrate.util.extension.StringExtension.isValidPhoneNu
 import com.noor.mystore99.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
+import java.util.*
+import com.noor.mystore99.amigrate.util.PushNotification
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
@@ -57,7 +63,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun addListener() {
         with(binding) {
             tvSignUp.setOnClickListener {
@@ -67,6 +72,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                 flipCard(binding.cvLogin, binding.cvRegister) { showMessage(it) }
             }
             matBtLogin.setOnClickListener {
+//                val intent=Intent(this@LoginActivity,PushNotification::class.java)
+//                intent.putExtra("title","title")
+//                intent.putExtra("message","title")
+//                startActivity(intent)
+//                val obj=NotificationModel("title","message")
+//                ref.reference.child("Notification").setValue(obj)
                 doLogin()
 //                val intent=Intent(this@LoginActivity,MainActivity::class.java)
 //                startActivity(intent)
@@ -214,29 +225,37 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
 
 
     private fun doRegister() {
-        if (binding.txtInputEtPhoneSignUp.text.isNullOrEmpty()) {
+        if (binding.txtInputEtNameSignUp.text.isNullOrEmpty()) {
+            binding.txtInputEtNameSignUp.error = "Name cannot be blank."
+
+        }
+        else if (binding.txtInputEtPhoneSignUp.text.isNullOrEmpty()) {
             binding.txtInputEtPhoneSignUp.error = "Phone no cannot be blank."
 
         }
-        if (binding.txtInputEtPhoneSignUp.text.toString().isValidPhoneNumber().not()) {
+
+        else if (binding.txtInputEtPhoneSignUp.text.toString().isValidPhoneNumber().not()) {
             binding.txtInputEtPhoneSignUp.error = "Enter correct phone number."
         }
-        if (binding.txtInputEtPasswordSignUp.text.isNullOrEmpty()) {
-            binding.txtInputEtPassword.error = "Password cannot be black."
+        else if (binding.txtInputEtPasswordSignUp.text.isNullOrEmpty()) {
+            binding.txtInputEtPasswordSignUp.error = "Password cannot be black."
 
         }
-        if (binding.txtInputEtCnfrmPasswordSignUp.text.isNullOrEmpty()) {
-            binding.txtInputEtPassword.error = "Confirm Password cannot be black."
+        else if (binding.txtInputEtCnfrmPasswordSignUp.text.isNullOrEmpty()) {
+            binding.txtInputEtCnfrmPasswordSignUp.error = "Confirm Password cannot be black."
 
         }
-        if (binding.txtInputEtCnfrmPasswordSignUp.text == binding.txtInputEtPasswordSignUp.text) {
+       else if (binding.txtInputEtCnfrmPasswordSignUp.text == binding.txtInputEtPasswordSignUp.text) {
             showToast("Password and Confirm password must be same")
 
+        }
+        else{
+            getOtp("+91"+binding.txtInputEtPhoneSignUp.text.toString())
         }
 
        // startActivity(Intent(this,MainActivity::class.java))
 
-        getOtp("+91"+binding.txtInputEtPhoneSignUp.text.toString())
+
     }
 
     private fun getOtp(phoneNumber: String) {
@@ -262,7 +281,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
         }
         viewModel.doLogin(
             binding.txtInputEtPhone.text.toString(),
-            binding.txtInputEtPassword.text.toString()
+            binding.txtInputEtPassword.text.toString(),
+            this.applicationContext
         )
         prefsUtil.Name = binding.txtInputEtPhone.text.toString()
     }
@@ -277,7 +297,26 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                         prefsUtil.Name = binding.txtInputEtPhone.text.toString()
                         prefsUtil.password = binding.txtInputEtPassword.text.toString()
                     }
-                    startActivity(Intent(this, MainActivity::class.java))
+                    prefsUtil.isLoggedIn = true
+                    prefsUtil.Name = binding.txtInputEtPhone.text.toString()
+                    prefsUtil.password = binding.txtInputEtPassword.text.toString()
+                    var intent=Intent(Intent(this, MainActivity::class.java))
+                    intent.putExtra("key",binding.txtInputEtPhone.text.toString())
+                    startActivity(intent)
+                }
+                is AuthResource.Error -> {}
+                AuthResource.InvalidPhoneNumber -> {
+                    Toast.makeText(this,"Invalid Phone Number",Toast.LENGTH_SHORT).show()
+                }
+                AuthResource.Loading ->{}
+                AuthResource.NoUserFound -> {
+                    Toast.makeText(this,"No User Found",Toast.LENGTH_SHORT).show()
+                }
+                AuthResource.OtpRequired -> {}
+                AuthResource.OtpSend -> {}
+                is AuthResource.VerificationFailed -> {}
+                AuthResource.WrongPassword -> {
+                    Toast.makeText(this,"wrong Password",Toast.LENGTH_SHORT).show()
                 }
                 else -> {}
             }
@@ -290,16 +329,19 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                 }
                 AuthResource.OtpRequired -> showMessage("Otp is required")
                 AuthResource.OtpSend -> {
+
                     if(binding.txtInputEtNameSignUp.text.isNullOrEmpty()) {
                         flipCard(binding.cvOtp, binding.cvForget) { showToast(it) }
 
                         Log.d("checkOtp", "" + it)
                     }
                     else{
+                        ViewState.Loading
                         flipCard(binding.cvOtp, binding.cvRegister) { showToast(it) }
                         Log.d("checkOtp", "" + it)
                     }
                     showToast("Otp Sent Successfully")
+                    ViewState.Success()
 
                 }
                 AuthResource.Success -> {
@@ -319,14 +361,26 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                     }
                     else {
                         with(binding) {
+                            val currentDate1 = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(
+                                Date()
+                            )
+                            val currentTime1 = SimpleDateFormat("HHmmss", Locale.getDefault()).format(
+                                Date()
+                            )
+                            var combo = currentDate1 + currentTime1
                             val obj = UserModel(
                                 address = null,
                                 pincode = null,
                                 name = txtInputEtNameSignUp.text.toString(),
                                 password = txtInputEtPasswordSignUp.text.toString(),
                                 uid = FirebaseAuth.getInstance().uid!!,
-                                otpVerified = true
+                                otpVerified = true,
+                                time = combo
+
                             )
+                            val title="New User register"
+                            val message="Name:- ${txtInputEtNameSignUp.text.toString()} Phone:- ${txtInputEtPhone.text.toString()}"
+                            //val pushNotification= (title,message)
                             obj?.name?.let { it1 -> Log.d("checkObj", it1) }
                             users.child(txtInputEtPhoneSignUp.text.toString()).setValue(obj)
                             showToast("Register Successfully")
@@ -334,7 +388,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                         }
                     }
 //                            sendEmail(name.text.toString(), phone.text.toString())
-                    startActivity(Intent(this, MainActivity::class.java))
+                    var intent=Intent(this, MainActivity::class.java)
+                    intent.putExtra("key",binding.txtInputEtNameSignUp.text.toString())
+                    startActivity(intent)
                 }
                 is AuthResource.VerificationFailed -> {
                     Log.d("SAHIL",it.error)
@@ -343,6 +399,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                 else -> {}
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(binding.txtInputEtPhone.text!=null && binding.txtInputEtPhone.text.toString()!="" && binding.txtInputEtPassword.text!=null && binding.txtInputEtPassword.text.toString()!="" &&prefsUtil.Name!=null && prefsUtil.Name.toString()!=""&& prefsUtil.password!=null && prefsUtil.password.toString()!="")
+            if(binding.txtInputEtPhone.text.toString()==prefsUtil.Name && binding.txtInputEtPassword.text.toString()==prefsUtil.password)
+                startActivity(Intent(this,MainActivity::class.java))
     }
 
     override fun onDestroy() {

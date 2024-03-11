@@ -587,6 +587,8 @@ public class HomeFragment extends Fragment {
 
     }
 
+
+
     private void startbannerslideshow() {
         final Handler handler = new Handler();
         final Runnable update = new Runnable() {

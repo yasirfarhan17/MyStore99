@@ -53,7 +53,7 @@ class UserViewModel @Inject constructor(
 
     init {
         launch {
-            getAllProducts()
+           //getAllProducts()
             getCartFromDB()
            //  combine()
             getBanner()
@@ -63,19 +63,21 @@ class UserViewModel @Inject constructor(
 
      fun getBanner() {
         launch {
+            _viewState.postValue(ViewState.Loading)
             bannerUseCase.invoke().collectLatest {
                 if (it.data.isNullOrEmpty()) {
                     _bannerList.postValue(null)
                     return@collectLatest
                 }
                 _bannerList.postValue(it.data as ArrayList<SliderModel>)
+                _viewState.postValue(ViewState.Success())
 
             }
         }
     }
 
 
-     fun getAllProducts() {
+     fun getAllProducts(context: Context) {
         launch {
             _viewState.postValue(ViewState.Loading)
             productUseCase.invoke().collect {
@@ -83,7 +85,7 @@ class UserViewModel @Inject constructor(
                     is Resource.Success -> {
                         val list = it.data?.map { productModel -> productModel.toProductEntity() }
                         _productList.postValue(list as ArrayList<ProductEntity>)
-                       // _viewState.postValue(ViewState.Success())
+                        _viewState.postValue(ViewState.Success())
                     }
                     is Resource.Error -> {
                         _viewState.postValue(ViewState.Error(it.message))
@@ -129,6 +131,7 @@ class UserViewModel @Inject constructor(
                     return@collect
                 }
                 _categoryList.postValue(it.data as ArrayList<CategoryModel>)
+                _viewState.postValue(ViewState.Success())
             }
         }
 
@@ -168,6 +171,7 @@ class UserViewModel @Inject constructor(
             }
             addToCartUseCase.invoke(item).collectLatest {
                 _insertToCart.postValue(it.data ?: it.message)
+                _viewState.postValue(ViewState.Success())
             }
         }
     }
@@ -175,6 +179,7 @@ class UserViewModel @Inject constructor(
         launch {
             updateQuantUseCase.invoke(price,id,qunat).collectLatest {
                 _quant.postValue(it.data?:it.message)
+                _viewState.postValue(ViewState.Success())
             }
         }
 

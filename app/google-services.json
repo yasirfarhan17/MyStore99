@@ -15,11 +15,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "334702389312-0qqfhgaeu23jjap483cre0e1r18p1ju3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mystoreupdate",
+            "certificate_hash": "16898cb83e739571c3c9a19a76c0a0e1b8e50627"
+          }
+        },
+        {
           "client_id": "334702389312-7t8mb3cseogi1ibga07duibfptjl448a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.mystoreupdate",
             "certificate_hash": "fd5cf79e7df3bec0dafa0e5a738b1dcab66cbfc9"
+          }
+        },
+        {
+          "client_id": "334702389312-8k93ebeik68n5cp2dpmtpvqkb8374mqr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mystoreupdate",
+            "certificate_hash": "3683ab90f03df3c408975b01d864be7f406eadf2"
+          }
+        },
+        {
+          "client_id": "334702389312-mkpn1kt4v8enlurrf8kehop0v5p2gkh2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mystoreupdate",
+            "certificate_hash": "f7dbf7ddcce31e02beaacf628ad6c20613e5f777"
           }
         },
         {
@@ -52,7 +76,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "334702389312-07pnon06d2etodothe68sraagblmflpf.apps.googleusercontent.com",
+          "client_id": "334702389312-0kio4bpji9aihr3q585q899b2ffmh0nm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.noor.mystore99",
@@ -65,6 +89,22 @@
           "android_info": {
             "package_name": "com.noor.mystore99",
             "certificate_hash": "fd5cf79e7df3bec0dafa0e5a738b1dcab66cbfc9"
+          }
+        },
+        {
+          "client_id": "334702389312-ged0hanja4rcp8fsp6uv0fqptjh2k40k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noor.mystore99",
+            "certificate_hash": "3683ab90f03df3c408975b01d864be7f406eadf2"
+          }
+        },
+        {
+          "client_id": "334702389312-kikms5knqtjfo9pf0stjn9actsv1ehv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noor.mystore99",
+            "certificate_hash": "079f0828f8047416519cdd74bbab0207126f2170"
           }
         },
         {

@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.CartModel
-import com.example.networkmodule.util.Util.decodeToBitmap
 import com.noor.mystore99.R
 import com.noor.mystore99.databinding.IndiviewCheckoutBinding
 
@@ -28,7 +26,7 @@ class CheckoutAdapter :RecyclerView.Adapter<CheckoutAdapter.CheckOutViewHolder>(
 
         fun bind(item:CartModel){
             with(binding){
-                finalName.text=item.products_name
+                finalName.text=item.products_name+"("+item.weight+")"
                 lastPrice.text="₹ "+item.price
                 finalAmount.text="₹ "+item.total
                 lastQuantity.text=" x "+item.quant

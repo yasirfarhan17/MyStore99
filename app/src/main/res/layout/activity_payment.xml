@@ -49,7 +49,7 @@
             android:fontFamily="@font/convergence"
             android:text="@string/payment_methods"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/btnprimary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_back" />
@@ -58,7 +58,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_payment"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="120dp"
             android:layout_margin="10dp"
             app:cardBackgroundColor="#28365b"
             app:cardCornerRadius="20dp"
@@ -97,25 +97,26 @@
 
                 <RadioGroup
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="20sp"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="25dp"
-                    android:layout_marginBottom="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/label_cash"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="@+id/label_cash">
 
                     <RadioButton
                         android:id="@+id/rb_cash"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp" />
+                        android:defaultFocusHighlightEnabled="true"
+                        android:layout_marginBottom="10dp"
+                        android:focusedByDefault="true" />
 
                     <RadioButton
                         android:id="@+id/rb_upi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp" />
+                        android:layout_marginTop="15dp"
+                        android:visibility="gone" />
 
                 </RadioGroup>
 
@@ -126,6 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
+                    android:visibility="gone"
                     android:background="@color/white"
                     app:layout_constraintBottom_toTopOf="@id/img_upi"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -138,6 +140,7 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="5dp"
+                    android:visibility="gone"
                     android:layout_marginBottom="5dp"
                     android:contentDescription="@string/icon_for_cash_payment"
                     android:src="@drawable/upii"
@@ -150,6 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:visibility="gone"
                     android:fontFamily="@font/convergence"
                     android:text="@string/upi"
                     android:textColor="@color/white"
@@ -177,21 +181,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cv_payment" />
 
-
-        <TextView
-            android:id="@+id/changeAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="20dp"
-            android:fontFamily="@font/convergence"
-            android:text="change Address"
-            android:textAlignment="center"
-            android:textColor="@color/btnprimary"
-            android:drawableLeft="@drawable/ic_pin"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_payment" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_shipping"
@@ -282,6 +271,23 @@
                     app:layout_constraintTop_toBottomOf="@+id/label_phone"
                     tools:text="708636633" />
 
+                <TextView
+                    android:id="@+id/changeAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="16dp"
+                    android:drawableLeft="@drawable/ic_pin"
+                    android:fontFamily="@font/convergence"
+                    android:text="change Address"
+                    android:textAlignment="center"
+                    android:textColor="@color/btnprimary"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_address"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/label_address"
+                    app:layout_constraintVertical_bias="0.0" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -321,14 +327,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cv_shipping" />
 
+        <TextView
+            android:id="@+id/pincodeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pincode"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/et_pincode"
+            app:layout_constraintStart_toStartOf="@+id/deliveryText"
+            app:layout_constraintTop_toTopOf="@+id/et_pincode" />
+
         <EditText
             android:id="@+id/et_pincode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
             android:autofillHints="postalCode"
             android:background="@color/btnprimary"
-            android:focusableInTouchMode="false"
             android:hint="pin code"
             android:inputType="number"
             android:padding="7dp"
@@ -336,15 +352,17 @@
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/bt_change_pin"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/bt_change_pin" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.516"
+            app:layout_constraintStart_toStartOf="@+id/et_date"
+            app:layout_constraintTop_toBottomOf="@+id/deliveryText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_change_pin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:layout_marginEnd="20dp"
             android:text="@string/change_pincode"
             android:textAllCaps="false"
@@ -361,7 +379,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/check_out"
+            android:text="Confirm Order"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="17sp"

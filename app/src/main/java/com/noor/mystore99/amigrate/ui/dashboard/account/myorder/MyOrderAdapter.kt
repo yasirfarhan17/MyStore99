@@ -3,15 +3,8 @@ package com.noor.mystore99.amigrate.ui.dashboard.account.myorder
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import coil.transform.CircleCropTransformation
-import com.example.networkmodule.model.CartModel
 import com.example.networkmodule.model.checkOutModel
-import com.noor.mystore99.R
-import com.noor.mystore99.amigrate.ui.checkout.CheckoutAdapter
-import com.noor.mystore99.databinding.IndiviewCheckoutBinding
 import com.noor.mystore99.databinding.IndiviewMyorderBinding
 
 class MyOrderAdapter(

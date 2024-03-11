@@ -38,20 +38,20 @@ import javax.inject.Inject
     private fun getAllProducts () {
 
         GlobalScope.launch(Dispatchers.IO) {
-            productUseCase.invoke().collect {
-                when (it) {
-                    is Resource.Success -> {
-                        _productList.postValue(it.data as ArrayList<ProductModel>)
-                        //_viewState.postValue(ViewState.Success())
-                    }
-                    is Resource.Error -> {
-                        // _viewState.postValue(ViewState.Error(it.message))
-                    }
-                    is Resource.Loading -> {
-                        //_viewState.postValue(ViewState.Loading)
-                    }
-                }
-            }
+//            productUseCase.invoke().collect {
+//                when (it) {
+//                    is Resource.Success -> {
+//                        _productList.postValue(it.data as ArrayList<ProductModel>)
+//                        //_viewState.postValue(ViewState.Success())
+//                    }
+//                    is Resource.Error -> {
+//                        // _viewState.postValue(ViewState.Error(it.message))
+//                    }
+//                    is Resource.Loading -> {
+//                        //_viewState.postValue(ViewState.Loading)
+//                    }
+//                }
+//            }
         }
 
     }

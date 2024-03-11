@@ -37,7 +37,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, loginViewModel>() {
     fun init() {
         with(binding) {
             checkOut.setOnClickListener {
-                viewModel.doLogin(binding.etPhone.text.toString(), "123")
+                viewModel.doLogin(binding.etPhone.text.toString(), "123",this@LoginFragment.requireContext())
             }
 
             verify.setOnClickListener {

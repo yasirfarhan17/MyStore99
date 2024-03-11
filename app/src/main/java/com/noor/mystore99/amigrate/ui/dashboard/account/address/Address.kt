@@ -2,9 +2,13 @@ package com.noor.mystore99.amigrate.ui.dashboard.account.address
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.databinding.ActivityAddressBinding
@@ -36,6 +40,9 @@ class Address : BaseActivity<ActivityAddressBinding,AdressViewModel>() {
             if(txtInputEtAdress.text.toString().isEmpty()  || txtInputEtAdress.text==null){
                 txtInputEtAdress.setError("Required")
             }
+            if(txtInputEtLandmark.text.toString().isEmpty()  || txtInputEtLandmark.text==null){
+                txtInputEtAdress.setError("Required")
+            }
             if(txtInputEtCity.text.toString().isEmpty() || txtInputEtCity.text ==null){
                         txtInputEtCity.setError("Required")
                     }
@@ -43,12 +50,16 @@ class Address : BaseActivity<ActivityAddressBinding,AdressViewModel>() {
                                 txtInputEtPincode.setError("Required")
             }
                else {
-                   val address = txtInputEtAdress.text.toString()+ " "+ txtInputEtCity.text.toString()
+                   val address = txtInputEtAdress.text.toString()+",  "+ txtInputEtCity.text.toString() +" land Marks:- "+txtInputEtLandmark.text.toString()
 
                 user.child("address").setValue(address)
                 user.child("pincode").setValue(txtInputEtPincode.text.toString())
-
-
+                Toast.makeText(this@Address,"Address updated successfully", Toast.LENGTH_SHORT).show()
+                onBackPressed()
+                txtInputEtAdress.text?.clear()
+                txtInputEtLandmark.text?.clear()
+                txtInputEtCity.text?.clear()
+                txtInputEtPincode.text?.clear()
 
             }
 

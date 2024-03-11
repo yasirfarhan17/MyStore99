@@ -1,18 +1,15 @@
 package com.noor.mystore99.amigrate.ui.upi
 
 import android.app.Activity
-import java.util.Base64
 
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.networkmodule.model.CartModel
 import com.example.networkmodule.model.checkOutModel
@@ -23,20 +20,12 @@ import com.noor.mystore99.amigrate.ui.cart.CartViewModel
 import com.noor.mystore99.amigrate.ui.checkout.CheckoutActivity
 import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel
 import com.noor.mystore99.cartItem
-import com.shreyaspatil.EasyUpiPayment.EasyUpiPayment
-import com.shreyaspatil.EasyUpiPayment.listener.PaymentStatusListener
-import com.shreyaspatil.EasyUpiPayment.model.Payment
-import com.shreyaspatil.EasyUpiPayment.model.TransactionDetails
 import dagger.hilt.android.AndroidEntryPoint
-import java.nio.charset.StandardCharsets
-import java.security.KeyPairGenerator
-import java.security.PrivateKey
-import java.security.PublicKey
 import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-open class NewUPIPay : AppCompatActivity(), PaymentStatusListener {
+open class NewUPIPay : AppCompatActivity()  {
 
 
     val viewModel: PaymentViewModel by viewModels()
@@ -261,74 +250,74 @@ Payment: $op"""
         sm.execute()
     }
 
-
-    private fun makePayment(amount:String,  upi:String,  name:String, desc:String, transactionId :String) {
-        // on below line we are calling an easy payment method and passing
-        // all parameters to it such as upi id,name, description and others.
-         val easyUpiPayment = EasyUpiPayment.Builder()
-            .with(this)
-            // on below line we are adding upi id.
-            .setPayeeVpa(upi)
-            // on below line we are setting name to which we are making oayment.
-            .setPayeeName(name)
-            // on below line we are passing transaction id.
-            .setTransactionId(transactionId)
-            // on below line we are passing transaction ref id.
-            .setTransactionRefId(transactionId)
-            // on below line we are adding description to payment.
-            .setDescription(desc)
-            // on below line we are passing amount which is being paid.
-            .setAmount(amount)
-            // on below line we are calling a build method to build this ui.
-            .build()
-        // on below line we are calling a start
-        // payment method to start a payment.
-        easyUpiPayment.startPayment()
-        // on below line we are calling a set payment
-        // status listener method to call other payment methods.
-        easyUpiPayment.setPaymentStatusListener(this)
-    }
-
-
-     override fun onTransactionCompleted(transactionDetails:TransactionDetails) {
-        // on below line we are getting details about transaction when completed.
-        var transcDetails :String = transactionDetails.status.toString() + "\n" + "Transaction ID : " + transactionDetails.transactionId
-         //transactionDetailsTV.setVisibility(View.VISIBLE);
-        // on below line we are setting details to our text view.
-        //transactionDetailsTV.setText(transcDetails);
-    }
-
-
-     override fun onTransactionSuccess() {
-        // this method is called when transaction is successful and we are displaying a toast message.
-        Toast.makeText(this, "Transaction successfully completed..", Toast.LENGTH_SHORT).show()
-         setValueToFirebase()
-         startActivity(Intent(this@NewUPIPay, CheckoutActivity::class.java))
-         viewModelCart.clearCart()
-    }
-
-
-     override fun onTransactionSubmitted() {
-        // this method is called when transaction is done
-        // but it may be successful or failure.
-        Log.e("TAG", "TRANSACTION SUBMIT")
-     }
-
-
-    override fun onTransactionFailed() {
-        // this method is called when transaction is failure.
-        Toast.makeText(this, "Failed to complete transaction", Toast.LENGTH_SHORT).show()
-    }
-
-
-    override fun onTransactionCancelled() {
-        // this method is called when transaction is cancelled.
-        Toast.makeText(this, "Transaction cancelled..", Toast.LENGTH_SHORT).show()
-    }
-
-
-    override fun onAppNotFound() {
-        // this method is called when the users device is not having any app installed for making payment.
-        Toast.makeText(this, "No app found for making transaction..", Toast.LENGTH_SHORT).show()
-    }
+//
+//    private fun makePayment(amount:String,  upi:String,  name:String, desc:String, transactionId :String) {
+//        // on below line we are calling an easy payment method and passing
+//        // all parameters to it such as upi id,name, description and others.
+//         val easyUpiPayment = EasyUpiPayment.Builder()
+//            .with(this)
+//            // on below line we are adding upi id.
+//            .setPayeeVpa(upi)
+//            // on below line we are setting name to which we are making oayment.
+//            .setPayeeName(name)
+//            // on below line we are passing transaction id.
+//            .setTransactionId(transactionId)
+//            // on below line we are passing transaction ref id.
+//            .setTransactionRefId(transactionId)
+//            // on below line we are adding description to payment.
+//            .setDescription(desc)
+//            // on below line we are passing amount which is being paid.
+//            .setAmount(amount)
+//            // on below line we are calling a build method to build this ui.
+//            .build()
+//        // on below line we are calling a start
+//        // payment method to start a payment.
+//        easyUpiPayment.startPayment()
+//        // on below line we are calling a set payment
+//        // status listener method to call other payment methods.
+//        easyUpiPayment.setPaymentStatusListener(this)
+//    }
+//
+//
+//     override fun onTransactionCompleted(transactionDetails: TransactionDetails) {
+//        // on below line we are getting details about transaction when completed.
+//        var transcDetails :String = transactionDetails.status.toString() + "\n" + "Transaction ID : " + transactionDetails.transactionId
+//         //transactionDetailsTV.setVisibility(View.VISIBLE);
+//        // on below line we are setting details to our text view.
+//        //transactionDetailsTV.setText(transcDetails);
+//    }
+//
+//
+//     override fun onTransactionSuccess() {
+//        // this method is called when transaction is successful and we are displaying a toast message.
+//        Toast.makeText(this, "Transaction successfully completed..", Toast.LENGTH_SHORT).show()
+//         setValueToFirebase()
+//         startActivity(Intent(this@NewUPIPay, CheckoutActivity::class.java))
+//         viewModelCart.clearCart()
+//    }
+//
+//
+//     override fun onTransactionSubmitted() {
+//        // this method is called when transaction is done
+//        // but it may be successful or failure.
+//        Log.e("TAG", "TRANSACTION SUBMIT")
+//     }
+//
+//
+//    override fun onTransactionFailed() {
+//        // this method is called when transaction is failure.
+//        Toast.makeText(this, "Failed to complete transaction", Toast.LENGTH_SHORT).show()
+//    }
+//
+//
+//    override fun onTransactionCancelled() {
+//        // this method is called when transaction is cancelled.
+//        Toast.makeText(this, "Transaction cancelled..", Toast.LENGTH_SHORT).show()
+//    }
+//
+//
+//    override fun onAppNotFound() {
+//        // this method is called when the users device is not having any app installed for making payment.
+//        Toast.makeText(this, "No app found for making transaction..", Toast.LENGTH_SHORT).show()
+//    }
 }

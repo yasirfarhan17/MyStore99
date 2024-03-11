@@ -37,7 +37,7 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hi Yasir"
+            android:text="Hi User"
             android:textAlignment="center"
             android:textColor="@color/btnprimary"
             android:textSize="26dp"

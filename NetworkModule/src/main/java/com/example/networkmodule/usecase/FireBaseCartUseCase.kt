@@ -1,5 +1,6 @@
 package com.example.networkmodule.usecase
 
+import android.util.Log
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.model.ProductModel
 import com.example.networkmodule.network.Resource
@@ -25,6 +26,7 @@ class FireBaseCartUseCase @Inject constructor(
                         send(Resource.Error("No Product Found"))
                     } else {
                         withContext(Dispatchers.Main) {
+                            Log.d("insideUsecse",list.toString())
                             send(Resource.Success(list))
                         }
                     }

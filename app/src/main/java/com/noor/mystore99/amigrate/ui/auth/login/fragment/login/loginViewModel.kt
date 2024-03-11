@@ -1,5 +1,6 @@
 package com.noor.mystore99.amigrate.ui.auth.login.fragment.login
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.networkmodule.network.AuthResource
 import com.example.networkmodule.usecase.GetLoginUseCase
@@ -18,10 +19,10 @@ class loginViewModel @Inject constructor(
 
     private val _event = MutableLiveData<AuthResource>()
     val event = _event.toLiveData()
-    fun doLogin(phoneNumber: String, password: String) {
+    fun doLogin(phoneNumber: String, password: String,context:Context) {
         launch {
             _viewState.postValue(ViewState.Loading)
-            loginUseCase.invoke(phoneNumber, password).collectLatest {
+            loginUseCase.invoke(phoneNumber, password,context).collectLatest {
                 _event.postValue(it)
             }
         }
