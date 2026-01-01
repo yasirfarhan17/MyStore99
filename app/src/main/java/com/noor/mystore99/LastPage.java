@@ -21,8 +21,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -64,7 +67,6 @@ public class LastPage extends AppCompatActivity {
     SharedPreferences preferences1;
     String key,str1,zz;
     ImageView qr;
-    QRGEncoder qrgEncoder;
     Bitmap bitmap;
     ArrayList<String> va=new ArrayList<>();
     int size;
@@ -264,7 +266,8 @@ public class LastPage extends AppCompatActivity {
         });
 
 
-        ref= FirebaseDatabase.getInstance().getReference("Myorder").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Item").child("YourOrder").child(zz);
+        ref= FirebaseDatabase.getInstance().getReference("Myorder").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Item
+").child("YourOrder").child(zz);
         m.clear();
         //Toast.makeText(LastPage.this,pp+" "+quant,Toast.LENGTH_SHORT).show();
         ref.addChildEventListener(new ChildEventListener() {
@@ -476,13 +479,15 @@ public class LastPage extends AppCompatActivity {
 
         //Toast.makeText(LastPage.this,""+p,Toast.LENGTH_LONG).show();
 
-        qrgEncoder = new QRGEncoder(("OrderId= "+zz+"\nItem="+va+"\n Address=  \""+add1+"\"\n Payment="+p), null, QRGContents.Type.TEXT, 2500);
-        bitmap = qrgEncoder.getBitmap();
-
-        // Getting QR-Code as Bitmap
-
-        // Setting Bitmap to ImageView
-        qr.setImageBitmap(bitmap);
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode(("OrderId= "+zz+"\nItem="+va+"\n Address=  \""+add1+"\"\n Payment="+p), BarcodeFormat.QR_CODE, 2500, 2500);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            bitmap = barcodeEncoder.createBitmap(bitMatrix);
+            qr.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
 
     }

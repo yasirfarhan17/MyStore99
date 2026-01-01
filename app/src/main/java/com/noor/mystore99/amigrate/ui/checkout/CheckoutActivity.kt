@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidmads.library.qrgenearator.QRGContents
-import androidmads.library.qrgenearator.QRGEncoder
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -20,6 +18,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.WriterException
+import com.google.zxing.common.BitMatrix
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.dashboard.account.myorder.MyOrder
@@ -45,7 +48,6 @@ class CheckoutActivity : BaseActivity<ActivityCheckOutBinding, CheckoutViewModel
     lateinit var id1: String
     lateinit var pincode: String
     var localData = ArrayList<CartModel>()
-    var qrgEncoder: QRGEncoder? = null
     var bitmap: Bitmap? = null
     lateinit var cartBottomSheetDialog: BottomSheetDialog
      var ref = FirebaseDatabase.getInstance().reference
@@ -289,18 +291,14 @@ class CheckoutActivity : BaseActivity<ActivityCheckOutBinding, CheckoutViewModel
                 "&sign=MEYCIQC8bLDdRbDhpsPAt9wR1a0pcEssDaV" +   // Base 64 encoded Digital signature needs to be passed in this tag
                 "Q7lugo8mfJhDk6wIhANZkbXOWWR2lhJOH2Qs/OQRaRFD2oBuPCGtrMaVFR23t"
 
-        //Toast.makeText(LastPage.this,""+p,Toast.LENGTH_LONG).show();
-        qrgEncoder = QRGEncoder(
-            url,
-            null,
-            QRGContents.Type.TEXT,
-            4000
-        )
-        bitmap = qrgEncoder!!.bitmap
-
-        // Getting QR-Code as Bitmap
-
-        // Setting Bitmap to ImageView
-        binding.imgBtCart.setImageBitmap(bitmap)
+        val multiFormatWriter = MultiFormatWriter()
+        try {
+            val bitMatrix: BitMatrix = multiFormatWriter.encode(url, BarcodeFormat.QR_CODE, 4000, 4000)
+            val barcodeEncoder = BarcodeEncoder()
+            bitmap = barcodeEncoder.createBitmap(bitMatrix)
+            binding.imgBtCart.setImageBitmap(bitmap)
+        } catch (e: WriterException) {
+            e.printStackTrace()
+        }
     }
 }
