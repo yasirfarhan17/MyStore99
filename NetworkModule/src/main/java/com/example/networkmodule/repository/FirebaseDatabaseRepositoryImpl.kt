@@ -48,29 +48,7 @@ class FirebaseDatabaseRepositoryImpl @Inject constructor(
                     it.children.forEach { ittt ->
                         val productLocal = ittt.getValue(ProductModel::class.java)
                         productLocal?.let { it1 ->
-//                                val imageBitmap=it1.img?.decodeToBitmap()
-//                            Log.d("insideRepoUri",imageBitmap.toString())
-//                                val uri= Util.getImageUri(context, imageBitmap!!)
-//                                val ref: StorageReference =storageReference.child(System.currentTimeMillis().toString())
-//                                ref.putFile(uri!!).addOnSuccessListener(object :
-//                                    OnSuccessListener<UploadTask.TaskSnapshot> {
-//                                    override fun onSuccess(p0: UploadTask.TaskSnapshot?) {
-//                                        p0!!.metadata!!.reference!!.downloadUrl.addOnSuccessListener(object:OnSuccessListener<Uri>{
-//                                            override fun onSuccess(p0: Uri?) {
-//                                                val url=p0.toString()
-//                                                val productModelNew= ProductModelNew(it1.products_name,it1.price,url,it1.quant,it1.hindiName,it1.stock)
-//                                                arrNew.add(productModelNew)
-//                                                Log.d("insideRepo","$url ${dataSnapshot.value} ${ittt.key}  $arrNew")
-//
-//                                                reference.child(it.key!!).child(it1.products_name.toString()).setValue(productModelNew)
-//                                            }
-//
-//                                        })
-//
-//                                            }
-//
-//                                })
-                            list.add(it1)
+                           list.add(it1)
                         }
 
                     }
