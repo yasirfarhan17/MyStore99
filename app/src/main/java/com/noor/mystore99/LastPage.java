@@ -266,8 +266,7 @@ public class LastPage extends AppCompatActivity {
         });
 
 
-        ref= FirebaseDatabase.getInstance().getReference("Myorder").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Item
-").child("YourOrder").child(zz);
+        ref= FirebaseDatabase.getInstance().getReference("Myorder").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Item ").child("YourOrder").child(zz);
         m.clear();
         //Toast.makeText(LastPage.this,pp+" "+quant,Toast.LENGTH_SHORT).show();
         ref.addChildEventListener(new ChildEventListener() {
