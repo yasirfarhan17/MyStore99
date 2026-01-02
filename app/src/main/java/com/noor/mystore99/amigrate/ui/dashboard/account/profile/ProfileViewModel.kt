@@ -84,7 +84,8 @@ class ProfileViewModel @Inject constructor(
     
     private fun compressImage(uri: Uri): ByteArray {
         val inputStream = context.contentResolver.openInputStream(uri)
-        val originalBitmap = BitmapFactory.decodeStream(inputStream)
+        val originalBitmap = BitmapFactory.decodeStream(inputStream) 
+            ?: throw IllegalArgumentException("Failed to decode image")
         inputStream?.close()
         
         // Calculate scaling to max 1024x1024
