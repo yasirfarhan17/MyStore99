@@ -10,6 +10,10 @@ import com.example.networkmodule.model.SliderModel
 import com.example.networkmodule.network.Resource
 import com.example.networkmodule.storage.PrefsUtil
 import com.example.networkmodule.usecase.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.amigrate.base.BaseViewModel
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.ui.cart.CartViewModel
@@ -99,26 +103,27 @@ class UserViewModel @Inject constructor(
     }
 
      fun getCartFromDB() {
-        launch {
-            _viewState.postValue(ViewState.Loading)
-            getCart().collectLatest {
-                when (it) {
-                    is Resource.Success -> {
-                        _cartFromDB.postValue(it.data as ArrayList<CartEntity>)
-                        _viewState.postValue(ViewState.Success())
-                    }
-                    is Resource.Error -> {
-                        _viewState.postValue(ViewState.Error(it.message))
-                    }
-                    is Resource.Loading -> {
-                        _viewState.postValue(ViewState.Loading)
-                    }
-                    else -> {
-                        Log.d("yas", "g")
+        val key = prefsUtil.Name
+        if (key.isNullOrEmpty()) return
+
+        val ref = FirebaseDatabase.getInstance().getReference("CartNew").child(key)
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val cartList = ArrayList<CartEntity>()
+                snapshot.children.forEach {
+                    val cartItem = it.getValue(com.example.networkmodule.model.CartModel::class.java)?.toCartEntity()
+                    cartItem?.let { item ->
+                        cartList.add(item)
                     }
                 }
+                _cartFromDB.postValue(cartList)
+                _viewState.postValue(ViewState.Success())
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+                _viewState.postValue(ViewState.Error(error.message))
+            }
+        })
     }
 
 
