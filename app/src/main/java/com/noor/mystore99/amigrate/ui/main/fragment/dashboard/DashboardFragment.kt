@@ -102,6 +102,8 @@ class DashboardFragment : Fragment(), DashBoardCallBack {
                                 val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
                                 binding.imageProfile.load(decodedByte) {
                                     transformations(CircleCropTransformation())
+                                    placeholder(R.drawable.usericon)
+                                    error(R.drawable.usericon)
                                 }
                             } catch (e: Exception) {
                                 binding.imageProfile.setImageResource(R.drawable.usericon)

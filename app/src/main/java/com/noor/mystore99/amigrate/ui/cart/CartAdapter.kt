@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.google.firebase.database.DataSnapshot
@@ -53,7 +54,7 @@ class CartAdapter(
                 total.text = "₹ $totalPrice"
 
                 imgCart.load(item.img) {
-                    transformations(RoundedCornersTransformation(16f))
+                    transformations(CircleCropTransformation())
                     placeholder(R.drawable.ic_local_mall_black_24dp)
                     error(R.drawable.ic_local_mall_black_24dp)
                 }

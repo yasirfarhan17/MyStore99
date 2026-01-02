@@ -31,7 +31,9 @@ class CategoryAdapter(val callback: CategoryAdapterCallback) :
         fun bind(item: CategoryModel) {
             with(binding) {
                 categoryIcon.load(item.categoryIconLink) {
-                    placeholder(R.drawable.vegetable)
+                    transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_local_mall_black_24dp)
+                    error(R.drawable.ic_local_mall_black_24dp)
                 }
                 categoryName.text = item.categoryName.uppercase()
                 constraintLayout.setOnClickListener {

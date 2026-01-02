@@ -32,7 +32,8 @@ class CheckoutAdapter :RecyclerView.Adapter<CheckoutAdapter.CheckOutViewHolder>(
                 lastQuantity.text=" x "+item.quant
                     imgCheckout.load(item.img) {
                         transformations(CircleCropTransformation())
-                        placeholder(R.drawable.ic_home_black_24dp)
+                        placeholder(R.drawable.ic_local_mall_black_24dp)
+                        error(R.drawable.ic_local_mall_black_24dp)
                     }
             }
         }

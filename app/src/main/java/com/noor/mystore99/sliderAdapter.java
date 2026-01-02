@@ -42,7 +42,12 @@ public class sliderAdapter extends PagerAdapter {
         }
         ImageView banner = view.findViewById(R.id.banner_slide);
         Log.d("insideSlider",sliderModelList.get(position).getBanner());
-        Glide.with(container.getContext()).load(sliderModelList.get(position).getBanner()).apply(new RequestOptions().placeholder(R.drawable.ic_home_black_24dp)).into(banner);
+        Glide.with(container.getContext())
+                .load(sliderModelList.get(position).getBanner())
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.ic_local_mall_black_24dp)
+                        .error(R.drawable.ic_local_mall_black_24dp))
+                .into(banner);
         container.addView(view, 0);
         return view;
     }

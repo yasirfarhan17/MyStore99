@@ -10,6 +10,7 @@ import coil.transform.CircleCropTransformation
 import com.example.networkmodule.model.CategoryModel
 import com.example.networkmodule.model.DashBoardModel
 import com.example.networkmodule.util.Util.decodeToBitmap
+import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapter
 import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.CategoryAdapterCallback
 import com.noor.mystore99.databinding.IndiviewCategoryBinding
@@ -38,6 +39,8 @@ class DashBoardAdapter(
             with(binding) {
                 imgDash.load(item.Img) {
                     transformations(CircleCropTransformation())
+                    placeholder(R.drawable.action_user)
+                    error(R.drawable.action_user)
                 }
                 tvDash.text = item.name?.uppercase()
 //                constraintLayout.setOnClickListener {

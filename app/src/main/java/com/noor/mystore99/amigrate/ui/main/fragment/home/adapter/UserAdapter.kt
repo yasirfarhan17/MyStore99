@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.networkmodule.database.entity.CartEntity
 import com.example.networkmodule.database.entity.ProductEntity
 import com.google.firebase.database.DataSnapshot
@@ -70,7 +71,8 @@ class UserAdapter(
                 price.text = "₹ " + item.price
                 quantBox.text = item.quant
                 productImg.load(item.img) {
-                    placeholder(R.drawable.vegetable)
+                    placeholder(R.drawable.ic_local_mall_black_24dp)
+                    error(R.drawable.ic_local_mall_black_24dp)
                 }
                 if (item.stock.equals("no")) {
                     addBtn.visibility = View.GONE

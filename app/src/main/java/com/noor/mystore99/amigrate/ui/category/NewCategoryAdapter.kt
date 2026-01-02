@@ -53,7 +53,9 @@ class NewCategoryAdapter(
                 price.text = "₹ " + item.price
                 quantBox.text = item.quant
                 productImg.load(item.img) {
-                    placeholder(R.drawable.vegetable)
+                    transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_local_mall_black_24dp)
+                    error(R.drawable.ic_local_mall_black_24dp)
                 }
                 if (item.stock.equals("no")) {
                     addBtn.visibility = View.GONE
