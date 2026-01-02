@@ -1,69 +1,73 @@
 package com.noor.mystore99.amigrate.ui.dashboard.account.myorder
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.noor.mystore99.MainActivity
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.checkout.CheckoutActivity
-import com.noor.mystore99.amigrate.ui.checkout.CheckoutAdapter
-import com.noor.mystore99.amigrate.ui.checkout.CheckoutViewModel
-import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel
 import com.noor.mystore99.databinding.ActivityMyOrderBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyOrder : BaseActivity<ActivityMyOrderBinding,MyOrderViewModel>(),MyOrderCallBack {
-    override fun layoutId(): Int =R.layout.activity_my_order
+class MyOrder : BaseActivity<ActivityMyOrderBinding, MyOrderViewModel>(), MyOrderCallBack {
+    
+    override fun layoutId(): Int = R.layout.activity_my_order
     override val viewModel: MyOrderViewModel by viewModels()
-    lateinit var key:String
+    
+    private lateinit var userId: String
+    private lateinit var orderAdapter: MyOrderAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        key=prefsUtil.Name.toString()
-        binding=DataBindingUtil.setContentView(this,R.layout.activity_my_order)
-        viewModel.getOrder(key)
-        getInit()
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_my_order)
+        
+        userId = prefsUtil.Name.toString()
+        
+        setupUI()
+        viewModel.getOrders(userId)
     }
 
-
-    fun getInit(){
-
-        with(binding){
-
-            rvCart.layoutManager = StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
-            rvCart.adapter = MyOrderAdapter(this@MyOrder)
-
+    private fun setupUI() {
+        // Back button
+        binding.imgBack.setOnClickListener { finish() }
+        
+        // RecyclerView setup
+        orderAdapter = MyOrderAdapter(this)
+        binding.rvOrders.apply {
+            layoutManager = LinearLayoutManager(this@MyOrder)
+            adapter = orderAdapter
         }
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this@MyOrder, com.noor.mystore99.amigrate.ui.main.MainActivity::class.java)
-        startActivity(intent)
-    }
-
-
-
-
 
     override fun addObservers() {
-        viewModel.checkoutOrder.observe(this){
-            it.sortByDescending { ttt->
-                ttt.orderId
+        // Orders list
+        viewModel.checkoutOrder.observe(this) { orders ->
+            orders?.let {
+                // Sort by order ID descending (newest first)
+                it.sortByDescending { order -> order.orderId }
+                orderAdapter.submitList(it)
             }
-            (binding.rvCart.adapter as MyOrderAdapter).submitList(it)
         }
-
+        
+        // Empty state
+        viewModel.hasOrders.observe(this) { hasOrders ->
+            if (hasOrders) {
+                binding.rvOrders.visibility = View.VISIBLE
+                binding.emptyStateLayout.visibility = View.GONE
+            } else {
+                binding.rvOrders.visibility = View.GONE
+                binding.emptyStateLayout.visibility = View.VISIBLE
+            }
+        }
     }
 
     override fun onItemClick(orderId: String) {
-        val intent=Intent(this,CheckoutActivity::class.java)
-        intent.putExtra("combo",orderId)
+        val intent = Intent(this, CheckoutActivity::class.java)
+        intent.putExtra("combo", orderId)
         startActivity(intent)
     }
 }
