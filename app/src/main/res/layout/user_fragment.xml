@@ -52,31 +52,38 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_input_user_id"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:hint="Search"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Search products..."
+                app:boxBackgroundColor="#F5F5F5"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:startIconDrawable="@drawable/ic_search_black"
                 app:endIconMode="clear_text"
-                app:helperTextTextColor="@color/colorAccent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:hintTextColor="@color/colorAccent"
                 app:layout_constraintTop_toBottomOf="@id/tv_app_name"
-                app:startIconDrawable="@drawable/ic_search_black">
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/search_view"
                     android:layout_width="match_parent"
-                    android:background="@color/white"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     android:fontFamily="@font/convergence"
-                    android:minHeight="?attr/actionBarSize" />
-
+                    android:inputType="text"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
