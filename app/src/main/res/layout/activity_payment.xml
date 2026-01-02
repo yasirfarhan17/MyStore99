@@ -78,40 +78,83 @@
                         android:padding="16dp">
 
                         <TextView
-                            android:id="@+id/tv_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:textColor="#212121"
-                            android:textSize="14sp"
-                            app:layout_constraintEnd_toStartOf="@+id/tv_change_address"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="123 Street Name, City, State - 123456" />
-
-                        <TextView
-                            android:id="@+id/tv_phone_number"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:textColor="#757575"
-                            android:textSize="14sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_address"
-                            tools:text="+91 9876543210" />
-
-                        <TextView
                             android:id="@+id/tv_change_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="?attr/selectableItemBackground"
-                            android:padding="8dp"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
                             android:text="CHANGE"
                             android:textColor="@color/btnprimary"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:maxLength="30"
+                            android:textColor="#212121"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_change_address"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="John Doe" />
+                        
+                        <ImageView
+                            android:id="@+id/ic_loc"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="12dp"
+                            android:src="@drawable/ic_pin"
+                            app:tint="#757575"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_name"
+                            android:contentDescription="Address Location" />
+
+                        <TextView
+                            android:id="@+id/tv_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="8dp"
+                            android:lineSpacingExtra="4dp"
+                            android:textColor="#424242"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ic_loc"
+                            app:layout_constraintTop_toTopOf="@+id/ic_loc"
+                            tools:text="123 Street Name, City, State\nPincode - 123456" />
+
+                        <ImageView
+                            android:id="@+id/ic_phone"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="12dp"
+                            android:src="@drawable/ic_call"
+                            app:tint="#757575"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_address"
+                            android:contentDescription="Phone Number" />
+
+                        <TextView
+                            android:id="@+id/tv_phone_number"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="0dp"
+                            android:textColor="#424242"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@id/ic_phone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ic_phone"
+                            app:layout_constraintTop_toTopOf="@+id/ic_phone"
+                            tools:text="+91 9876543210" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>

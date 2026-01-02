@@ -114,19 +114,19 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
         // User Details
         viewModel.userDetail.observe(this) { user ->
             if (user != null) {
-                // Handle null fields gracefully
                 val addr = user.address ?: ""
                 val pin = user.pincode ?: ""
-                val city = "" // user.city removed as per previous fix
+                
+                binding.tvName.text = user.name?.takeIf { it.isNotBlank() } ?: "User"
                 
                 if (addr.isNotBlank()) {
-                     binding.tvAddress.text = "$addr${if(pin.isNotBlank()) ", $pin" else ""}"
+                     binding.tvAddress.text = "$addr\nPincode - $pin"
                 } else {
                      binding.tvAddress.text = "No address found. Please add one."
                 }
                 
-                binding.tvPhoneNumber.text = "${user.name ?: "User"} | $userId"
-                binding.etPincode.setText(pin.toString())
+                binding.tvPhoneNumber.text = userId
+                binding.etPincode.setText(pin)
                 userName = user.name ?: ""
             }
         }
