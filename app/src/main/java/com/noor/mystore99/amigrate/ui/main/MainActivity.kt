@@ -2,25 +2,17 @@ package com.noor.mystore99.amigrate.ui.main
 
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
-import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.networkmodule.usecase.FirebaseGetProductUseCase
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.noor.mystore99.BuildConfig
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
@@ -36,242 +28,116 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity  : BaseActivity<ActivityMain3Binding, MainViewModel>() {
+class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
 
     override val viewModel: MainViewModel by viewModels()
-     val viewModel1: UserViewModel by viewModels()
-    var handler = Handler()
-    companion object{
-        lateinit var key :String
-        lateinit var count:String
+    private val userViewModel: UserViewModel by viewModels()
+
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 
-
-
-
-
-
-
-
-    @Inject
-    lateinit var productUseCase: FirebaseGetProductUseCase
-    var ref=FirebaseDatabase.getInstance().reference
-
     override fun layoutId(): Int = R.layout.activity_main3
-
-
 
     protected val _viewState = MutableLiveData<ViewState>(ViewState.Idle)
     val viewState = _viewState.toLiveData()
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         key= prefsUtil.Name.toString()
-        if(checkInternet()) {
-            val versionCode = BuildConfig.VERSION_CODE
-            val codee = IntArray(1)
 
-            ref = FirebaseDatabase.getInstance().getReference("version").child("version")
-            ref.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("hooo", "working")
-                    if (snapshot.exists()) {
-                        codee[0] = snapshot.value.toString().toInt()
-                    }
-                    if (versionCode < codee[0]) {
-                        val alertDialogBuilder = AlertDialog.Builder(
-                            this@MainActivity
-                        )
+        // Handle Back Press using OnBackPressedDispatcher
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showExitDialog()
+            }
+        })
 
-                        // set title
-                        alertDialogBuilder.setTitle("SabziTaza Update")
-
-                        // set dialog message
-                        alertDialogBuilder
-                            .setMessage("Please update SabziTaza to the latest version.")
-                            .setCancelable(false)
-                            .setPositiveButton(
-                                "Update"
-                            ) { dialog, id ->
-                                // if this button is clicked, close
-                                // current activity
-                                val intent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("market://details?id=com.noor.mystore99")
-                                )
-                                startActivity(intent)
-                                //show_Notification("LogOut","You Log Out Your account at "+ currentTime);
-                                //EmployeeHome.this.finish();
-                            }
-                            .setNegativeButton(
-                                "Cancel"
-                            ) { dialog, id -> // if this button is clicked, just close
-                                // the dialog box and do nothing
-                                dialog.cancel()
-                            }
-
-                        // create alert dialog
-                        val alertDialog = alertDialogBuilder.create()
-
-                        // show it
-                        alertDialog.show()
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-            })
+        if (checkInternet()) {
+            viewModel.checkAppVersion(BuildConfig.VERSION_CODE)
             setNavView()
-            onResume()
-        }
-        else{
+            // onResume logic for cart is now handled by observers
+        } else {
             Toast.makeText(this@MainActivity, "No Internet Connection", Toast.LENGTH_LONG).show()
         }
-
-
-       // insertDataToFirebase((time+timeTenSeconds))
-
     }
 
-        override fun onBackPressed() {
-            val alertDialogBuilder = AlertDialog.Builder(
-                this@MainActivity
-            )
 
-            // set title
+    private fun showUpdateDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("SabziTaza Update")
+            .setMessage("Please update SabziTaza to the latest version.")
+            .setCancelable(false)
+            .setPositiveButton("Update") { _, _ ->
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=com.noor.mystore99")
+                )
+                startActivity(intent)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
+    }
 
-            // set title
-            alertDialogBuilder.setTitle("Exit")
-
-            // set dialog message
-
-            // set dialog message
-            alertDialogBuilder
-                .setMessage("Do you really want to exit?")
-                .setCancelable(false)
-                .setPositiveButton("Yes") { dialog, id ->
-                    // if this button is clicked, close
-                    // current activity
-                    val a = Intent(Intent.ACTION_MAIN)
-                    a.addCategory(Intent.CATEGORY_HOME)
-                    a.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(a)
-                    //show_Notification("LogOut","You Log Out Your account at "+ currentTime);
-                    //EmployeeHome.this.finish();
-                }
-                .setNegativeButton("No") { dialog, id -> // if this button is clicked, just close
-                    // the dialog box and do nothing
-                    dialog.cancel()
-                }
-
-            // create alert dialog
-
-            // create alert dialog
-            val alertDialog = alertDialogBuilder.create()
-
-            // show it
-
-            // show it
-            alertDialog.show()
-
+    private fun showExitDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Exit")
+            .setMessage("Do you really want to exit?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { _, _ ->
+                finishAffinity() // Closes all activities in the task
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 
     override fun onResume() {
         super.onResume()
-
-        val ref= key.let { FirebaseDatabase.getInstance().getReference("CartNew").child(it) }
-        Log.d("InsideOnResume",key)
-        ref.addValueEventListener(object:ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
-
-                    val count=snapshot.childrenCount
-                    if(count.toInt()>0){
-                        Log.d("InsideOnResume",count.toString() )
-                        binding.tvBatch.visibility=View.VISIBLE
-                        binding.clBatch.visibility=View.VISIBLE
-                        binding.tvBatch.text = count.toString()
-                    }
-                }
-                else{
-                    Log.d("InsideOnResume","no value" )
-                    binding.tvBatch.visibility=View.INVISIBLE
-                    binding.clBatch.visibility=View.INVISIBLE
-
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-
-            })
     }
 
-                private fun setNavView() {
-                    val navView: BottomNavigationView = binding.bottomNavigationView
-                    val navController = findNavController(R.id.nav_host_fragment_activity_main)
-                    navView.setupWithNavController(navController)
-                    //binding.clBatch.setVisible(false)
-                    binding.fabBtCart.setOnClickListener {
-                        val intent = Intent(this, CartActivity::class.java)
-                        startActivity(intent)
-                    }
-//                    navView.setOnItemSelectedListener(object : NavigationBarView.OnItemSelectedListener {
-//                        override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//                            when(item.itemId){
-//                                R.id.navigation_home->{
-//                                    navController.navigate(R.id.navigation_home)
-//                                    jump()
-//                                    return true
-//                                }
-//                                R.id.navigation_user->{
-//                                    navController.navigate(R.id.navigation_user)
-//                                    return true
-//                                }
-//                            }
-//                            return false
-//                        }
-//
-//                    })
+    private fun setNavView() {
+        val navView: BottomNavigationView = binding.bottomNavigationView
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navView.setupWithNavController(navController)
+
+        binding.fabBtCart.setOnClickListener {
+            val intent = Intent(this, CartActivity::class.java)
+            startActivity(intent)
+        }
+    }
 
 
+    override fun addObservers() {
+        lifecycleScope.launch {
+            userViewModel.cartFromDB.observe(this@MainActivity) { cartItems ->
+                if (cartItems.isNotEmpty()) {
+                    val count = cartItems.size
+                    binding.clBatch.setVisible(true)
+                    binding.tvBatch.text = count.toString()
+                } else {
+                    binding.clBatch.setVisible(false)
                 }
-
-
-                override fun addObservers() {
-            lifecycleScope.launch {
-                viewModel1.cartFromDB.observe(this@MainActivity){
-                    if(it.size>0) {
-                        val count = it.size
-                        binding.clBatch.setVisible(true)
-                        binding.tvBatch.text = count.toString()
-                    }
-                    else{
-                        binding.clBatch.setVisible(false)
-                    }
-                }
-
             }
         }
 
-    fun checkInternet(): Boolean {
-        var connected = false
-        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        connected =
-            if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)!!.state == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)!!.state == NetworkInfo.State.CONNECTED
-            ) {
-                //we are connected to a network
-                true
-            } else false
-        return connected
+        lifecycleScope.launch {
+            viewModel.updateRequired.collect { required ->
+                if (required) {
+                    showUpdateDialog()
+                }
+            }
+        }
     }
 
-
-
+    private fun checkInternet(): Boolean {
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
 
 }

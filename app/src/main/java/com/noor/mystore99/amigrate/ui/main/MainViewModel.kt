@@ -34,32 +34,34 @@ class MainViewModel @Inject constructor(
     private var _productList = MutableLiveData<ArrayList<ProductModel>>()
     val productList = _productList.toLiveData()
 
+    private val _updateRequired = MutableStateFlow(false)
+    val updateRequired: Flow<Boolean> = _updateRequired
+
     init {
         getCartItemCountUseCase()
     }
 
+    fun checkAppVersion(currentVersionCode: Int) {
+        val versionRef =
+            com.google.firebase.database.FirebaseDatabase.getInstance().getReference("version")
+                .child("version")
+        versionRef.addListenerForSingleValueEvent(object :
+            com.google.firebase.database.ValueEventListener {
+            override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
+                if (snapshot.exists()) {
+                    val serverVersionCode = snapshot.value.toString().toIntOrNull() ?: 0
+                    if (currentVersionCode < serverVersionCode) {
+                        _updateRequired.value = true
+                    }
+                }
+            }
 
+            override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
+                Log.e("MainViewModel", "Version check error: ${error.message}")
+            }
+        })
+    }
 
-//     fun getAllProducts () {
-//
-//        GlobalScope.launch(Dispatchers.IO) {
-//            productUseCase.invoke().collect {
-//                when (it) {
-//                    is Resource.Success -> {
-//                        _productList.postValue(it.data as ArrayList<ProductModel>)
-//                        //_viewState.postValue(ViewState.Success())
-//                    }
-//                    is Resource.Error -> {
-//                        // _viewState.postValue(ViewState.Error(it.message))
-//                    }
-//                    is Resource.Loading -> {
-//                        //_viewState.postValue(ViewState.Loading)
-//                    }
-//                }
-//            }
-//        }
-//
-//    }
 
     private fun getCartItemCountUseCase() {
         launch {
@@ -71,22 +73,7 @@ class MainViewModel @Inject constructor(
                         }
                         Log.d("CartCheck", "" + it)
                     }
-                    else -> {}
-                }
-            }
-        }
-    }
-     fun getProductItemCountUseCase() {
-        launch {
-            productItemsCountUseCase.invoke().collectLatest {
-                when (it) {
-                    is Resource.Success -> {
-                        if(it.data==null)
-                            _productItemCount.value=0
-                        else
-                            _productItemCount.value=it.data!!
-                        Log.d("CartCheck", "" + it)
-                    }
+
                     else -> {}
                 }
             }
