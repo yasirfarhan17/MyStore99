@@ -3,19 +3,14 @@ package com.noor.mystore99.amigrate.ui.main.fragment.dashboard
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -24,7 +19,6 @@ import com.example.networkmodule.storage.PrefsUtil
 import com.noor.mystore99.AboutPage
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.auth.login.LoginActivity
-import com.noor.mystore99.amigrate.ui.dashboard.account.address.AddressActivity
 import com.noor.mystore99.amigrate.ui.dashboard.account.myorder.MyOrder
 import com.noor.mystore99.amigrate.ui.dashboard.account.profile.ProfileActivity
 import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel
@@ -33,25 +27,23 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DashboardFragment : Fragment(),DashBoardCallBack {
+class DashboardFragment : Fragment(), DashBoardCallBack {
 
     private var _binding: ActivityMain2Binding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    val payment: PaymentViewModel by viewModels()
     private val binding get() = _binding!!
-    val arr=ArrayList<DashBoardModel>()
+    
+    private val paymentViewModel: PaymentViewModel by viewModels()
+    private val menuItems = ArrayList<DashBoardModel>()
+    
     @Inject
     lateinit var prefsUtil: PrefsUtil
-    lateinit var key:String
+    
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        key=prefsUtil.Name.toString()
-        payment.getUserDet(key)
-        addObservers()
-
+        userId = prefsUtil.Name.toString()
+        paymentViewModel.getUserDet(userId)
     }
 
     override fun onCreateView(
@@ -59,109 +51,130 @@ class DashboardFragment : Fragment(),DashBoardCallBack {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this)[DashboardViewModel::class.java]
         _binding = ActivityMain2Binding.inflate(inflater, container, false)
-        arr.clear()
-        arr.add(DashBoardModel(R.drawable.action_user,"My Account"))
-        arr.add(DashBoardModel(R.drawable.ic_local_mall_black_24dp,"My Order"))
-        arr.add(DashBoardModel(R.drawable.about,"About us"))
-        arr.add(DashBoardModel(R.drawable.ic_signout,"Log Out"))
-        binding.rvDash.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.rvDash.adapter=DashBoardAdapter(this)
-        (binding.rvDash.adapter as DashBoardAdapter).submitList(arr)
-
-        //setSingleEvent(binding.grid)
+        
+        setupMenuItems()
+        setupRecyclerView()
+        setupObservers()
+        setupClickListeners()
+        
         return binding.root
     }
 
+    private fun setupMenuItems() {
+        menuItems.clear()
+        menuItems.add(DashBoardModel(R.drawable.action_user, "My Account"))
+        menuItems.add(DashBoardModel(R.drawable.ic_local_mall_black_24dp, "My Order"))
+        menuItems.add(DashBoardModel(R.drawable.about, "About us"))
+        menuItems.add(DashBoardModel(R.drawable.ic_signout, "Log Out"))
+    }
+
+    private fun setupRecyclerView() {
+        binding.rvDash.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = DashBoardAdapter(this@DashboardFragment).apply {
+                submitList(menuItems)
+            }
+        }
+    }
+
     @SuppressLint("SetTextI18n")
-     fun addObservers() {
-        payment.userDetail.observe(this){
-            with(binding){
-                tvName.text="Hi ${it.name}"
-                //tvName.setText(it.name)
-                if(it.photo!=null) {
-                    val `val`: String = it.photo.toString()
-
-                    val decodedString = Base64.decode(`val`, Base64.DEFAULT)
-                    val decodedByte =
-                        BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
-                    // imageProfile.setImageBitmap(decodedByte)
-
-                    imageProfile.load(decodedByte) {
-                        transformations(CircleCropTransformation())
+    private fun setupObservers() {
+        paymentViewModel.userDetail.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                binding.tvName.text = "Hi ${it.name}"
+                
+                it.photo?.let { photoData ->
+                    if (photoData.isNotBlank()) {
+                        // Handle both URL (new) and Base64 (legacy) formats
+                        if (photoData.startsWith("http")) {
+                            // New format: Firebase Storage URL
+                            binding.imageProfile.load(photoData) {
+                                crossfade(true)
+                                transformations(CircleCropTransformation())
+                                placeholder(R.drawable.usericon)
+                                error(R.drawable.usericon)
+                            }
+                        } else {
+                            // Legacy format: Base64 encoded image
+                            try {
+                                val decodedString = Base64.decode(photoData, Base64.DEFAULT)
+                                val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+                                binding.imageProfile.load(decodedByte) {
+                                    transformations(CircleCropTransformation())
+                                }
+                            } catch (e: Exception) {
+                                binding.imageProfile.setImageResource(R.drawable.usericon)
+                            }
+                        }
                     }
                 }
             }
         }
+    }
 
+    private fun setupClickListeners() {
+        // Allow tapping profile card to navigate to profile
+        binding.cvProfile.setOnClickListener {
+            startActivity(Intent(activity, ProfileActivity::class.java))
+        }
+        
+        // Setup swipe-to-refresh
+        binding.swipeRefresh.setOnRefreshListener {
+            refreshUserData()
+        }
+    }
+    
+    private fun refreshUserData() {
+        paymentViewModel.getUserDet(userId)
+        // Stop refreshing after a short delay (data will update via observer)
+        binding.swipeRefresh.postDelayed({
+            binding.swipeRefresh.isRefreshing = false
+        }, 1000)
+    }
+
+    override fun onItemClick(productName: String) {
+        when (productName) {
+            "My Order" -> startActivity(Intent(activity, MyOrder::class.java))
+            "My Account" -> startActivity(Intent(activity, ProfileActivity::class.java))
+            "About us" -> startActivity(Intent(activity, AboutPage::class.java))
+            "Log Out" -> showLogoutDialog()
+        }
+    }
+
+    private fun showLogoutDialog() {
+        context?.let { ctx ->
+            AlertDialog.Builder(ctx)
+                .setTitle("Exit")
+                .setMessage("Do you really want to exit?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { _, _ ->
+                    performLogout()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.cancel()
+                }
+                .create()
+                .show()
+        }
+    }
+    
+    private fun performLogout() {
+        // Fade out animation
+        binding.root.animate()
+            .alpha(0f)
+            .setDuration(300)
+            .withEndAction {
+                prefsUtil.Name = ""
+                prefsUtil.password = ""
+                startActivity(Intent(activity, LoginActivity::class.java))
+                activity?.finish()
+            }
+            .start()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onItemClick(productName: String) {
-        if(productName.equals("My Order"))
-        {
-            val intent=Intent(activity,MyOrder::class.java)
-            startActivity(intent)
-        }
-        else if(productName.equals("My Account"))
-        {
-            val intent=Intent(activity, ProfileActivity::class.java)
-            startActivity(intent)
-        }
-        else if(productName.equals("About us"))
-        {
-            val intent=Intent(activity, AboutPage::class.java)
-            startActivity(intent)
-        }
-        else if(productName.equals("Log Out"))
-        {
-            val alertDialogBuilder = context?.let {
-                AlertDialog.Builder(
-                    it
-                )
-            }
-
-            // set title
-
-            // set title
-            alertDialogBuilder?.setTitle("Exit")
-
-            // set dialog message
-
-            // set dialog message
-            alertDialogBuilder
-                ?.setMessage("Do you really want to exit?")
-                ?.setCancelable(false)
-                ?.setPositiveButton("Yes") { dialog, id ->
-                    // if this button is clicked, close
-                    // current activity
-                    //show_Notification("LogOut","You Log Out Your account at "+ currentTime);
-                    //EmployeeHome.this.finish();
-                    prefsUtil.Name=""
-                    prefsUtil.password=""
-                    startActivity(Intent(activity,LoginActivity::class.java))
-                }
-                ?.setNegativeButton("No") { dialog, id -> // if this button is clicked, just close
-                    // the dialog box and do nothing
-                    dialog.cancel()
-                }
-
-            // create alert dialog
-
-            // create alert dialog
-            val alertDialog = alertDialogBuilder?.create()
-
-            // show it
-
-            // show it
-            alertDialog?.show()
-        }
     }
 }
