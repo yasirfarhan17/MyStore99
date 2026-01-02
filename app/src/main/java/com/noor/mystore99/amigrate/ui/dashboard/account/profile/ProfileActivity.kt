@@ -24,7 +24,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
-import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
+import com.noor.mystore99.amigrate.ui.dashboard.account.address.AddressActivity
 import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel
 import com.noor.mystore99.databinding.ActivityProfileBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -132,10 +132,10 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding,ProfileViewModel>() 
                 }
             }
             binding.adress.setOnClickListener {
-                startActivity(Intent(this@ProfileActivity,Address::class.java))
+                startActivity(Intent(this@ProfileActivity,AddressActivity::class.java))
             }
             changeAddress.setOnClickListener {
-                startActivity(Intent(this@ProfileActivity,Address::class.java))
+                startActivity(Intent(this@ProfileActivity,AddressActivity::class.java))
             }
         }
     }

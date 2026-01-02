@@ -11,7 +11,7 @@ import com.example.networkmodule.network.Resource
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.cart.CartViewModel
-import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
+import com.noor.mystore99.amigrate.ui.dashboard.account.address.AddressActivity
 import com.noor.mystore99.databinding.ActivityPaymentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -70,7 +70,7 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
             imgBack.setOnClickListener { onBackPressed() }
 
             tvChangeAddress.setOnClickListener {
-                val intent = Intent(this@PaymentActivity, Address::class.java)
+                val intent = Intent(this@PaymentActivity, AddressActivity::class.java)
                 startActivity(intent)
             }
 

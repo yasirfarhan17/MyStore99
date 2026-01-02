@@ -24,7 +24,7 @@ import com.example.networkmodule.storage.PrefsUtil
 import com.noor.mystore99.AboutPage
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.ui.auth.login.LoginActivity
-import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
+import com.noor.mystore99.amigrate.ui.dashboard.account.address.AddressActivity
 import com.noor.mystore99.amigrate.ui.dashboard.account.myorder.MyOrder
 import com.noor.mystore99.amigrate.ui.dashboard.account.profile.ProfileActivity
 import com.noor.mystore99.amigrate.ui.payment.PaymentViewModel

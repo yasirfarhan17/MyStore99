@@ -54,7 +54,7 @@
             android:name=".amigrate.ui.dashboard.account.myorder.MyOrder"
             android:exported="false" />
         <activity
-            android:name=".amigrate.ui.dashboard.account.address.Address"
+            android:name=".amigrate.ui.dashboard.account.address.AddressActivity"
             android:exported="false" />
         <activity
             android:name=".amigrate.ui.category.CategoryActivity"
