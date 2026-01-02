@@ -154,7 +154,10 @@
                             android:padding="5dp"
                             android:text="@string/category"
                             android:textColor="@color/colorPrimaryDark"
-                            android:textSize="18sp" />
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="8dp" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -206,7 +209,8 @@
                             android:fontFamily="@font/convergence"
                             android:text="@string/all_products"
                             android:textColor="@color/colorPrimaryDark"
-                            android:textSize="18sp"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
                             android:visibility="visible"
                             app:layout_anchor="@id/app_bar"
                             app:layout_anchorGravity="bottom"
