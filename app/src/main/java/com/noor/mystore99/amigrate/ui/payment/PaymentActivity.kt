@@ -1,25 +1,19 @@
 package com.noor.mystore99.amigrate.ui.payment
 
-import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.example.networkmodule.model.CartModel
+import com.example.networkmodule.network.Resource
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
 import com.noor.mystore99.amigrate.ui.cart.CartViewModel
-import com.example.networkmodule.model.checkOutModel
-import com.google.firebase.database.*
 import com.noor.mystore99.amigrate.ui.dashboard.account.address.Address
-import com.noor.mystore99.amigrate.ui.upi.NewUPIPay
-import com.noor.mystore99.amigrate.util.PushNotification
 import com.noor.mystore99.databinding.ActivityPaymentBinding
-import com.noor.mystore99.setDate
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,174 +21,183 @@ import kotlin.collections.ArrayList
 class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>() {
 
     override val viewModel: PaymentViewModel by viewModels()
-     val viewModelCart: CartViewModel by viewModels()
-    var cashFlag:Boolean=false
-    var upiFlag:Boolean=false
-    lateinit var combo:String
-    var list =ArrayList<CartModel>()
-    lateinit var  key:String
-    lateinit var amount:String
-    lateinit var address:String
-    lateinit var ref : DatabaseReference
-    lateinit var ref1 : DatabaseReference
-    lateinit var ref2 : DatabaseReference
-    lateinit var name : String
+    private val cartViewModel: CartViewModel by viewModels()
+
+    private var cartList = ArrayList<CartModel>()
+    private lateinit var userId: String
+    private lateinit var amount: String
+    private var userName: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_payment)
-        key=prefsUtil.Name.toString()
-        amount= intent.getStringExtra("amount").toString()
-        val currentDate1 = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-        val currentTime1 = SimpleDateFormat("HHmmss", Locale.getDefault()).format(
-            Date()
-        )
-        combo = currentDate1 + currentTime1
-        Log.d("checkamt", ""+ amount)
-        ref= FirebaseDatabase.getInstance().getReference("UserNew").child(key)
-        ref1= FirebaseDatabase.getInstance().getReference("orderNew").child(key)
-        ref2= FirebaseDatabase.getInstance().getReference("PinCode")
-        viewModel.getUserDet(key)
-        viewModelCart.cartDataCall(key)
+
+        userId = prefsUtil.Name.toString()
+        amount = intent.getStringExtra("amount") ?: "0"
+
         initUi()
-    }
+        setupListeners()
+        setupObservers()
 
-
-
-    @SuppressLint("SetTextI18n")
-    private fun initUi() {
-        with(binding) {
-            setDate(this@PaymentActivity, binding.etDate.id)
-            viewModel.userDetail.observe(this@PaymentActivity){
-                tvAddress.text=it.address.toString()+" Pincode:-"+it.pincode.toString()
-                address=tvAddress.text.toString()
-                tvPhoneNumber.text=key
-                etPincode.setText(it.pincode.toString())
-                name=it.name.toString()
-
-            }
-            imgBack.setOnClickListener {
-                onBackPressed()
-            }
-            rbCash.setOnClickListener {
-                cashFlag=true
-                upiFlag=false
-            }
-            rbUpi.setOnClickListener {
-                cashFlag=false
-                upiFlag=true
-            }
-            btChangePin.setOnClickListener {
-                etPincode.setFocusableInTouchMode(true)
-                etPincode.setFocusable(true)
-            }
-
-            changeAddress.setOnClickListener {
-                startActivity(Intent(this@PaymentActivity, Address::class.java))
-            }
-
-            btCheckOut.setOnClickListener {
-                if(cashFlag){
-                    if(etDate.text == null || etDate.text.isNullOrBlank()){
-                        Toast.makeText(this@PaymentActivity,"Please choose delivery date",Toast.LENGTH_SHORT).show()
-                    }
-                    else if(tvAddress.text.toString().equals("null Pincode:-null") ||tvAddress.text==null||tvAddress.text.isNullOrEmpty()){
-                        Toast.makeText(this@PaymentActivity,"Address is required",Toast.LENGTH_SHORT).show()
-                    }
-                    else if(etPincode.text.toString().equals("null")|| etPincode.text ==null || etPincode.text.isNullOrBlank()){
-                        Toast.makeText(this@PaymentActivity,"Pin code is required",Toast.LENGTH_SHORT).show()
-                    }
-
-
-                    else {
-                        Log.d("checkingPincode",etPincode.text.toString())
-                        ref2.child(etPincode.text.toString()).addValueEventListener(object :ValueEventListener{
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                if(snapshot.exists()){
-                                    val status=snapshot.child("status").value
-                                    if(status?.equals("on") == true){
-                                        val intent = Intent(this@PaymentActivity, confirmOrder::class.java)
-                                        setValueToFirebase(etPincode.text.toString())
-                                        intent.putExtra("pay", "Cash on delivery")
-                                        intent.putExtra("amount", amount)
-                                        intent.putExtra("combo", combo)
-                                        intent.putExtra("pincode", etPincode.text.toString())
-
-                                        viewModelCart.clearCart()
-                                        ref.child("pincode").setValue(etPincode.text.toString())
-                                        val ref = FirebaseDatabase.getInstance().getReference("CartNew").child(key)
-                                        ref.removeValue()
-                                        startActivity(intent)
-                                    }
-
-                                }
-                                else{
-                                    Toast.makeText(this@PaymentActivity,"Please change the Pin code",Toast.LENGTH_SHORT).show()
-                                }
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-
-                            }
-
-                        })
-
-                    }
-                }
-
-                else if(upiFlag){
-//                    val intent = Intent(this@PaymentActivity, CheckoutActivity::class.java)
-//                    setValueToFirebase()
-//                    intent.putExtra("pay","UPI")
-//                    intent.putExtra("amount",amount)
-//                    intent.putExtra("combo",combo)
-//                    viewModelCart.clearCart()
-//                    startActivity(intent)
-//                    //viewModelCart.clearCart()
-//                    startActivity(intent)
-                var ref=FirebaseDatabase.getInstance().getReference("CartNew").child(key)
-                    ref.removeValue()
-                    startActivity(Intent(this@PaymentActivity,NewUPIPay::class.java))
-                }
-                else{
-                    Toast.makeText(this@PaymentActivity,"Please select payment option",Toast.LENGTH_SHORT).show()
-                }
-
-
-            }
-        }
+        viewModel.getUserDet(userId)
+        cartViewModel.cartDataCall(userId)
     }
 
     override fun layoutId(): Int = R.layout.activity_payment
 
-    override fun addObservers() {
-        viewModelCart.cartFromDB.observe(this){
-            list = it.map{itt ->
-                CartModel(itt.products_name,itt.price,itt.img,itt.weight,itt.quant,itt.total)
-            } as ArrayList<CartModel>
+    private fun initUi() {
+        binding.etDate.setOnClickListener { showDatePicker() }
+        // setEndIconOnClickListener is not available on TextInputEditText, avoiding it or using TIL if bound
+        binding.tilDate.setEndIconOnClickListener { showDatePicker() }
+    }
+
+    private fun showDatePicker() {
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        val dpd = DatePickerDialog(this, { _, year1, monthOfYear, dayOfMonth ->
+            val dateStr = "$dayOfMonth/${monthOfYear + 1}/$year1"
+            binding.etDate.setText(dateStr)
+        }, year, month, day)
+        dpd.datePicker.minDate = System.currentTimeMillis() - 1000
+        dpd.show()
+    }
+
+    private fun setupListeners() {
+        with(binding) {
+            imgBack.setOnClickListener { onBackPressed() }
+
+            tvChangeAddress.setOnClickListener {
+                val intent = Intent(this@PaymentActivity, Address::class.java)
+                startActivity(intent)
+            }
+
+            btCheckOut.setOnClickListener {
+                handleCheckout()
+            }
         }
     }
 
-    private fun setValueToFirebase(pincode:String){
-        val currentDate1 = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-        val currentTime1 = SimpleDateFormat("HHmmss", Locale.getDefault()).format(
-            Date()
-        )
-        viewModel.userDetail.observe(this@PaymentActivity){
-            address=it.address.toString()+" Pincode:-"+pincode
-        }
-        val currentDate = SimpleDateFormat("ddMMyyyy", Locale.getDefault()).format(Date())
-        combo = currentDate1 + currentTime1
-        val model: checkOutModel
-        if(upiFlag){
-            model= checkOutModel(list,combo,binding.etDate.text.toString(),currentTime1,currentDate,address,amount,"upi",key,name)
-        }
-        else{
-            model= checkOutModel(list,combo,binding.etDate.text.toString(),currentTime1,currentDate,address,amount,"cod",key,name)
-        }
-        val title="New Order"
-        val message="orderId:- $combo Phone:- $key Amount:- $amount time:-$currentTime1"
-        //val pushNotification=PushNotification(title,message)
-        ref1.child(combo).setValue(model)
+    private fun handleCheckout() {
+        // Validation
+        val date = binding.etDate.text.toString()
+        val pincode = binding.etPincode.text.toString()
+        val address = binding.tvAddress.text.toString()
 
+        if (date.isBlank()) {
+            Toast.makeText(this, "Please choose a delivery date", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        if (address.isBlank() || address.contains("null") || address.length < 5) {
+            Toast.makeText(this, "Valid shipping address is required", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        if (pincode.isBlank() || pincode.length < 4) {
+             Toast.makeText(this, "Valid pincode is required", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        if (amount == "0" || amount == "null") {
+             Toast.makeText(this, "Invalid Cart Amount", Toast.LENGTH_SHORT).show()
+             return
+        }
+
+        // Proceed to Verify Pincode
+        viewModel.verifyPincode(pincode)
     }
+
+    private fun setupObservers() {
+        // User Details
+        viewModel.userDetail.observe(this) { user ->
+            if (user != null) {
+                // Handle null fields gracefully
+                val addr = user.address ?: ""
+                val pin = user.pincode ?: ""
+                val city = "" // user.city removed as per previous fix
+                
+                if (addr.isNotBlank()) {
+                     binding.tvAddress.text = "$addr${if(pin.isNotBlank()) ", $pin" else ""}"
+                } else {
+                     binding.tvAddress.text = "No address found. Please add one."
+                }
+                
+                binding.tvPhoneNumber.text = "${user.name ?: "User"} | $userId"
+                binding.etPincode.setText(pin.toString())
+                userName = user.name ?: ""
+            }
+        }
+
+        // Cart Data
+        cartViewModel.cartFromDB.observe(this) { entities ->
+            cartList = entities.mapTo(ArrayList()) {
+                CartModel(it.products_name, it.price, it.img, it.weight, it.quant, it.total)
+            }
+        }
+
+        // Pincode Status
+        viewModel.pincodeStatus.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                     binding.btCheckOut.isEnabled = false
+                     binding.btCheckOut.text = "Verifying..."
+                }
+                is Resource.Success -> {
+                    // Pincode Verified -> Place Order (COD)
+                    binding.btCheckOut.text = "Processing Order..."
+                    
+                    val date = binding.etDate.text.toString()
+                    val pincode = binding.etPincode.text.toString()
+                    val address = binding.tvAddress.text.toString()
+
+                    viewModel.placeOrder(
+                        cartList = cartList,
+                        amount = amount,
+                        date = date,
+                        address = address,
+                        pincode = pincode,
+                        paymentMode = "cod",
+                        userId = userId,
+                        userName = userName
+                    )
+                }
+                is Resource.Error -> {
+                    binding.btCheckOut.isEnabled = true
+                    binding.btCheckOut.text = "Place Order"
+                    Toast.makeText(this, resource.message ?: "Service unavailable at this pincode", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        // Order Status
+        viewModel.orderStatus.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    // Already handled in flow usually, but double safety
+                    binding.btCheckOut.isEnabled = false
+                }
+                is Resource.Success -> {
+                    val intent = Intent(this, confirmOrder::class.java)
+                    intent.putExtra("pay", "Cash on delivery")
+                    intent.putExtra("amount", amount)
+                    intent.putExtra("combo", resource.data)
+                    intent.putExtra("pincode", binding.etPincode.text.toString())
+                    
+                    cartViewModel.clearCart()
+                    startActivity(intent)
+                    finish()
+                }
+                is Resource.Error -> {
+                    binding.btCheckOut.isEnabled = true
+                    binding.btCheckOut.text = "Place Order"
+                    Toast.makeText(this, "Failed: ${resource.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+    
+    override fun addObservers() {}
 }
