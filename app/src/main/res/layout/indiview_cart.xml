@@ -1,200 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="4dp">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_main"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_margin="10dp"
-            app:cardBackgroundColor="#28365b"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="10dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:padding="12dp">
 
-
-                <ImageView
+                <!-- Product Image -->
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/img_cart"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="4dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ic_local_mall_black_24dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-                <ImageView
-                    android:id="@+id/img_clear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/icon_to_clear_cart"
-                    android:src="@drawable/ic_delete_black_24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/btnprimary" />
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
-
+                <!-- Product Details -->
                 <TextView
                     android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/white"
-                    android:textSize="17sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/img_clear"
                     app:layout_constraintStart_toEndOf="@+id/img_cart"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="ProductName" />
+                    tools:text="Fresh Tomato Hybrid" />
 
+                <TextView
+                    android:id="@+id/tv_cart_quant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="#757575"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@id/tv_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                    tools:text="1 kg" />
 
                 <TextView
                     android:id="@+id/tv_cart_type"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#fd7b01"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/tv_cart_quant"
-                    app:layout_constraintStart_toEndOf="@+id/img_cart"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_name"
-                    tools:text="Type" />
-
-                <TextView
-                    android:id="@+id/tv_cart_quant"
-                    android:layout_width="50dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="#757575"
                     android:textSize="14sp"
-                    android:layout_marginBottom="5dp"
-                    app:layout_constraintEnd_toStartOf="@id/bt_minus"
-                    app:layout_constraintStart_toEndOf="@+id/img_cart"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_cart_type"
-                    app:layout_constraintBottom_toTopOf="@id/vBt1"
-                    tools:text="quant" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_cart_quant"
+                    app:layout_constraintStart_toEndOf="@id/tv_cart_quant"
+                    app:layout_constraintTop_toTopOf="@+id/tv_cart_quant"
+                    tools:text="₹ 40" />
 
+                <!-- Delete Button -->
+                <ImageView
+                    android:id="@+id/img_clear"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/icon_to_clear_cart"
+                    android:src="@drawable/ic_delete_black_24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#F44336" />
+
+                <!-- Quantity Controls -->
+                <LinearLayout
+                    android:id="@+id/ll_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    app:layout_constraintStart_toStartOf="@id/tv_name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_cart_quant">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/bt_minus"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        app:icon="@drawable/ic_baseline_remove_24"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
+                        app:iconTint="@color/black"
+                        app:strokeColor="#E0E0E0"
+                        app:cornerRadius="8dp" />
+
+                    <TextView
+                        android:id="@+id/tv_current_quant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="12dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="1" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/bt_Increase"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        app:icon="@drawable/ic_baseline_add_24"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
+                        app:iconTint="@color/black"
+                        app:strokeColor="#E0E0E0"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
+                <!-- Item Total Price -->
                 <TextView
                     android:id="@+id/total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textColor="#fd7b01"
-                    android:textSize="17sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/bt_Increase"
-                    app:layout_constraintStart_toEndOf="@+id/bt_Increase"
-                    app:layout_constraintTop_toTopOf="@+id/bt_Increase"
-                    tools:text="$ 120" />
+                    android:textColor="@color/btnprimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_quantity"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/ll_quantity"
+                    tools:text="₹ 120" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_minus"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/minus_btn"
-                    app:layout_constraintStart_toEndOf="@+id/tv_cart_quant"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_cart_type" />
-
-
+                <!-- Pack Size Selection -->
                 <TextView
-                    android:id="@+id/tv_current_quant"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="24dp"
-                    android:background="@color/white"
-                    android:elevation="10dp"
-                    android:padding="3dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/bt_minus"
-                    app:layout_constraintStart_toEndOf="@+id/bt_minus"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+                    android:id="@+id/tv_pack_size_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Select Size"
+                    android:textColor="#757575"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_quantity"
+                    tools:visibility="visible" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/bt_Increase"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/plus_btn"
-                    app:layout_constraintStart_toEndOf="@+id/tv_current_quant"
-                    app:layout_constraintTop_toTopOf="@+id/bt_minus" />
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggle_weight_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pack_size_label"
+                    tools:visibility="visible">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/vBt1"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/cartbg"
-                    android:backgroundTint="#fd7b01"
-                    android:padding="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tv_cart_quant"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_cart_quant"
-                    app:layout_constraintVertical_bias="1.0"
-                    android:text="1kg" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_variant_1kg"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="0dp"
+                        android:text="1 kg"
+                        android:textSize="12sp" 
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"/>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/vBt2"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/cartbg"
-                    android:backgroundTint="#fd7b01"
-                    android:padding="5dp"
-                    android:text="@string/_500_gm"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_variant_500gm"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="0dp"
+                        android:text="500 gm"
+                        android:textSize="12sp" 
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"/>
 
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/vBt1"
-                    app:layout_constraintTop_toTopOf="@+id/vBt1" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_variant_250gm"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="0dp"
+                        android:text="250 gm"
+                        android:textSize="12sp" 
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"/>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/vBt3"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/cartbg"
-                    android:backgroundTint="#fd7b01"
-                    android:padding="5dp"
-                    android:text="@string/_250_gm"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/vBt2"
-                    app:layout_constraintTop_toTopOf="@+id/vBt2" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </androidx.cardview.widget.CardView>
-
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
