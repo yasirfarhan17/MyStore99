@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="8dp">
+    android:paddingVertical="12dp">
 
     <TextView
         android:id="@+id/tv_summary_name"
@@ -12,35 +12,35 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/white"
+        android:maxLines="2"
+        android:textColor="#212121"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tv_summary_price"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Fresh Tomato Hybrid" />
+        tools:text="Fresh Almonds" />
 
     <TextView
         android:id="@+id/tv_summary_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="#BDBDBD"
+        android:textColor="#757575"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@id/tv_summary_name"
         app:layout_constraintTop_toBottomOf="@id/tv_summary_name"
-        tools:text="1 kg x 2" />
+        tools:text="250 gm x 1" />
 
     <TextView
         android:id="@+id/tv_summary_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="#212121"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_summary_details"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="$120" />
+        tools:text="₹ 240" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
