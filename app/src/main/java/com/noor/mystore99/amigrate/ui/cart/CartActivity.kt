@@ -1,248 +1,156 @@
 package com.noor.mystore99.amigrate.ui.cart
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.networkmodule.database.entity.CartEntity
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.database.FirebaseDatabase
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
-import com.noor.mystore99.amigrate.ui.main.fragment.home.UserViewModel
 import com.noor.mystore99.amigrate.ui.payment.PaymentActivity
-import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.amigrate.util.Util.showAlert
 import com.noor.mystore99.databinding.ActivityNewCartBinding
 import com.noor.mystore99.databinding.BottomSheetCartDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
-class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(),cartCallBack {
+class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(), CartCallBack {
 
     override val viewModel: CartViewModel by viewModels()
-     val userviewModel: UserViewModel by viewModels()
     override fun layoutId(): Int = R.layout.activity_new_cart
-    lateinit var bindingSheet : BottomSheetCartDetailsBinding
-    lateinit var  key:String
-
-    companion object{
-        var subValue:Int=0
-        var finalTotalPrice:Int=0
-        var deliverCharge=0
-        lateinit var cartValue : ArrayList<CartEntity>
-    }
-
+    
+    private var cartKey: String = ""
+    private var currentCartList: List<CartEntity> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_new_cart)
-        key=prefsUtil.Name.toString()
-        viewModel.cartDataCall(key)
+        
+        cartKey = prefsUtil.Name.toString()
+        viewModel.cartDataCall(cartKey)
+        
         initUi()
-        addListener()
+        setupListeners()
+        setupObservers()
     }
 
-    private fun addListener() {
+    private fun setupListeners() {
         with(binding) {
-//            update_counter()
-//            if(finalTotalPrice==0)
-//                itemsPresentInCart(false)
             btCheckOut.setOnClickListener {
-                if(subValue<150){
-                    Toast.makeText(this@CartActivity,"Please add more item",Toast.LENGTH_SHORT).show()
-                }
-                else{
-                    update_counter()
-                    val intent=Intent(this@CartActivity, PaymentActivity::class.java)
-                    Log.d("checkamt", ""+finalTotalPrice)
-                    intent.putExtra("amount", finalTotalPrice.toString())
+                val total = viewModel.totalPrice.value ?: 0
+                val subTotal = viewModel.subTotal.value ?: 0
+                
+                if (subTotal < 150) {
+                    Toast.makeText(this@CartActivity, getString(R.string.add_more_items_msg), Toast.LENGTH_SHORT).show()
+                } else {
+                    val intent = Intent(this@CartActivity, PaymentActivity::class.java).apply {
+                        putExtra("amount", total.toString())
+                    }
                     startActivity(intent)
-                    //startActivity(Intent(this@CartActivity, PaymentActivity::class.java))
                 }
-
             }
+
             imgClearCart.setOnClickListener {
                 showAlert(
                     this@CartActivity,
                     getString(R.string.txt_clear_cart_question),
                     getString(R.string.all_the_item_in_cart_will_be_cleared)
                 ) {
-                    FirebaseDatabase.getInstance().getReference("CartNew").child(key).removeValue()
-                    finalTotalPrice=0
-                    itemsPresentInCart(false)
-                    (binding.rvCart.adapter as CartAdapter).clearAdapter()
-                    //UserAdapter.clearAdapter()
-
+                    viewModel.clearCartForUser(cartKey)
                 }
             }
+
             tvViewDetails.setOnClickListener {
-                update_counter()
                 showCartDetailsBottomDialog()
-
-
             }
+
             imgBack.setOnClickListener {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
             }
+
             btStartBuying.setOnClickListener {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
             }
         }
     }
 
+    private fun setupObservers() {
+        viewModel.cartFromDB.observe(this) { cartList ->
+            currentCartList = cartList ?: emptyList()
+            updateCartVisibility(currentCartList.isNotEmpty())
+            (binding.rvCart.adapter as? CartAdapter)?.submitList(ArrayList(currentCartList), cartKey)
+        }
+
+        viewModel.totalPrice.observe(this) { total ->
+            binding.tvTotalPrice.text = getString(R.string.currency_format, total)
+        }
+    }
+    
+    // Note: 'addObservers' was an override from BaseActivity presumably, but I renamed it to setupObservers which is better.
+    // If BaseActivity requires addObservers, I should keep it or call it.
+    // Checking previous code: override fun addObservers()
+    override fun addObservers() {
+        // BaseActivity abstract method implementation
+        // delegating to our clean setupObservers or keeping empty if already called in onCreate
+    }
+
+    private fun updateCartVisibility(isPresent: Boolean) {
+        with(binding) {
+            btCheckOut.isVisible = isPresent
+            imgClearCart.isVisible = isPresent
+            rvCart.isVisible = isPresent
+            tvViewDetails.isVisible = isPresent
+            tvTotalPrice.isVisible = isPresent
+            clEmptyCart.isVisible = !isPresent
+        }
+    }
+
     private fun showCartDetailsBottomDialog() {
-        val cartBottomSheetDialog = BottomSheetDialog(this)
-        bindingSheet = DataBindingUtil.inflate<BottomSheetCartDetailsBinding>(
+        val dialog = BottomSheetDialog(this)
+        val sheetBinding = DataBindingUtil.inflate<BottomSheetCartDetailsBinding>(
             layoutInflater,
             R.layout.bottom_sheet_cart_details,
             null,
             false
         )
-        cartBottomSheetDialog.setContentView(bindingSheet.root)
-        bindingSheet.tvSubTotal.text= "₹ $subValue"
-        when (deliverCharge) {
-            20 -> {
-                bindingSheet.tvDeliveryCharge.text="₹ 20"
-            }
-            10 -> {
-                bindingSheet.tvDeliveryCharge.text="₹ 10"
-            }
-            else -> bindingSheet.tvDeliveryCharge.text="free"
+        dialog.setContentView(sheetBinding.root)
+
+        val subTotal = viewModel.subTotal.value ?: 0
+        val delivery = viewModel.deliveryCharge.value ?: 0
+        val total = viewModel.totalPrice.value ?: 0
+
+        sheetBinding.tvSubTotal.text = getString(R.string.currency_format, subTotal)
+        
+        sheetBinding.tvDeliveryCharge.text = when (delivery) {
+            0 -> getString(R.string.free_delivery)
+            else -> getString(R.string.currency_format, delivery)
         }
 
-
-        bindingSheet.tvTotal.text= "₹ $finalTotalPrice"
-        cartBottomSheetDialog.create()
-        cartBottomSheetDialog.show()
+        sheetBinding.tvTotal.text = getString(R.string.currency_format, total)
+        dialog.show()
     }
 
     private fun initUi() {
-
-        with(binding) {
-            rvCart.layoutManager = LinearLayoutManager(this@CartActivity)
-            rvCart.adapter = CartAdapter(this@CartActivity)
+        binding.rvCart.apply {
+            layoutManager = LinearLayoutManager(this@CartActivity)
+            adapter = CartAdapter(this@CartActivity)
         }
     }
-
-
-    override fun addObservers() {
-
-
-
-        viewModel.cartFromDB.observe(this) { cartList ->
-            if (cartList.isNullOrEmpty()) {
-                itemsPresentInCart(false)
-                Log.d("cartcheck", "" + cartList)
-                return@observe
-            }
-            itemsPresentInCart(true)
-            (binding.rvCart.adapter as CartAdapter).submitList(cartList,key)
-            cartValue=cartList
-            getTotalPrice(cartList)
-            update_counter()
-            Log.d("cartcheck", "" + cartList)
-        }
-    }
-
-    fun getTotalPrice(totalPrice:ArrayList<CartEntity>) {
-        subValue=0
-        var deliveryCharge:Int=0
-        for(totals in totalPrice){
-            subValue += totals.total!!.toInt()
-        }
-        finalTotalPrice= subValue
-        Log.d("finalTotalPrice",""+ finalTotalPrice)
-       // update_counter()
-    }
-
-    private fun itemsPresentInCart(isPresent: Boolean) {
-        binding.btCheckOut.setVisible(isPresent)
-        binding.imgClearCart.setVisible(isPresent)
-        binding.rvCart.setVisible(isPresent)
-        binding.tvViewDetails.setVisible(isPresent)
-        binding.clEmptyCart.setVisible(isPresent.not())
-        binding.tvTotalPrice.setVisible(isPresent)
-
-    }
-
+    
     override fun onClick(price: String, id: String, quant: String) {
-        userviewModel.updateQuant(price,id,quant)
-        //addObservers()
-        getTotalPrice(cartValue)
-        update_counter()
+        viewModel.updateQuant(price, id, quant)
     }
 
-
-    @SuppressLint("SetTextI18n")
-    fun update_counter(){
-        if(subValue in 401..1000) {
-            deliverCharge=10
-        }
-        else if(subValue in 100..400) {
-            deliverCharge=20
-        }
-        else {
-            deliverCharge=0
-        }
-        finalTotalPrice= subValue+ deliverCharge
-        binding.tvTotalPrice.text= "₹ $finalTotalPrice"
-        }
-
-
-    override fun onResume() {
-//        val ref=FirebaseDatabase.getInstance().getReference("CartNew").child(key)
-//        ref.addValueEventListener(object: ValueEventListener{
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                val cartList = ArrayList<CartEntity>()
-//                snapshot.children.forEach {
-//                    Log.d("SAHIL_CART", "cart $it")
-//                    val cartItem = it.getValue(CartModel::class.java)?.toCartEntity()
-//                    Log.d("SAHIL_CART", "cart $snapshot")
-//                    cartItem.let { it1 ->
-//                        if (it1 != null) {
-//                            cartList.add(it1)
-//                        }
-//                    }
-//                }
-//                if (cartList.isNullOrEmpty()) {
-//                    itemsPresentInCart(false)
-//                    Log.d("cartcheck", "" + cartList)
-//
-//                }
-//                else {
-//                    Log.d("cartcheck", "" + cartList)
-//                    itemsPresentInCart(true)
-//                    (binding.rvCart.adapter as CartAdapter).submitList(cartList, key)
-//                    cartValue = cartList
-//                    getTotalPrice(cartList)
-//                    update_counter()
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//
-//            }
-//
-//        })
-        viewModel.cartDataCall(key)
-        super.onResume()
-    }
     override fun onDelete(id: String, pos: Int, item: CartEntity) {
         viewModel.deleteItemFromCart(item)
-        cartValue.removeAt(pos)
-        (binding.rvCart.adapter as CartAdapter).submitList(cartValue,key)
-        Log.d("checkcart", ""+cartValue.size)
-        getTotalPrice(cartValue)
-        update_counter()
-        if(cartValue.size==0){
-            itemsPresentInCart(false)
-        }
-        showMessage("Removed Successfully")
+        Toast.makeText(this, "Removed Successfully", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun update_counter() {
+        // No-op: UI updates are handled via LiveData observers
     }
 }

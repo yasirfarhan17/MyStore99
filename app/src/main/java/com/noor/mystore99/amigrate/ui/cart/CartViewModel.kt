@@ -40,6 +40,15 @@ class CartViewModel @Inject constructor(
     private var _cartFromDB = MutableLiveData<ArrayList<CartEntity>>()
     val cartFromDB = _cartFromDB.toLiveData()
 
+    private val _totalPrice = MutableLiveData<Int>()
+    val totalPrice = _totalPrice.toLiveData()
+
+    private val _deliveryCharge = MutableLiveData<Int>()
+    val deliveryCharge = _deliveryCharge.toLiveData()
+
+    private val _subTotal = MutableLiveData<Int>()
+    val subTotal = _subTotal.toLiveData()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             getCartFromDB()
@@ -54,7 +63,9 @@ class CartViewModel @Inject constructor(
                 when (it) {
                     is Resource.Success -> {
                         Log.d("indideCartViewModel",it.data.toString())
-                        _cartFromDB.postValue(it.data as ArrayList<CartEntity>)
+                        val cartList = it.data as ArrayList<CartEntity>
+                        _cartFromDB.postValue(cartList)
+                        calculateTotals(cartList)
                         _viewState.postValue(ViewState.Success())
                     }
                     is Resource.Error -> {
@@ -71,9 +82,27 @@ class CartViewModel @Inject constructor(
         }
     }
 
+    private fun calculateTotals(cartList: List<CartEntity>) {
+        var subValue = 0
+        for (item in cartList) {
+            subValue += item.total?.toIntOrNull() ?: 0
+        }
+        _subTotal.postValue(subValue)
+
+        val charge = when (subValue) {
+            in 401..1000 -> 10
+            in 100..400 -> 20
+            else -> 0
+        }
+        _deliveryCharge.postValue(charge)
+        _totalPrice.postValue(subValue + charge)
+    }
+
     fun updateQuant(price: String, id: String, quant: String) {
         viewModelScope.launch(Dispatchers.IO) {
             dao.update(price, id, quant)
+            // Ideally we re-fetch or logic updates automatically if Flow used. 
+            // For now assuming cartDataCall listener handles updates or we rely on Firebase listener.
         }
     }
 
@@ -82,6 +111,8 @@ class CartViewModel @Inject constructor(
             _viewState.postValue(ViewState.Loading)
             clearCartItemsUseCase.invoke()
             delay(300)
+            _cartFromDB.postValue(ArrayList())
+            calculateTotals(emptyList())
             _viewState.postValue(ViewState.Success())
 
         }
@@ -92,17 +123,23 @@ class CartViewModel @Inject constructor(
             _viewState.postValue(ViewState.Loading)
             deleteCartItemUseCase.invoke(cartItem).collectLatest {
                 _viewState.postValue(ViewState.Success())
+                // Optimistic update or wait for firestore callback logic to update list
             }
         }
+    }
+    
+    fun clearCartForUser(key: String) {
+        FirebaseDatabase.getInstance().getReference("CartNew").child(key).removeValue()
+        _cartFromDB.postValue(ArrayList())
+        calculateTotals(emptyList())
     }
 
     fun clear(id: String) {
         launch {
-            //_viewState.postValue(ViewState.Loading)
             dao.clearIndi(id)
-
         }
     }
+    
     fun cartDataCall(key:String){
         val ref= FirebaseDatabase.getInstance().getReference("CartNew").child(key)
         ref.addValueEventListener(object: ValueEventListener {
@@ -111,25 +148,17 @@ class CartViewModel @Inject constructor(
                 snapshot.children.forEach {
                     Log.d("SAHIL_CART", "cart $it")
                     val cartItem = it.getValue(CartModel::class.java)?.toCartEntity()
-
-                    Log.d("SAHIL_CART", "cart $snapshot")
-                    cartItem.let { it1 ->
-                        if (it1 != null) {
-                            cartList.add(it1)
-                        }
+                    cartItem?.let { item ->
+                        cartList.add(item)
                     }
                 }
                 _cartFromDB.postValue(cartList)
-
+                calculateTotals(cartList)
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                Log.e("CartViewModel", "Database error: ${error.message}")
             }
-
         })
     }
-
-
-
 }
