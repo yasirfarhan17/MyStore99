@@ -22,19 +22,24 @@ class ProfileViewModel @Inject constructor(
 
     private val _updateStatus = MutableLiveData<Resource<String>>()
     val updateStatus: LiveData<Resource<String>> = _updateStatus
+    
+    private val _loadingStatus = MutableLiveData<Boolean>()
+    val loadingStatus: LiveData<Boolean> = _loadingStatus
 
     fun getUserDetails(userId: String) {
         launch {
-            _updateStatus.postValue(Resource.Loading()) // Re-using for loading state if needed
+            _loadingStatus.postValue(true)
             getUser.invoke(userId).collect {
                 when (it) {
                     is Resource.Success -> {
                         if (it.data != null) {
                             _userDetail.postValue(it.data!!)
                         }
+                        _loadingStatus.postValue(false)
                     }
                     is Resource.Error -> {
-                         _updateStatus.postValue(Resource.Error(it.message ?: "Failed to load profile"))
+                        _loadingStatus.postValue(false)
+                        // Could show error via Snackbar or separate error LiveData
                     }
                     else -> {}
                 }

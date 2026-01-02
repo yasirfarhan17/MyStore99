@@ -34,20 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <!-- Back Button -->
-                    <ImageView
-                        android:id="@+id/back"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_left_arrow"
-                        app:tint="@android:color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:contentDescription="Back" />
+
 
                     <!-- Title -->
                     <TextView
@@ -58,10 +45,10 @@
                         android:textColor="@android:color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/back"
+                        app:layout_constraintBottom_toTopOf="@id/cv_profile"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/back" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <!-- Profile Card Container -->
                     <com.google.android.material.card.MaterialCardView
@@ -76,6 +63,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/profile_image_card"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/white"

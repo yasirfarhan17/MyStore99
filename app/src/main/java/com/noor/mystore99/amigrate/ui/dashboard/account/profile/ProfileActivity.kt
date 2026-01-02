@@ -37,6 +37,10 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
                     crossfade(true)
                     transformations(CircleCropTransformation())
                 }
+                
+                // Visual feedback: increase elevation to show pending upload
+                binding.cvImage.cardElevation = 12f
+                binding.ivCamera.setImageResource(R.drawable.ic_camera_alt_black_24dp) // Could use upload icon
             }
         }
     }
@@ -71,11 +75,25 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
         // Save
         binding.btnSave.setOnClickListener {
             val name = binding.etName.text.toString().trim()
-            if (name.isBlank()) {
-                Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            
+            // Comprehensive validation
+            when {
+                name.isBlank() -> {
+                    Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show()
+                }
+                name.length < 2 -> {
+                    Toast.makeText(this, "Name must be at least 2 characters", Toast.LENGTH_SHORT).show()
+                }
+                name.length > 50 -> {
+                    Toast.makeText(this, "Name must be less than 50 characters", Toast.LENGTH_SHORT).show()
+                }
+                !name.matches(Regex("^[a-zA-Z\\s]+$")) -> {
+                    Toast.makeText(this, "Name can only contain letters and spaces", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    viewModel.updateProfile(userId, name, selectedImageUri)
+                }
             }
-            viewModel.updateProfile(userId, name, selectedImageUri)
         }
     }
     
@@ -87,6 +105,12 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
     }
 
     private fun setupObservers() {
+        // Loading State
+        viewModel.loadingStatus.observe(this) { isLoading ->
+            // Could show/hide a progress bar here if needed
+            // For now, it just prevents the confusing "Updating..." text
+        }
+        
         // User Details
         viewModel.userDetail.observe(this) { user ->
             if (user != null) {
@@ -132,6 +156,15 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
                     binding.btnSave.text = "Update Profile"
                     binding.btnSave.isEnabled = true
                     Toast.makeText(this, resource.data, Toast.LENGTH_SHORT).show()
+                    
+                    // Refresh user data to show updated info
+                    viewModel.getUserDetails(userId)
+                    
+                    // Reset selected image since it's now uploaded
+                    selectedImageUri = null
+                    
+                    // Reset visual indicator
+                    binding.cvImage.cardElevation = 4f
                 }
                 is Resource.Error -> {
                     binding.btnSave.text = "Update Profile"
