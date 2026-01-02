@@ -39,7 +39,7 @@ private const val RIGHT_BOTTOM_POSITION = 3
 open class FabButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = R.attr.floatingActionButtonStyle
+    defStyleAttr: Int = com.google.android.material.R.attr.floatingActionButtonStyle
 ) : FloatingActionButton(context, attrs, defStyleAttr) {
 
     private val animationProperty =

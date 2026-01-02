@@ -195,7 +195,7 @@ public class first extends AppCompatActivity {
                     return;
 
                 }
-                final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder().setContext(first.this).build();
+                final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder(first.this).create();
                 waitingtDialog.show();
                 users = FirebaseDatabase.getInstance().getReference("User");
                 verifySignInCode(editPassword.getText().toString());

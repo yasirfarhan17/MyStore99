@@ -133,7 +133,7 @@ public class loginPage extends AppCompatActivity {
                     }
                     if (number != 0) {
                         Snackbar.make(getWindow().getDecorView().getRootView(), "working", Snackbar.LENGTH_SHORT).show();
-                        final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder().setContext(loginPage.this).build();
+                        final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder(loginPage.this).create();
                         waitingtDialog.show();
                         users = FirebaseDatabase.getInstance().getReference("User");
                         if (number == Integer.parseInt(otp.getText().toString())) {
@@ -144,7 +144,7 @@ public class loginPage extends AppCompatActivity {
 
                     } else {
                         Snackbar.make(getWindow().getDecorView().getRootView(), "working22", Snackbar.LENGTH_SHORT).show();
-                        final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder().setContext(loginPage.this).build();
+                        final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder(loginPage.this).create();
                         waitingtDialog.show();
                         users = FirebaseDatabase.getInstance().getReference("User");
                         verifySignInCode(otp.getText().toString());

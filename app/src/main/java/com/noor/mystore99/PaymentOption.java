@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import dmax.dialog.SpotsDialog;
 
 
@@ -39,43 +40,43 @@ public class PaymentOption extends AppCompatActivity {
     Button back;
     DatabaseReference ref;
     SharedPreferences preferences;
-    String key,val,ad,payToatl,date,add;
-    TextView total,t1;
+    String key, val, ad, payToatl, date, add;
+    TextView total, t1;
     Spinner spinner;
-    private ArrayList<cartItem> list=new ArrayList<>();
+    private ArrayList<cartItem> list = new ArrayList<>();
     private SpinnerAdapter mAdapter;
     Button pay;
     RadioGroup radioGroup;
-    RadioButton radioButton1,radioButton2;
-    static  int a=0;
+    RadioButton radioButton1, radioButton2;
+    static int a = 0;
     SharedPreferences preferences1;
-    SharedPreferences.Editor editor ;
-    String name,phone,op;
+    SharedPreferences.Editor editor;
+    String name, phone, op;
     IFCMService ifcmService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_option);
-        back=findViewById(R.id.back);
+        back = findViewById(R.id.back);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        total=(TextView)findViewById(R.id.payMon);
-        t1=(TextView)findViewById(R.id.totalmoney);
-        pay=(Button)findViewById(R.id.pay);
-        radioGroup=findViewById(R.id.RadioGroup);
-        radioButton1=findViewById(R.id.payRadio);
-        radioButton2=findViewById(R.id.payRadio1);
+        total = (TextView) findViewById(R.id.payMon);
+        t1 = (TextView) findViewById(R.id.totalmoney);
+        pay = (Button) findViewById(R.id.pay);
+        radioGroup = findViewById(R.id.RadioGroup);
+        radioButton1 = findViewById(R.id.payRadio);
+        radioButton2 = findViewById(R.id.payRadio1);
         final String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         final String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-        ifcmService= RetrofitFCMClient.getInstance().create(IFCMService.class);
+        ifcmService = RetrofitFCMClient.getInstance().create(IFCMService.class);
 
 
         preferences1 = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences1.edit();
-        payToatl=getIntent().getStringExtra("payTotal");
-        date=getIntent().getStringExtra("Date");
-        add=getIntent().getStringExtra("Add");
+        payToatl = getIntent().getStringExtra("payTotal");
+        date = getIntent().getStringExtra("Date");
+        add = getIntent().getStringExtra("Add");
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,13 +86,11 @@ public class PaymentOption extends AppCompatActivity {
         });
 
 
+        total.setText("₹ " + payToatl);
+        t1.setText("₹ " + payToatl);
 
 
-                    total.setText("₹ "+payToatl);
-                    t1.setText("₹ "+payToatl);
-
-
-        ref= FirebaseDatabase.getInstance().getReference("Cart").child(key);
+        ref = FirebaseDatabase.getInstance().getReference("Cart").child(key);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -99,10 +98,10 @@ public class PaymentOption extends AppCompatActivity {
                 //Toast.makeText(CartProductList.this,"hii",Toast.LENGTH_SHORT).show();
                 list.clear();
 
-                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     //  Toast.makeText(CartProductList.this,"hii",Toast.LENGTH_SHORT).show();
 
-                    cartItem p=dataSnapshot1.getValue(cartItem.class);
+                    cartItem p = dataSnapshot1.getValue(cartItem.class);
                     list.add(p);
 
                     // notify();
@@ -116,8 +115,9 @@ public class PaymentOption extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         cartItem clickedItem = (cartItem) parent.getItemAtPosition(position);
                         String clickedCountryName = clickedItem.getName();
-                       // Toast.makeText(PaymentOption.this, clickedCountryName + " selected", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(PaymentOption.this, clickedCountryName + " selected", Toast.LENGTH_SHORT).show();
                     }
+
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
@@ -133,54 +133,45 @@ public class PaymentOption extends AppCompatActivity {
 
                         final String currentDate1 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
                         final String currentTime1 = new SimpleDateFormat("HHmmss", Locale.getDefault()).format(new Date());
-                        String combo=currentDate1+currentTime1;
+                        String combo = currentDate1 + currentTime1;
 
-                        Log.d("TimeFrame",combo);
+                        Log.d("TimeFrame", combo);
                         final String num = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
-                        editor.putString("orderId",combo);
+                        editor.putString("orderId", combo);
                         editor.apply();
 
 
-
-                       // Toast.makeText(PaymentOption.this,""+timeStamp,Toast.LENGTH_LONG).show();
-
+                        // Toast.makeText(PaymentOption.this,""+timeStamp,Toast.LENGTH_LONG).show();
 
 
-
-
-
-
-
-
-                        ref= FirebaseDatabase.getInstance().getReference("Myorder").child(key).child("Item").child("YourOrder").child(combo);
+                        ref = FirebaseDatabase.getInstance().getReference("Myorder").child(key).child("Item").child("YourOrder").child(combo);
                         ref.setValue(list);
-                        ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Payment");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Payment");
                         ref.setValue("Payment Not Paid (COD)");
-                        op="Payment Not Paid (COD)";
-                        ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Date");
+                        op = "Payment Not Paid (COD)";
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Date");
                         ref.setValue(date);
 
-                        ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("address");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("address");
                         ref.setValue(add);
 
-                        ref=FirebaseDatabase.getInstance().getReference("User").child(key);
+                        ref = FirebaseDatabase.getInstance().getReference("User").child(key);
                         ref.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    name=dataSnapshot.child("name").getValue().toString();
-                                    phone=dataSnapshot.child("phone").getValue().toString();
+                                if (dataSnapshot.exists()) {
+                                    name = dataSnapshot.child("name").getValue().toString();
+                                    phone = dataSnapshot.child("phone").getValue().toString();
                                 }
-                                ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("name");
+                                ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("name");
                                 ref.setValue(name);
-                                ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("phone");
+                                ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("phone");
                                 ref.setValue(phone);
-                                final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder().setContext(PaymentOption.this).build();
+                                final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder(PaymentOption.this).create();
                                 waitingtDialog.show();
-                               //prepareNotificationMessage(combo,name);
 
 
-                                sendEmail(combo,list,date,add,name,phone,payToatl,op);
+                                sendEmail(combo, list, date, add, name, phone, payToatl, op);
                                 waitingtDialog.dismiss();
 
                             }
@@ -192,31 +183,30 @@ public class PaymentOption extends AppCompatActivity {
                         });
 
 
-
-                        ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("CurrentDate");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("CurrentDate");
                         ref.setValue(currentDate);
 
-                        ref= FirebaseDatabase.getInstance().getReference("OrderConfirm").child(combo).child("status");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderConfirm").child(combo).child("status");
                         ref.setValue("no");
-                        ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Total");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Total");
                         ref.setValue(payToatl);
 
-                        ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Time");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("Time");
                         ref.setValue(combo);
 
-                        ref= FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("currentTime");
+                        ref = FirebaseDatabase.getInstance().getReference("OrderDetail").child(key).child(combo).child("currentTime");
                         ref.setValue(currentTime);
 
 
-                        ref= FirebaseDatabase.getInstance().getReference("Cart").child(key);
+                        ref = FirebaseDatabase.getInstance().getReference("Cart").child(key);
                         ref.removeValue();
 
-                        ref=FirebaseDatabase.getInstance().getReference("status").child(key).child(combo).child("placed");
+                        ref = FirebaseDatabase.getInstance().getReference("status").child(key).child(combo).child("placed");
                         ref.setValue("ok");
 
-                        Intent intent=new Intent(PaymentOption.this,LastPage.class);
+                        Intent intent = new Intent(PaymentOption.this, LastPage.class);
                         //Toast.makeText(PaymentOption.this,num,Toast.LENGTH_SHORT).show();
-                        intent.putExtra("OrderId",combo);
+                        intent.putExtra("OrderId", combo);
                         startActivity(intent);
                     }
                 });
@@ -231,36 +221,35 @@ public class PaymentOption extends AppCompatActivity {
         });
 
 
-                radioButton2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent=new Intent(PaymentOption.this,upiPay.class);
-                        a++;
-                        intent.putExtra("PayTotal",payToatl);
-                        intent.putExtra("Date",date);
-                        intent.putExtra("address",add);
-                        startActivity(intent);
+        radioButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PaymentOption.this, upiPay.class);
+                a++;
+                intent.putExtra("PayTotal", payToatl);
+                intent.putExtra("Date", date);
+                intent.putExtra("address", add);
+                startActivity(intent);
 
-                    }
-                });
-
+            }
+        });
 
 
     }
-    private void sendEmail(String order,ArrayList<cartItem> list,String date,String add,String name,String phone,String payToatl,String op) {
+
+    private void sendEmail(String order, ArrayList<cartItem> list, String date, String add, String name, String phone, String payToatl, String op) {
         //Getting content for email
 
-        ArrayList<String> val=new ArrayList<>();
-        for(int i=0;i<list.size();i++){
-            if(list.get(i).getWeight().equals("Per Kg")){
-                val.add("Item: "+list.get(i).getName()+"\t(1 Kg"+")"+"\t Quantity :"+list.get(i).getQuant()+"\t price: "+list.get(i).getTotal()+"\n");
-            }
-            else{
-                val.add("Item: "+list.get(i).getName()+"\t("+list.get(i).getWeight()+")"+"\t Quantity :"+list.get(i).getQuant()+"\t price: "+list.get(i).getTotal()+"\n");
+        ArrayList<String> val = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getWeight().equals("Per Kg")) {
+                val.add("Item: " + list.get(i).getName() + "\t(1 Kg" + ")" + "\t Quantity :" + list.get(i).getQuant() + "\t price: " + list.get(i).getTotal() + "\n");
+            } else {
+                val.add("Item: " + list.get(i).getName() + "\t(" + list.get(i).getWeight() + ")" + "\t Quantity :" + list.get(i).getQuant() + "\t price: " + list.get(i).getTotal() + "\n");
             }
 
         }
-String str="Order:"+order+"\t\t"+"Order-Date:"+date+"\nName :"+name+"\t\t\t\t"+"Phone: "+phone+"\n"+val+"\n"+"Address :"+add+"\nTotal: "+payToatl+"\nPayment: "+op;
+        String str = "Order:" + order + "\t\t" + "Order-Date:" + date + "\nName :" + name + "\t\t\t\t" + "Phone: " + phone + "\n" + val + "\n" + "Address :" + add + "\nTotal: " + payToatl + "\nPayment: " + op;
 //Creating SendMail object
         SendMail sm = new SendMail(this, "sabzitaza90@gmail.com", "Order", str);
 

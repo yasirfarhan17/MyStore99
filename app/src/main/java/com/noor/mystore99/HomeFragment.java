@@ -274,7 +274,7 @@ public class HomeFragment extends Fragment {
         if (checkRun) {
             update.run();
         } else {
-            waitingtDialog = new SpotsDialog.Builder().setContext(getActivity()).build();
+            waitingtDialog = new SpotsDialog.Builder(getActivity()).create();
             waitingtDialog.show();
             ref = FirebaseDatabase.getInstance().getReference("Category");
             //Toast.makeText(getActivity(),"hii",Toast.LENGTH_SHORT).show();

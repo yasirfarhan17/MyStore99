@@ -190,7 +190,7 @@ public class LastPage extends AppCompatActivity {
         cancleOrder=findViewById(R.id.cancleOrder);
         //
 
-        final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder().setContext(LastPage.this).build();
+        final android.app.AlertDialog waitingtDialog = new SpotsDialog.Builder(LastPage.this).create();
         waitingtDialog.show();
 
 
