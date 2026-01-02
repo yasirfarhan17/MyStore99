@@ -1,10 +1,10 @@
 package com.noor.mystore99.amigrate.ui.category
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.networkmodule.database.entity.CartEntity
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseActivity
@@ -21,39 +21,52 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding, CategoryViewModel
 
     override val viewModel: CategoryViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
+    
+    private lateinit var categoryAdapter: NewCategoryAdapter
+    private var categoryName: String = ""
 
     override fun layoutId(): Int = R.layout.activity_category
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         processIntent()
-        initUI()
+        setupUI()
     }
 
     private fun processIntent() {
-        intent.getStringExtra(CATEGORY_NAME)?.let { name ->
-            viewModel.getAllCategory(name)
-        }
+        categoryName = intent.getStringExtra(CATEGORY_NAME) ?: "Category"
+        binding.tvCategoryName.text = categoryName
+        viewModel.getAllCategory(categoryName)
     }
 
-    private fun initUI() {
-        with(binding) {
-            categoryRv.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-            categoryRv.adapter = NewCategoryAdapter(this@CategoryActivity)
-
-            searchView.addTextChangedListener { text ->
-                viewModel.filterProducts(text.toString())
-            }
-
-            back.setOnClickListener {
-                onBackPressed()
-            }
+    private fun setupUI() {
+        // Back button
+        binding.imgBack.setOnClickListener { finish() }
+        
+        // RecyclerView setup with Grid
+        categoryAdapter = NewCategoryAdapter(this)
+        binding.rvProducts.apply {
+            layoutManager = GridLayoutManager(this@CategoryActivity, 2)
+            adapter = categoryAdapter
+        }
+        
+        // Search functionality
+        binding.searchView.addTextChangedListener { text ->
+            val query = text.toString()
+            viewModel.filterProducts(query)
         }
     }
 
     override fun addObservers() {
-        viewModel.categoryList.observe(this) { list ->
-            (binding.categoryRv.adapter as NewCategoryAdapter).submitListNew(ArrayList(list))
+        viewModel.categoryList.observe(this) { products ->
+            if (products.isNullOrEmpty()) {
+                binding.rvProducts.visibility = View.GONE
+                binding.emptyStateLayout.visibility = View.VISIBLE
+            } else {
+                binding.rvProducts.visibility = View.VISIBLE
+                binding.emptyStateLayout.visibility = View.GONE
+                categoryAdapter.submitListNew(ArrayList(products))
+            }
         }
     }
 
