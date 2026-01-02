@@ -32,6 +32,15 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             data?.data?.let { uri ->
+                // Check file size (max 10MB)
+                val fileSize = contentResolver.openInputStream(uri)?.available() ?: 0
+                val maxSize = 10 * 1024 * 1024 // 10MB in bytes
+                
+                if (fileSize > maxSize) {
+                    Toast.makeText(this, R.string.profile_image_too_large, Toast.LENGTH_LONG).show()
+                    return@registerForActivityResult
+                }
+                
                 selectedImageUri = uri
                 binding.ivProfile.load(uri) {
                     crossfade(true)
@@ -40,7 +49,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
                 
                 // Visual feedback: increase elevation to show pending upload
                 binding.cvImage.cardElevation = 12f
-                binding.ivCamera.setImageResource(R.drawable.ic_camera_alt_black_24dp) // Could use upload icon
+                binding.ivCamera.setImageResource(R.drawable.ic_camera_alt_black_24dp)
             }
         }
     }
@@ -79,16 +88,16 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
             // Comprehensive validation
             when {
                 name.isBlank() -> {
-                    Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.profile_name_empty, Toast.LENGTH_SHORT).show()
                 }
                 name.length < 2 -> {
-                    Toast.makeText(this, "Name must be at least 2 characters", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.profile_name_too_short, Toast.LENGTH_SHORT).show()
                 }
                 name.length > 50 -> {
-                    Toast.makeText(this, "Name must be less than 50 characters", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.profile_name_too_long, Toast.LENGTH_SHORT).show()
                 }
                 !name.matches(Regex("^[a-zA-Z\\s]+$")) -> {
-                    Toast.makeText(this, "Name can only contain letters and spaces", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.profile_name_invalid_chars, Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     viewModel.updateProfile(userId, name, selectedImageUri)
@@ -149,11 +158,11 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
         viewModel.updateStatus.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    binding.btnSave.text = "Updating..."
+                    binding.btnSave.text = getString(R.string.profile_updating)
                     binding.btnSave.isEnabled = false
                 }
                 is Resource.Success -> {
-                    binding.btnSave.text = "Update Profile"
+                    binding.btnSave.text = getString(R.string.profile_update_button)
                     binding.btnSave.isEnabled = true
                     Toast.makeText(this, resource.data, Toast.LENGTH_SHORT).show()
                     
@@ -167,7 +176,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
                     binding.cvImage.cardElevation = 4f
                 }
                 is Resource.Error -> {
-                    binding.btnSave.text = "Update Profile"
+                    binding.btnSave.text = getString(R.string.profile_update_button)
                     binding.btnSave.isEnabled = true
                     Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
                 }
