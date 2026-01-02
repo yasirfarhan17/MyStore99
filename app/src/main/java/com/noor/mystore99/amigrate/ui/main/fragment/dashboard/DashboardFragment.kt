@@ -139,7 +139,7 @@ class DashboardFragment : Fragment(), DashBoardCallBack {
         when (productName) {
             "My Order" -> startActivity(Intent(activity, MyOrder::class.java))
             "My Account" -> startActivity(Intent(activity, ProfileActivity::class.java))
-            "About us" -> startActivity(Intent(activity, AboutPage::class.java))
+            "About us" -> startActivity(Intent(activity, com.noor.mystore99.amigrate.ui.about.AboutActivity::class.java))
             "Log Out" -> showLogoutDialog()
         }
     }
