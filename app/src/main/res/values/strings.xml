@@ -92,4 +92,6 @@
     <string name="deliverydate">DeliveryDate</string>
     <string name="register_user">Register User</string>
 
+    <string name="search_hint">Search</string>
+    <string name="no_item_found">No Item Found</string>
 </resources>
