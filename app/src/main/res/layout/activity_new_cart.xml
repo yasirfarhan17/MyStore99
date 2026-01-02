@@ -37,19 +37,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_back" />
 
-        <ImageView
-            android:id="@+id/img_clear_cart"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+        <TextView
+            android:id="@+id/tv_clear_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/icon_to_clear_cart"
-            android:padding="12dp"
-            android:src="@drawable/ic_delete_black_24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="CLEAR"
+            android:textColor="#D32F2F"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
+            app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
         <!-- Cart Items List -->
         <androidx.recyclerview.widget.RecyclerView

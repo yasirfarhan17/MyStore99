@@ -54,14 +54,8 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(), Cart
                 }
             }
 
-            imgClearCart.setOnClickListener {
-                showAlert(
-                    this@CartActivity,
-                    getString(R.string.txt_clear_cart_question),
-                    getString(R.string.all_the_item_in_cart_will_be_cleared)
-                ) {
-                    viewModel.clearCartForUser(cartKey)
-                }
+            tvClearCart.setOnClickListener {
+                showClearCartDialog()
             }
 
             tvViewDetails.setOnClickListener {
@@ -101,7 +95,7 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(), Cart
     private fun updateCartVisibility(isPresent: Boolean) {
         with(binding) {
             btCheckOut.isVisible = isPresent
-            imgClearCart.isVisible = isPresent
+            tvClearCart.isVisible = isPresent
             rvCart.isVisible = isPresent
             tvViewDetails.isVisible = isPresent
             tvTotalPrice.isVisible = isPresent
@@ -119,6 +113,9 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(), Cart
         )
         dialog.setContentView(sheetBinding.root)
 
+        sheetBinding.rvCartItemsSummary.layoutManager = LinearLayoutManager(this)
+        sheetBinding.rvCartItemsSummary.adapter = CartSummaryAdapter(currentCartList)
+
         val subTotal = viewModel.subTotal.value ?: 0
         val delivery = viewModel.deliveryCharge.value ?: 0
         val total = viewModel.totalPrice.value ?: 0
@@ -132,6 +129,21 @@ class CartActivity : BaseActivity<ActivityNewCartBinding, CartViewModel>(), Cart
 
         sheetBinding.tvTotal.text = getString(R.string.currency_format, total)
         dialog.show()
+    }
+
+    private fun showClearCartDialog() {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setIcon(R.drawable.ic_baseline_remove_24) // Using the vector I added or delete icon
+            .setTitle("Clear Cart?")
+            .setMessage("Are you sure you want to remove all items from your cart?")
+            .setPositiveButton("Clear") { dialog, _ ->
+                viewModel.clearCartForUser(cartKey)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun initUi() {
