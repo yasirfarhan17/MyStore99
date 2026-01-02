@@ -3,7 +3,7 @@ package com.noor.mystore99.amigrate.ui.main.fragment.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
+
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -27,6 +27,7 @@ import com.example.networkmodule.model.SliderModel
 import com.google.android.material.appbar.AppBarLayout
 import com.noor.mystore99.R
 import com.noor.mystore99.amigrate.base.BaseFragment
+import com.noor.mystore99.sliderAdapter
 import com.noor.mystore99.amigrate.base.ViewState
 import com.noor.mystore99.amigrate.ui.cart.CartViewModel
 import com.noor.mystore99.amigrate.ui.category.CategoryActivity
@@ -37,9 +38,11 @@ import com.noor.mystore99.amigrate.ui.main.fragment.home.adapter.UserAdapterCall
 import com.noor.mystore99.amigrate.util.ProgresssDialog
 import com.noor.mystore99.amigrate.util.Util.setVisible
 import com.noor.mystore99.databinding.UserFragmentBinding
-import com.noor.mystore99.sliderAdapter
-import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 
@@ -55,13 +58,11 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
     private var onlyViewIsDestroyed = false
 
-    var sliderModelList = ArrayList<SliderModel>()
+    private var sliderModelList = ArrayList<SliderModel>()
     private var currentPage = 2
-    private var timer: Timer? = null
-
+    private var bannerJob: Job? = null
 
     private val delayTime: Long = 3000
-    private val periodTime: Long = 3000
     private lateinit var progressDialog: ProgresssDialog
 
 
@@ -78,75 +79,70 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
     private fun addListener() {
         with(binding) {
             txtInputUserId.setEndIconOnClickListener {
-                labelPromoOffer.visibility = View.VISIBLE
-                rvCategory.visibility = View.VISIBLE
-                labelCategory.visibility = View.VISIBLE
-                viewPagerBanners.visibility = View.VISIBLE
-                searchView.text?.clear()
+                resetSearchState()
             }
-
+            viewMore.setOnClickListener {
+                rvCategory.smoothScrollToPosition(rvCategory.adapter?.itemCount?.minus(1) ?: 2)
+            }
         }
+        setupSearchListener()
+    }
 
+    private fun resetSearchState() {
+        with(binding) {
+            labelPromoOffer.visibility = View.VISIBLE
+            rvCategory.visibility = View.VISIBLE
+            labelCategory.visibility = View.VISIBLE
+            viewPagerBanners.visibility = View.VISIBLE
+            searchView.text?.clear()
+            labelAllProduct.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setupSearchListener() {
         binding.searchView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                viewModel.productList.observe(viewLifecycleOwner) {
-                    //val list = it.map { productModel -> productModel.toProductEntity() }
-                    val localList = ArrayList<ProductEntity>()
-                    var flagNotFound = false
-                    if (p0 == null || p0.isEmpty()) {
-                        localList.addAll(it)
-                        flagNotFound = true
-                        binding.labelPromoOffer.visibility = View.VISIBLE
-                        binding.rvCategory.visibility = View.VISIBLE
-                        binding.labelCategory.visibility = View.VISIBLE
-                        binding.viewPagerBanners.visibility = View.VISIBLE
-                        binding.labelAllProduct.visibility=View.VISIBLE
-
-                    } else {
-                        for (item in it) {
-                            if (item.products_name.lowercase(Locale.ENGLISH).contains(
-                                    p0.toString().lowercase(
-                                        Locale.ENGLISH
-                                    )
-                                )
-                            ) {
-                                localList.add(item)
-                                flagNotFound = true
-
-                            }
-                        }
-
-                        if (!flagNotFound) {
-                            //localList.addAll(it)
-                            Toast.makeText(activity, "No Item Found", Toast.LENGTH_SHORT).show()
-                        }
-                        binding.labelPromoOffer.visibility = View.GONE
-                        binding.rvCategory.visibility = View.GONE
-                        binding.labelCategory.visibility = View.GONE
-                        binding.viewPagerBanners.visibility = View.GONE
-                        binding.labelAllProduct.visibility=View.GONE
-                    }
-
-                    (binding.rvProduct.adapter as UserAdapter).submitListNew(
-                        localList
-                    )
-                }
-                //(binding.rvProduct.adapter as UserAdapter).filter.filter(p0.toString())
+                performSearch(p0.toString())
             }
 
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
+            override fun afterTextChanged(p0: Editable?) {}
         })
-        binding.viewMore.setOnClickListener {
-            binding.rvCategory.smoothScrollToPosition(binding.rvCategory.adapter?.itemCount
-                ?.minus(1) ?:2 );
+    }
+
+    private fun performSearch(query: String) {
+        viewModel.productList.observe(viewLifecycleOwner) { list ->
+            if (list == null) return@observe
+            
+            val filteredList = ArrayList<ProductEntity>()
+            if (query.isEmpty()) {
+                filteredList.addAll(list)
+                setVisibleViewsForSearch(true)
+            } else {
+                val searchQuery = query.lowercase(Locale.ENGLISH)
+                for (item in list) {
+                    if (item.products_name.lowercase(Locale.ENGLISH).contains(searchQuery)) {
+                        filteredList.add(item)
+                    }
+                }
+                setVisibleViewsForSearch(filteredList.isNotEmpty())
+                if (filteredList.isEmpty()) {
+                    Toast.makeText(activity, "No Item Found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            (binding.rvProduct.adapter as UserAdapter).submitListNew(filteredList)
+        }
+    }
+
+    private fun setVisibleViewsForSearch(isVisible: Boolean) {
+        val visibility = if (isVisible) View.VISIBLE else View.GONE
+        with(binding) {
+            labelPromoOffer.visibility = visibility
+            rvCategory.visibility = visibility
+            labelCategory.visibility = visibility
+            viewPagerBanners.visibility = visibility
+            labelAllProduct.visibility = visibility
         }
     }
 
@@ -171,64 +167,51 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
 
     override fun addObservers() {
-        var c = 0
-        progressDialog= ProgresssDialog(requireContext())
+        progressDialog = ProgresssDialog(requireContext())
         progressDialog.dismiss()
-        viewModel.productList.observe(viewLifecycleOwner) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                if(it!=null)
-                        it.sortBy { productEntity ->
-                            productEntity.products_name
-                        }
-                    (binding.rvProduct.adapter as UserAdapter).submitListNew(it)
 
-                }
-
-
-            }
-        viewModel.cartFromDB.observe(viewLifecycleOwner) { itt ->
-            if (itt != null) {
-                Log.d("indideCart", "" + itt)
-                (binding.rvProduct.adapter as UserAdapter).submitList(itt)
+        viewModel.productList.observe(viewLifecycleOwner) { products ->
+            products?.let {
+                it.sortBy { productEntity -> productEntity.products_name }
+                (binding.rvProduct.adapter as UserAdapter).submitListNew(it)
             }
         }
-//        viewModel.combineData.observe(viewLifecycleOwner){
-//            Log.d("inssideCombine",""+it.first)
-//            (binding.rvProduct.adapter as UserAdapter).submitListNeww(it.first)
 
+        viewModel.cartFromDB.observe(viewLifecycleOwner) { cartItems ->
+            cartItems?.let {
+                Log.d("indideCart", "" + it)
+                (binding.rvProduct.adapter as UserAdapter).submitList(it)
+            }
+        }
 
-        viewModel.bannerList.observe(viewLifecycleOwner) {
-            if (it.isNullOrEmpty()) {
+        viewModel.bannerList.observe(viewLifecycleOwner) { banners ->
+            if (banners.isNullOrEmpty()) {
                 binding.viewPagerBanners.setVisible(false)
                 binding.labelPromoOffer.setVisible(false)
                 return@observe
             }
             binding.viewPagerBanners.setVisible(true)
             binding.labelPromoOffer.setVisible(true)
-            sliderModelList = it
-            Log.d("checkBanner",""+it)
+            sliderModelList = banners
+            
             val sliderAdapter = sliderAdapter(sliderModelList)
             binding.viewPagerBanners.adapter = sliderAdapter
             binding.viewPagerBanners.clipToPadding = false
             binding.viewPagerBanners.pageMargin = 20
-            sliderAdapter.notifyDataSetChanged()
             binding.viewPagerBanners.currentItem = currentPage
             setBanner()
         }
-        viewModel.categoryList.observe(viewLifecycleOwner) {
-            if (it.isNullOrEmpty()) {
+
+        viewModel.categoryList.observe(viewLifecycleOwner) { categories ->
+            if (categories.isNullOrEmpty()) {
                 binding.labelCategory.setVisible(false)
                 binding.rvCategory.setVisible(false)
                 return@observe
             }
             binding.labelCategory.setVisible(true)
             binding.rvCategory.setVisible(true)
-            (binding.rvCategory.adapter as CategoryAdapter).submitList(it)
+            (binding.rvCategory.adapter as CategoryAdapter).submitList(categories)
         }
-//        viewModel.insertToCart.observe(viewLifecycleOwner){
-//            showToast(it)
-//        }
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -275,24 +258,20 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
 
     private fun startBannerSlideshow() {
-        val handler = Handler()
-        val update = Runnable {
-            if (currentPage >= sliderModelList.size) {
-                currentPage = 1
+        bannerJob?.cancel()
+        bannerJob = lifecycleScope.launch {
+            while (isActive) {
+                delay(delayTime)
+                if (currentPage >= sliderModelList.size) {
+                    currentPage = 1
+                }
+                binding.viewPagerBanners.setCurrentItem(currentPage++, true)
             }
-            binding.viewPagerBanners.setCurrentItem(currentPage++, true)
         }
-        timer = Timer()
-        timer!!.schedule(object : TimerTask() {
-            override fun run() {
-                handler.post(update)
-            }
-        }, delayTime, periodTime)
     }
 
     private fun stopBannerSlideShow() {
-        timer?.cancel()
-
+        bannerJob?.cancel()
     }
 
     override fun onItemClick(cartEntity: CartEntity) {
@@ -314,9 +293,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
         super.onPause()
     }
     override fun onDestroyView() {
-        timer?.cancel()
         stopBannerSlideShow()
-
         super.onDestroyView()
     }
 
