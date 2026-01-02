@@ -82,18 +82,7 @@
         <activity
             android:name=".amigrate.ui.payment.PaymentActivity"
             android:exported="false" />
-        <activity android:name=".AboutPage" />
-        <activity android:name=".InstructionPage" />
-        <activity android:name=".page1" />
-        <activity android:name=".signUpPage" />
-        <activity android:name=".loginPage" />
-        <activity android:name=".first" />
-        <activity android:name=".ProfileEdit" />
-        <activity android:name=".ProfilePage" />
-        <activity android:name=".OrderPage" />
-        <activity android:name=".PaymentOption" />
-        <activity android:name=".Address1" />
-        <activity android:name=".upiPay" />
+
         <!--
                  The API key for Google Maps-based APIs is defined as a string resource.
                  (See the file "res/values/google_maps_api.xml").
@@ -120,17 +109,10 @@
             android:name=".amigrate.ui.main.MainActivity"
             android:exported="false"
             android:hardwareAccelerated="true" />
-        <activity android:name=".LastPage" />
+        <activity android:name=".amigrate.ui.about.AboutActivity" />
         <activity android:name=".amigrate.ui.cart.CartActivity" />
-        <activity android:name=".CategoryProduct" />
-        <activity android:name=".CartProductList" />
-        <activity android:name=".AddressPage" />
-        <activity android:name=".MainActivity" />
-        <activity
-            android:name=".slpash"
-            android:exported="false"
-            android:theme="@style/AppTheme">
-        </activity>
+
+
 
         <service
             android:name=".MyFirebaseMessaging"
