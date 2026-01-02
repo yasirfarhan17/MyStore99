@@ -56,6 +56,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
 
     private fun initUi() {
         with(binding) {
+            // Animation
+            cvLogin.alpha = 0f
+            cvLogin.translationY = 100f
+            cvLogin.animate().alpha(1f).translationY(0f).setDuration(800).setStartDelay(200).start()
+            
+            labelHeader.alpha = 0f
+            labelHeader.animate().alpha(1f).setDuration(800).start()
+
             if (prefsUtil.isLoggedIn) {
                 txtInputEtPhone.setText(prefsUtil.Name.toString())
                 txtInputEtPassword.setText(prefsUtil.password.toString())
@@ -196,6 +204,43 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, MainLoginViewModel>() {
                 }
             }
 
+            btnBackRegister.setOnClickListener {
+                flipCard(binding.cvLogin, binding.cvRegister) { showMessage(it) }
+            }
+            btnBackForget.setOnClickListener {
+                 flipCard(binding.cvLogin, binding.cvForget) { showMessage(it) }
+            }
+
+            onBackPressedDispatcher.addCallback(this@LoginActivity, object : androidx.activity.OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    with(binding) {
+                        when {
+                            cvRegister.visibility == android.view.View.VISIBLE -> {
+                                flipCard(cvLogin, cvRegister) { showMessage(it) }
+                            }
+                            cvForget.visibility == android.view.View.VISIBLE -> {
+                                flipCard(cvLogin, cvForget) { showMessage(it) }
+                            }
+                            cvOtp.visibility == android.view.View.VISIBLE -> {
+                                // Logic to decide where to go back from OTP?? 
+                                // For now, let's assume back to Register which seems to be the main entry per existing logic or Login
+                                // Reviewing existing code: OTP can come from Register or Forget (Set Password).
+                                // Current safe bet for "confusion" fix: Go back to Login or Register.
+                                // Let's check: if (txtInputEtNameSignUp.text.isNullOrEmpty()) -> likely from Forget/SetPassword
+                                if (txtInputEtNameSignUp.text.isNullOrEmpty()) {
+                                     flipCard(cvForget, cvOtp) { showMessage(it) }
+                                } else {
+                                     flipCard(cvRegister, cvOtp) { showMessage(it) }
+                                }
+                            }
+                            else -> {
+                                isEnabled = false
+                                onBackPressedDispatcher.onBackPressed()
+                            }
+                        }
+                    }
+                }
+            })
         }
     }
 

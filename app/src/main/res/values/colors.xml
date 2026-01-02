@@ -20,6 +20,10 @@
     <color name="btnRegister">#83838c</color>
     <color name="primary">#192648</color>
     <color name="btnprimary">#fe9501</color>
+    
+    <!-- Splash Screen Gradient -->
+    <color name="splash_gradient_start">#4A00E0</color> <!-- Deep Purple -->
+    <color name="splash_gradient_end">#8E2DE2</color>   <!-- Rich Violet -->
 
 
     <color name="baseReleaseColor">#212121</color>
