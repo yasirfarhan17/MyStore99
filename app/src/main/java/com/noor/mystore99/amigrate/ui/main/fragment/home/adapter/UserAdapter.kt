@@ -142,17 +142,14 @@ class UserAdapter(
                     "1",
                     item.price
                 )
+
+                addBtn.text = "ADD"
+                addBtn.isEnabled = true
+                addBtn.alpha = 1.0f
+                addBtn.setBackgroundTintList(android.content.res.ColorStateList.valueOf(binding.root.context.getColor(R.color.btnprimary)))
+                
                 addBtn.setOnClickListener {
                     callBack.onItemClick(cartEntity)
-//                    addBtn.visibility = View.GONE
-//                    btMinus.visibility = View.VISIBLE
-//                    btIncrease.visibility = View.VISIBLE
-//                    tvCurrentQuant.visibility = View.VISIBLE
-//                    item.count = 1.toString();
-//                    val total = item.price?.toInt()?.times(item.count!!.toInt())
-//                    callBack.onClick(total.toString(), item.products_name, item.count!!)
-//                    tvCurrentQuant.text = item.count
-                    //Toast.makeText(it.context, "Item Added successfully", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -44,22 +44,30 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_batch"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/round_shape"
-            android:backgroundTint="#D50000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="20dp"
+            android:minHeight="20dp"
+            android:background="@drawable/bg_cart_badge"
+            android:visibility="gone"
             app:layout_anchor="@id/fab_bt_cart"
-            app:layout_anchorGravity="bottom|right">
+            app:layout_anchorGravity="top|end">
             <TextView
                 android:id="@+id/tv_batch"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:includeFontPadding="false"
                 android:textStyle="bold"
-                android:fontFamily="@font/convergence"
                 android:textColor="@color/white"
-                android:textSize="13sp"
-                tools:text="110" />
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

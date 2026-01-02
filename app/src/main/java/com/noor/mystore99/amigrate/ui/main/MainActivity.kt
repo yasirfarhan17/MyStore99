@@ -113,15 +113,13 @@ class MainActivity : BaseActivity<ActivityMain3Binding, MainViewModel>() {
 
 
     override fun addObservers() {
-        lifecycleScope.launch {
-            userViewModel.cartFromDB.observe(this@MainActivity) { cartItems ->
-                if (cartItems.isNotEmpty()) {
-                    val count = cartItems.size
-                    binding.clBatch.setVisible(true)
-                    binding.tvBatch.text = count.toString()
-                } else {
-                    binding.clBatch.setVisible(false)
-                }
+        userViewModel.cartFromDB.observe(this@MainActivity) { cartItems ->
+            if (!cartItems.isNullOrEmpty()) {
+                val count = cartItems.size
+                binding.clBatch.setVisible(true)
+                binding.tvBatch.text = count.toString()
+            } else {
+                binding.clBatch.setVisible(false)
             }
         }
 

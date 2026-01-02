@@ -172,7 +172,7 @@ class UserFragment : BaseFragment<UserFragmentBinding, UserViewModel>(), UserAda
 
         viewModel.productList.observe(viewLifecycleOwner) { products ->
             products?.let {
-                it.sortBy { productEntity -> productEntity.products_name }
+                it.sortWith(compareBy<ProductEntity> { it.stock == "no" }.thenBy { it.products_name })
                 (binding.rvProduct.adapter as UserAdapter).submitListNew(it)
             }
         }
